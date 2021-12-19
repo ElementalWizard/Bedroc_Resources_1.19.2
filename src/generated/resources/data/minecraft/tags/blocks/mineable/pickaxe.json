@@ -1,0 +1,21 @@
+{
+  "replace": false,
+  "values": [
+    "bedres:enderian_ore_overworld",
+    "bedres:enderian_ore_nether",
+    "bedres:enderian_ore_end",
+    "bedres:enderian_ore_deepslate",
+    "bedres:spike",
+    "bedres:bedrock_compressed_wire",
+    "bedres:enderian_block",
+    "bedres:enderian_brick",
+    "bedres:fluxed_gravity_bubble",
+    "bedres:pedestal",
+    "bedres:ritual_pedestal",
+    "bedres:scrape_tank",
+    "bedres:scraper_motor",
+    "bedres:void_tears",
+    "bedres:bedrock_stairs",
+    "bedres:decaying_fluxed_cobblestone"
+  ]
+}

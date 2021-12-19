@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "group": "boat",
+  "pattern": [
+    "# #",
+    "###"
+  ],
+  "key": {
+    "#": {
+      "item": "bedres:decaying_fluxed_oak_planks"
+    }
+  },
+  "result": {
+    "item": "minecraft:oak_boat"
+  }
+}

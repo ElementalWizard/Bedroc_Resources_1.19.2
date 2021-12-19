@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "bedres:bedrock_compressed_wire"
+    }
+  ],
+  "result": {
+    "item": "bedres:bedrock_wire",
+    "count": 9
+  }
+}

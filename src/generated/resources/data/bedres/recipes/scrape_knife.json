@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " II",
+    "ERI",
+    "BE "
+  ],
+  "key": {
+    "I": {
+      "item": "bedres:enderian_ingot"
+    },
+    "E": {
+      "tag": "forge:ingots/gold"
+    },
+    "B": {
+      "item": "minecraft:blaze_rod"
+    },
+    "R": {
+      "item": "minecraft:ender_eye"
+    }
+  },
+  "result": {
+    "item": "bedres:scrape_knife"
+  }
+}

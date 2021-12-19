@@ -1,0 +1,26 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " P ",
+    "SGS",
+    "SBS"
+  ],
+  "key": {
+    "G": {
+      "tag": "forge:ingots/gold"
+    },
+    "B": {
+      "item": "bedres:enderian_brick"
+    },
+    "S": {
+      "item": "bedres:bedrock_stairs"
+    },
+    "P": {
+      "item": "bedres:item_platform"
+    }
+  },
+  "result": {
+    "item": "bedres:ritual_pedestal",
+    "count": 2
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "parent": "block/cube_all",
+  "textures": {
+    "particle": "bedres:block/decaying_fluxed_dirt",
+    "all": "bedres:block/decaying_fluxed_dirt"
+  }
+}

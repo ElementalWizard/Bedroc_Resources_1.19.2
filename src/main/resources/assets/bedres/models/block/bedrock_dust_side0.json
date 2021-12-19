@@ -1,0 +1,6 @@
+{
+  "parent": "bedres:block/bedrock_dust_side",
+  "textures": {
+    "line": "bedres:block/bedrock_dust_line0"
+  }
+}

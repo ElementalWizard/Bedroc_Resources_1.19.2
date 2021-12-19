@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "POP",
+    "OVO",
+    "POP"
+  ],
+  "key": {
+    "P": {
+      "tag": "forge:glass_panes/purple"
+    },
+    "V": {
+      "item": "bedres:void_tears"
+    },
+    "O": {
+      "tag": "forge:obsidian"
+    }
+  },
+  "result": {
+    "item": "bedres:fluxed_gravity_bubble"
+  }
+}

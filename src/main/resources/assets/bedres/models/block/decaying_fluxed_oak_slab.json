@@ -1,0 +1,8 @@
+{
+  "parent": "block/slab",
+  "textures": {
+    "bottom": "bedres:block/decaying_fluxed_oak_planks",
+    "top": "bedres:block/decaying_fluxed_oak_planks",
+    "side": "bedres:block/decaying_fluxed_oak_planks"
+  }
+}

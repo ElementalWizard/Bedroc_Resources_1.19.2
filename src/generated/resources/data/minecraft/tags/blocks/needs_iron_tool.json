@@ -1,0 +1,16 @@
+{
+  "replace": false,
+  "values": [
+    "bedres:spike",
+    "bedres:bedrock_compressed_wire",
+    "bedres:enderian_block",
+    "bedres:enderian_brick",
+    "bedres:fluxed_gravity_bubble",
+    "bedres:pedestal",
+    "bedres:ritual_pedestal",
+    "bedres:scrape_tank",
+    "bedres:scraper_motor",
+    "bedres:void_tears",
+    "bedres:bedrock_stairs"
+  ]
+}

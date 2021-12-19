@@ -1,0 +1,46 @@
+{
+	"credit": "Made with Blockbench",
+	"parent": "bedres:block/scraper_motor",
+	"display": {
+		"thirdperson_righthand": {
+			"translation": [0, 3.75, 0],
+			"scale": [0.5, 0.5, 0.5]
+		},
+		"thirdperson_lefthand": {
+			"translation": [0, 3.75, 0],
+			"scale": [0.5, 0.5, 0.5]
+		},
+		"firstperson_righthand": {
+			"translation": [0, 2.75, 0],
+			"scale": [0.5, 0.5, 0.5]
+		},
+		"firstperson_lefthand": {
+			"translation": [0, 3.25, 0],
+			"scale": [0.5, 0.5, 0.5]
+		},
+		"ground": {
+			"translation": [0, 1, 0],
+			"scale": [0.5, 0.5, 0.5]
+		},
+		"gui": {
+			"rotation": [26, 43, -18],
+			"translation": [0, 0.5, 0],
+			"scale": [0.5, 0.5, 0.5]
+		},
+		"head": {
+			"translation": [0, 1, 0]
+		},
+		"fixed": {
+			"rotation": [9, 20, 11],
+			"translation": [0, 0.5, -2.75],
+			"scale": [0.5, 0.5, 0.5]
+		}
+	},
+	"groups": [
+		{
+			"name": "Shaft",
+			"origin": [8, 8, 8],
+			"children": [0, 1, 2, 3, 4, 5, 6]
+		}
+	]
+}

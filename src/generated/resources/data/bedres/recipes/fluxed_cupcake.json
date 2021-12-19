@@ -1,0 +1,29 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "ACA",
+    "BEB",
+    "CWC"
+  ],
+  "key": {
+    "A": {
+      "item": "minecraft:milk_bucket"
+    },
+    "B": {
+      "item": "minecraft:sugar"
+    },
+    "C": {
+      "item": "bedres:fluxed_spores"
+    },
+    "E": {
+      "item": "minecraft:egg"
+    },
+    "W": {
+      "item": "minecraft:bowl"
+    }
+  },
+  "result": {
+    "item": "bedres:fluxed_cupcake",
+    "count": 3
+  }
+}

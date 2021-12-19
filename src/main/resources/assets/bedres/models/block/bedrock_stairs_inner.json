@@ -1,0 +1,8 @@
+{
+  "parent": "block/inner_stairs",
+  "textures": {
+    "bottom": "bedres:block/enderian_brick",
+    "top": "bedres:block/enderian_brick",
+    "side": "bedres:block/enderian_brick"
+  }
+}

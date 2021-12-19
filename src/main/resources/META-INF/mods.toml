@@ -1,0 +1,28 @@
+modLoader="javafml" #mandatory
+loaderVersion="[39,)" #mandatory (25 is current forge version)
+license="All Rights Reserved"
+updateJSONURL="${update_json}" #optional
+issueTrackerURL="https://github.com/ElementalWizard/Bedrock-Resources/issues" #optional
+displayURL="" #optional
+logoFile="bedrockresources_logo.png"
+credits="Life" #optional
+authors="AlexVR" #The man himself
+
+[[mods]] #mandatory
+    modId="bedres" #mandatory
+    version="3" #mandatory
+    displayName="Bedrock Resources" #mandatory
+    description='''Use the power deep in bedrock!
+    '''
+## A dependency - use the . to indicate dependency for a specific modid. Dependencies are optional.
+[[dependencies.bedres]] #optional
+    # the modid of the dependency
+    modId="forge" #mandatory
+    # Does this dependency have to exist - if not, ordering below must be specified
+    mandatory=true #mandatory
+    # The version range of the dependency
+    versionRange="[39,)" #mandatory
+    # An ordering relationship for the dependency - BEFORE or AFTER required if the relationship is not mandatory
+    ordering="NONE"
+    # Side this dependency is applied on - BOTH, CLIENT or SERVER
+    side="BOTH"

@@ -1,0 +1,7 @@
+{
+  "parent": "block/cross",
+  "textures": {
+    "particle": "bedres:block/decaying_fluxed_sappling",
+    "cross": "bedres:block/decaying_fluxed_sappling"
+  }
+}

@@ -1,0 +1,8 @@
+{
+	"variants": {
+		"facing=north": { "model": "bedres:block/bedrock_scraper_slave" },
+		"facing=south": { "model": "bedres:block/bedrock_scraper_slave", "y": 180 },
+		"facing=west":  { "model": "bedres:block/bedrock_scraper_slave", "y": 270 },
+		"facing=east":  { "model": "bedres:block/bedrock_scraper_slave", "y": 90 }
+	}
+}

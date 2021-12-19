@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "axis=y":  { "model": "bedres:block/decaying_fluxed_stripped_oak_log" },
+    "axis=z":   { "model": "bedres:block/decaying_fluxed_stripped_oak_log", "x": 90 },
+    "axis=x":   { "model": "bedres:block/decaying_fluxed_stripped_oak_log", "x": 90, "y": 90 }
+  }
+}
