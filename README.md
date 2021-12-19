@@ -3,6 +3,6 @@
 <p align="center">Use the powers of bedrock to change the world around you and explore mystery dungeons that get progressively more difficult the more you do.
 </p>
 <p align="center">
-    <a href="https://minecraft.curseforge.com/projects/building-gadgets"><img src="http://cf.way2muchnoise.eu/full_351738_downloads.svg" /></a>
-    <a href="https://minecraft.curseforge.com/projects/building-gadgets"><img src="http://cf.way2muchnoise.eu/versions/351738.svg" /></a>
+    <a href="https://www.curseforge.com/minecraft/mc-mods/bedrock-resources"><img src="http://cf.way2muchnoise.eu/full_351738_downloads.svg" /></a>
+    <a href="https://www.curseforge.com/minecraft/mc-mods/bedrock-resources"><img src="http://cf.way2muchnoise.eu/versions/351738.svg" /></a>
 </p>
