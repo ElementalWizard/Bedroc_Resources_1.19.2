@@ -22,8 +22,34 @@ public class ItemPlatformRenderer implements BlockEntityRenderer<ItemPlatformTil
     @Override
     public void render(ItemPlatformTile tile, float partialTick, PoseStack poseStack, MultiBufferSource bufferSource, int combinedLight, int combinedOverlay) {
 
-        AtomicReference<ItemStack> stack = new AtomicReference<>(new ItemStack(Registration.ENDERIAN_INGOT_ITEM.get()));;
-        tile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).ifPresent(h -> stack.set(h.getStackInSlot(0)));
+        tile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).ifPresent(h -> {
+
+            poseStack.pushPose();
+            switch(tile.getBlockState().getValue(FaceAttachedHorizontalDirectionalBlock.FACE)) {
+                case FLOOR:
+                    poseStack.translate(.5 ,.2 ,.5);
+                    break;
+                case WALL:
+                    switch (tile.getBlockState().getValue(FaceAttachedHorizontalDirectionalBlock.FACING)) {
+                        case EAST -> poseStack.translate(.2, .5, .5);
+                        case WEST -> poseStack.translate(.8, .5, .5);
+                        case SOUTH -> poseStack.translate(.5, .5, .2);
+                        case NORTH -> poseStack.translate(.5, .5, .8);
+                    }
+                    break;
+                case CEILING:
+                    poseStack.translate(.5 ,.8 ,.5);
+                    break;
+            }
+
+            Quaternion rotation = Minecraft.getInstance().gameRenderer.getMainCamera().rotation();
+            poseStack.mulPose(rotation);
+            poseStack.scale(0.25F, 0.25F, 0.25F);
+            Minecraft.getInstance().getItemRenderer().renderStatic(h.getStackInSlot(0), ItemTransforms.TransformType.FIXED, combinedLight, combinedOverlay, poseStack, bufferSource, (int) tile.getBlockPos().asLong());
+            poseStack.popPose();
+
+        });
+        ItemStack stack = new ItemStack(Registration.ENDERIAN_INGOT_ITEM.get());
 
         poseStack.pushPose();
         switch(tile.getBlockState().getValue(FaceAttachedHorizontalDirectionalBlock.FACE)) {
@@ -46,7 +72,7 @@ public class ItemPlatformRenderer implements BlockEntityRenderer<ItemPlatformTil
         Quaternion rotation = Minecraft.getInstance().gameRenderer.getMainCamera().rotation();
         poseStack.mulPose(rotation);
         poseStack.scale(0.25F, 0.25F, 0.25F);
-        Minecraft.getInstance().getItemRenderer().renderStatic(stack.get(), ItemTransforms.TransformType.FIXED, combinedLight, combinedOverlay, poseStack, bufferSource, (int) tile.getBlockPos().asLong());
+        Minecraft.getInstance().getItemRenderer().renderStatic(stack, ItemTransforms.TransformType.FIXED, combinedLight, combinedOverlay, poseStack, bufferSource, (int) tile.getBlockPos().asLong());
         poseStack.popPose();
 
 

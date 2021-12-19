@@ -66,17 +66,18 @@ public class ItemPlatform extends FaceAttachedHorizontalDirectionalBlock impleme
             if (tileEntity instanceof ItemPlatformTile) {
                 world.getBlockEntity(pos).getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).ifPresent(h -> {
                     ItemStack itemInHand = player.getItemInHand(hand);
-                    ItemStack itemInBlock = h.getStackInSlot(0).copy();
 
                     if(itemInHand.isEmpty() || player.isShiftKeyDown()){
-                        ItemHandlerHelper.giveItemToPlayer(player,itemInBlock);
-                        h.insertItem(0,ItemStack.EMPTY,false);
+                        boolean extracted = player.addItem(h.getStackInSlot(0));
+                        if (extracted) {
+                            h.insertItem(0,ItemStack.EMPTY,false);
+                        }
                     }else{
                         ItemStack remainder = ItemHandlerHelper.insertItem(h, itemInHand, false);
                         if (remainder.isEmpty()) {
                             player.setItemInHand(hand,ItemStack.EMPTY);
                         } else {
-                            player.setItemInHand(hand,remainder.copy());
+                            player.setItemInHand(hand,remainder);
                         }
                     }
                 });
