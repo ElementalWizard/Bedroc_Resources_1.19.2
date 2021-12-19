@@ -33,6 +33,7 @@ public class ItemPlatformTile extends BlockEntity {
     public ItemStackHandler itemHandler = createHandler();
     private LazyOptional<IItemHandler> handler = LazyOptional.of(() -> itemHandler);
 
+    public ItemStack item = ItemStack.EMPTY;
 
     public ItemPlatformTile(BlockPos pWorldPosition, BlockState pBlockState) {
         super(Registration.ITEM_PLATFORM_TILE.get(), pWorldPosition, pBlockState);
@@ -49,7 +50,10 @@ public class ItemPlatformTile extends BlockEntity {
         super.load(tag);
         if (tag.contains("inv")) {
             itemHandler.deserializeNBT(tag.getCompound("inv"));
+            item = itemHandler.getStackInSlot(0);
         }
+
+
     }
 
     private void saveClientData(CompoundTag tag) {
@@ -72,7 +76,10 @@ public class ItemPlatformTile extends BlockEntity {
         tag.put("Info", infoTag);
         return tag;
     }
-
+    public void sendUpdates() {
+        level.sendBlockUpdated(getBlockPos(), this.getBlockState(), getBlockState(), 3);
+        setChanged();
+    }
     @Override
     public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket pkt) {
 
@@ -108,9 +115,16 @@ public class ItemPlatformTile extends BlockEntity {
             protected void onContentsChanged(int slot) {
                 // To make sure the TE persists when the chunk is saved later we need to
                 // mark it dirty every time the item handler changes
+                item = getStackInSlot(0);
+                sendUpdates();
                 setChanged();
             }
 
+            @Override
+            protected void onLoad() {
+                item = getStackInSlot(0);
+                super.onLoad();
+            }
         };
     }
 
