@@ -8,22 +8,22 @@ import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.Biomes;
 import net.minecraft.world.level.biome.BiomeSource;
 import net.minecraft.world.level.biome.Climate;
-import net.minecraft.world.level.levelgen.feature.StructureFeature;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
-public class MysteryBiomeProvider  extends BiomeSource {
+public class MysBiomeProvider extends BiomeSource {
 
-    public static final Codec<MysteryBiomeProvider> CODEC = RegistryLookupCodec.create(Registry.BIOME_REGISTRY)
-            .xmap(MysteryBiomeProvider::new, MysteryBiomeProvider::getBiomeRegistry).codec();
+    public static final Codec<MysBiomeProvider> CODEC = RegistryLookupCodec.create(Registry.BIOME_REGISTRY)
+            .xmap(MysBiomeProvider::new, MysBiomeProvider::getBiomeRegistry).codec();
 
     private final Biome biome;
     private final Registry<Biome> biomeRegistry;
     private static final List<ResourceKey<Biome>> SPAWN = Collections.singletonList(Biomes.PLAINS);
 
-    public MysteryBiomeProvider(Registry<Biome> biomeRegistry) {
+    public MysBiomeProvider(Registry<Biome> biomeRegistry) {
         super(getStartBiomes(biomeRegistry));
         this.biomeRegistry = biomeRegistry;
         biome = biomeRegistry.get(Biomes.PLAINS.location());

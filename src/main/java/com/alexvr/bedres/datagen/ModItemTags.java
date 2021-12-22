@@ -22,11 +22,13 @@ public class ModItemTags extends ItemTagsProvider {
                 .add(Registration.ENDERIAN_ORE_NETHER_ITEM.get())
                 .add(Registration.ENDERIAN_ORE_END_ITEM.get())
                 .add(Registration.ENDERIAN_ORE_DEEPSLATE_ITEM.get());
+
         tag(Registration.ENDERIAN_ORE_ITEM)
                 .add(Registration.ENDERIAN_ORE_OVERWORLD_ITEM.get())
                 .add(Registration.ENDERIAN_ORE_NETHER_ITEM.get())
                 .add(Registration.ENDERIAN_ORE_END_ITEM.get())
                 .add(Registration.ENDERIAN_ORE_DEEPSLATE_ITEM.get());
+
         tag(ItemTags.STAIRS)
                 .add(Registration.ENDERIAN_STAIRS_ITEM.get());
 

@@ -1,4 +1,6 @@
 package com.alexvr.bedres.dimension;
+
+import net.minecraft.world.level.chunk.ChunkGenerator;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.world.level.*;
@@ -20,25 +22,24 @@ import net.minecraft.world.level.levelgen.blending.Blender;
 
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
-public class MysteryChunkGenerator extends ChunkGenerator {
+
+public class MysChunkGenerator extends ChunkGenerator {
 
     private static final Codec<Settings> SETTINGS_CODEC = RecordCodecBuilder.create(instance ->
             instance.group(
-                    Codec.INT.fieldOf("base").forGetter(Settings::getBaseHeight),
-                    Codec.FLOAT.fieldOf("verticalvariance").forGetter(Settings::getVerticalVariance),
-                    Codec.FLOAT.fieldOf("horizontalvariance").forGetter(Settings::getHorizontalVariance)
+                    Codec.INT.fieldOf("base").forGetter(Settings::getBaseHeight)
             ).apply(instance, Settings::new));
 
-    public static final Codec<MysteryChunkGenerator> CODEC = RecordCodecBuilder.create(instance ->
+    public static final Codec<MysChunkGenerator> CODEC = RecordCodecBuilder.create(instance ->
             instance.group(
-                    RegistryLookupCodec.create(Registry.BIOME_REGISTRY).forGetter(MysteryChunkGenerator::getBiomeRegistry),
-                    SETTINGS_CODEC.fieldOf("settings").forGetter(MysteryChunkGenerator::getTutorialSettings)
-            ).apply(instance, MysteryChunkGenerator::new));
+                    RegistryLookupCodec.create(Registry.BIOME_REGISTRY).forGetter(MysChunkGenerator::getBiomeRegistry),
+                    SETTINGS_CODEC.fieldOf("settings").forGetter(MysChunkGenerator::getTutorialSettings)
+            ).apply(instance, MysChunkGenerator::new));
 
     private final Settings settings;
 
-    public MysteryChunkGenerator(Registry<Biome> registry, Settings settings) {
-        super(new MysteryBiomeProvider(registry), new StructureSettings(false));
+    public MysChunkGenerator(Registry<Biome> registry, Settings settings) {
+        super(new MysBiomeProvider(registry), new StructureSettings(false));
         this.settings = settings;
     }
 
@@ -47,7 +48,7 @@ public class MysteryChunkGenerator extends ChunkGenerator {
     }
 
     public Registry<Biome> getBiomeRegistry() {
-        return ((MysteryBiomeProvider)biomeSource).getBiomeRegistry();
+        return ((MysBiomeProvider)biomeSource).getBiomeRegistry();
     }
 
     @Override
@@ -61,25 +62,23 @@ public class MysteryChunkGenerator extends ChunkGenerator {
         int x;
         int z;
 
-        for (x = 0; x < 16; x++) {
-            for (z = 0; z < 16; z++) {
-                chunk.setBlockState(pos.set(x, 0, z), bedrock, false);
-            }
-        }
+//        for (x = 0; x < 16; x++) {
+//            for (z = 0; z < 16; z++) {
+//                chunk.setBlockState(pos.set(x, 0, z), bedrock, false);
+//            }
+//        }
 
         int baseHeight = settings.getBaseHeight();
-        float verticalVariance = settings.getVerticalVariance();
-        float horizontalVariance = settings.getHorizontalVariance();
-        for (x = 0; x < 16; x++) {
-            for (z = 0; z < 16; z++) {
-                int realx = chunkpos.x * 16 + x;
-                int realz = chunkpos.z * 16 + z;
-                int height = (int) (baseHeight + Math.sin(realx / horizontalVariance)*verticalVariance + Math.cos(realz / horizontalVariance)*verticalVariance);
-                for (int y = 1 ; y < height ; y++) {
-                    chunk.setBlockState(pos.set(x, y, z), stone, false);
-                }
-            }
-        }
+//        for (x = 0; x < 16; x++) {
+//            for (z = 0; z < 16; z++) {
+//                int realx = chunkpos.x * 16 + x;
+//                int realz = chunkpos.z * 16 + z;
+//                int height = (int) (baseHeight + Math.sin(realx / horizontalVariance)*verticalVariance + Math.cos(realz / horizontalVariance)*verticalVariance);
+//                for (int y = 1 ; y < height ; y++) {
+//                    chunk.setBlockState(pos.set(x, y, z), stone, false);
+//                }
+//            }
+//        }
     }
 
     @Override
@@ -89,7 +88,7 @@ public class MysteryChunkGenerator extends ChunkGenerator {
 
     @Override
     public ChunkGenerator withSeed(long seed) {
-        return new MysteryChunkGenerator(getBiomeRegistry(), settings);
+        return new MysChunkGenerator(getBiomeRegistry(), settings);
     }
 
     @Override
@@ -139,25 +138,12 @@ public class MysteryChunkGenerator extends ChunkGenerator {
 
     private static class Settings {
         private final int baseHeight;
-        private final float verticalVariance;
-        private final float horizontalVariance;
 
-        public Settings(int baseHeight, float verticalVariance, float horizontalVariance) {
+        public Settings(int baseHeight) {
             this.baseHeight = baseHeight;
-            this.verticalVariance = verticalVariance;
-            this.horizontalVariance = horizontalVariance;
         }
-
-        public float getVerticalVariance() {
-            return verticalVariance;
-        }
-
         public int getBaseHeight() {
             return baseHeight;
-        }
-
-        public float getHorizontalVariance() {
-            return horizontalVariance;
         }
     }
 }

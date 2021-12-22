@@ -103,9 +103,9 @@ bf46a6da3ba7eb8666d9439fd34834866ce6a048 data/minecraft/recipes/enderian_ingot2.
 93f2e0d9a87da6fa016bf2e1e50224ff2c7f252b data/minecraft/tags/blocks/dirt.json
 6a2ee71d2675e472ec3e29f3f94546de284483e7 data/minecraft/tags/blocks/flowers.json
 f77446ffa0ada00b6a040cfb1cb1b0932f86c19e data/minecraft/tags/blocks/leaves.json
-ee2289554179473032ad4212fd37060f809de91d data/minecraft/tags/blocks/mineable/pickaxe.json
+2ef052c74a89f7bff067a64063c97add10cd6c55 data/minecraft/tags/blocks/mineable/pickaxe.json
 f9a9c07da77583eae54a3d800245278890f1e720 data/minecraft/tags/blocks/needs_diamond_tool.json
-71d4944d20ce49d49a6a684b7e576ec674ba5359 data/minecraft/tags/blocks/needs_iron_tool.json
+f419025d3266d200b53c672c615d086feb02b847 data/minecraft/tags/blocks/needs_iron_tool.json
 f588309dadfb2ea170bdcb65a1f5400a47fc2102 data/minecraft/tags/blocks/needs_stone_tool.json
 6b7ac6ef01a6bb65fd050f0c1041533fd127fd42 data/minecraft/tags/blocks/oak_logs.json
 d8c8aeda26f690a212a5bfccf097f526c970c8fe data/minecraft/tags/blocks/planks.json

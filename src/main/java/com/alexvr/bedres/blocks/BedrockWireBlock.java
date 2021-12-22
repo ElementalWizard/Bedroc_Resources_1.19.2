@@ -185,14 +185,8 @@ public class BedrockWireBlock extends Block {
                     BlockState blockstate1 = blockstate.updateShape(direction.getOpposite(), pLevel.getBlockState(blockpos), pLevel, blockpos$mutableblockpos, blockpos);
                     updateOrDestroy(blockstate, blockstate1, pLevel, blockpos$mutableblockpos, pFlags, pRecursionLeft);
                 }
-
                 blockpos$mutableblockpos.setWithOffset(pPos, direction).move(Direction.UP);
-                BlockState blockstate3 = pLevel.getBlockState(blockpos$mutableblockpos);
-                if (!blockstate3.is(Blocks.OBSERVER)) {
-                    BlockPos blockpos1 = blockpos$mutableblockpos.relative(direction.getOpposite());
-                    BlockState blockstate2 = blockstate3.updateShape(direction.getOpposite(), pLevel.getBlockState(blockpos1), pLevel, blockpos$mutableblockpos, blockpos1);
-                    updateOrDestroy(blockstate3, blockstate2, pLevel, blockpos$mutableblockpos, pFlags, pRecursionLeft);
-                }
+
             }
         }
     }

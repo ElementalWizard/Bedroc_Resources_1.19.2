@@ -32,13 +32,15 @@ public class ModBlockTags extends BlockTagsProvider {
                 .add(Registration.SCRAPER_MOTOR_BLOCK.get())
                 .add(Registration.VOID_TEAR_BLOCK.get())
                 .add(Registration.ENDERIAN_STAIRS_BLOCK.get())
-                .add(Registration.DF_COOBLE_BLOCK.get());
+                .add(Registration.DF_COOBLE_BLOCK.get())
+                .add(Registration.ITEM_PLATFORM_BLOCK.get());
 
         tag(BlockTags.NEEDS_STONE_TOOL)
                 .add(Registration.DF_COOBLE_BLOCK.get());
 
         tag(BlockTags.NEEDS_IRON_TOOL)
                 .add(Registration.SPIKE_BLOCK.get())
+                .add(Registration.ITEM_PLATFORM_BLOCK.get())
                 .add(Registration.BEDROCK_COMPRESSED_WIRE_BLOCK.get())
                 .add(Registration.ENDERIAN_BLOCK_BLOCK.get())
                 .add(Registration.ENDERIAN_BRICK_BLOCK.get())

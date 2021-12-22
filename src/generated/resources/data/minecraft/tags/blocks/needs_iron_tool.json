@@ -2,6 +2,7 @@
   "replace": false,
   "values": [
     "bedres:spike",
+    "bedres:item_platform",
     "bedres:bedrock_compressed_wire",
     "bedres:enderian_block",
     "bedres:enderian_brick",

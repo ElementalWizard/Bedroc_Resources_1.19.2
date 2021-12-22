@@ -16,6 +16,7 @@
     "bedres:scraper_motor",
     "bedres:void_tears",
     "bedres:bedrock_stairs",
-    "bedres:decaying_fluxed_cobblestone"
+    "bedres:decaying_fluxed_cobblestone",
+    "bedres:item_platform"
   ]
 }

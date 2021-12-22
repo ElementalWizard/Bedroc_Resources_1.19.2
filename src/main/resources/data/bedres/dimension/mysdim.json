@@ -2,10 +2,9 @@
   "type": "bedres:mysdim",
   "generator": {
     "type": "bedres:chunkgen",
+    "seed": 0,
     "settings": {
-      "base": 65,
-      "verticalvariance": 16,
-      "horizontalvariance": 10
+      "base": 65
     }
   }
 }
