@@ -1,9 +1,13 @@
 package com.alexvr.bedres.setup;
 
 import com.alexvr.bedres.blocks.*;
+import com.alexvr.bedres.blocks.bedrockiumPedestal.BedrociumPedestal;
+import com.alexvr.bedres.blocks.bedrockiumPedestal.BedrociumPedestalTile;
 import com.alexvr.bedres.blocks.bedrockiumTower.BedrociumTower;
 import com.alexvr.bedres.blocks.bedrockiumTower.BedrockiumTowerTile;
 import com.alexvr.bedres.blocks.decayingfluxedblocks.*;
+import com.alexvr.bedres.blocks.enderianRitualPedestal.EnderianRitualPedestal;
+import com.alexvr.bedres.blocks.enderianRitualPedestal.EnderianRitualPedestalTile;
 import com.alexvr.bedres.blocks.itemPlatform.ItemPlatform;
 import com.alexvr.bedres.blocks.itemPlatform.ItemPlatformTile;
 import com.alexvr.bedres.blocks.scrapeTank.ScrapeTank;
@@ -87,6 +91,7 @@ public class Registration {
 
     public static final RegistryObject<EnderianRitualPedestal> ENDERIAN_RITUAL_PEDESTAL_BLOCK = BLOCKS.register(BedrockReferences.ENDERIAN_RITUAL_PEDESTAL_REGNAME, () -> new EnderianRitualPedestal(METAL_BLOCK_PROPERTIES));
     public static final RegistryObject<Item> ENDERIAN_RITUAL_PEDESTAL_ITEM = fromBlock(ENDERIAN_RITUAL_PEDESTAL_BLOCK);
+    public static final RegistryObject<BlockEntityType<EnderianRitualPedestalTile>> ENDERIAN_RITUAL_PEDESTAL_TILE = BLOCK_ENTITIES.register(BedrockReferences.ENDERIAN_RITUAL_PEDESTAL_REGNAME, () -> BlockEntityType.Builder.of(EnderianRitualPedestalTile::new, ENDERIAN_RITUAL_PEDESTAL_BLOCK.get()).build(null));
 
     public static final RegistryObject<BedrociumSpike> SPIKE_BLOCK = BLOCKS.register(BedrockReferences.SPIKE_REGNAME, () -> new BedrociumSpike(METAL_BLOCK_PROPERTIES));
     public static final RegistryObject<Item> SPIKE_ITEM = fromBlock(SPIKE_BLOCK);
@@ -98,6 +103,7 @@ public class Registration {
 
     public static final RegistryObject<BedrociumPedestal> PEDESTAL_BLOCK = BLOCKS.register(BedrockReferences.PEDESTAL_REGNAME, () -> new BedrociumPedestal(METAL_BLOCK_PROPERTIES));
     public static final RegistryObject<Item> PEDESTAL_ITEM = fromBlock(PEDESTAL_BLOCK);
+    public static final RegistryObject<BlockEntityType<BedrociumPedestalTile>> PEDESTAL_TILE = BLOCK_ENTITIES.register(BedrockReferences.PEDESTAL_REGNAME, () -> BlockEntityType.Builder.of(BedrociumPedestalTile::new, PEDESTAL_BLOCK.get()).build(null));
 
     public static final RegistryObject<FaceAttachedHorizontalDirectionalBlock> ITEM_PLATFORM_BLOCK = BLOCKS.register(BedrockReferences.ITEM_PLATFORM_REGNAME, () -> new ItemPlatform(METAL_BLOCK_PROPERTIES.noOcclusion().noCollission().dynamicShape()));
     public static final RegistryObject<Item> ITEM_PLATFORM_ITEM = fromBlock(ITEM_PLATFORM_BLOCK);

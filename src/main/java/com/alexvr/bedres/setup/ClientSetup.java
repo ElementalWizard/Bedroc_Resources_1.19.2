@@ -1,7 +1,9 @@
 package com.alexvr.bedres.setup;
 
 import com.alexvr.bedres.BedrockResources;
+import com.alexvr.bedres.client.renderer.BedrociumPedestalRenderer;
 import com.alexvr.bedres.client.renderer.BedrockiumTowerRenderer;
+import com.alexvr.bedres.client.renderer.EnderianRitualPedestalRenderer;
 import com.alexvr.bedres.client.renderer.ItemPlatformRenderer;
 import com.alexvr.bedres.client.screen.ScrapeTankScreen;
 import net.minecraft.client.gui.screens.MenuScreens;
@@ -38,6 +40,8 @@ public class ClientSetup {
 
             BlockEntityRenderers.register(Registration.ITEM_PLATFORM_TILE.get(), ItemPlatformRenderer::new);
             BlockEntityRenderers.register(Registration.BASE_SPIKE_TILE.get(), BedrockiumTowerRenderer::new);
+            BlockEntityRenderers.register(Registration.PEDESTAL_TILE.get(), BedrociumPedestalRenderer::new);
+            BlockEntityRenderers.register(Registration.ENDERIAN_RITUAL_PEDESTAL_TILE.get(), EnderianRitualPedestalRenderer::new);
         });
 
     }
