@@ -1,6 +1,7 @@
 package com.alexvr.bedres.setup;
 
 import com.alexvr.bedres.BedrockResources;
+import com.alexvr.bedres.client.renderer.BedrockiumTowerRenderer;
 import com.alexvr.bedres.client.renderer.ItemPlatformRenderer;
 import com.alexvr.bedres.client.screen.ScrapeTankScreen;
 import net.minecraft.client.gui.screens.MenuScreens;
@@ -8,7 +9,6 @@ import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
 import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.ClientRegistry;
 import net.minecraftforge.client.event.ColorHandlerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -37,6 +37,7 @@ public class ClientSetup {
             ItemBlockRenderTypes.setRenderLayer(Registration.BEDROCK_WIRE_BLOCK.get(), RenderType.translucent());
 
             BlockEntityRenderers.register(Registration.ITEM_PLATFORM_TILE.get(), ItemPlatformRenderer::new);
+            BlockEntityRenderers.register(Registration.BASE_SPIKE_TILE.get(), BedrockiumTowerRenderer::new);
         });
 
     }

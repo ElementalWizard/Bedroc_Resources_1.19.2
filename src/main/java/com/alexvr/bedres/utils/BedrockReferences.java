@@ -39,6 +39,7 @@ public class BedrockReferences {
     public static final String SCRAPE_TANK_REGNAME = "scrape_tank";
     public static final String ENDERIAN_BLOCK_REGNAME = "enderian_block";
     public static final String ENDERIAN_ORE_REGNAME = "enderian_ore";
+    public static final String MYSTERY_DUNGEON_PORTAL_REGNAME = "mysdim_portal";
 
     public static final String SCRAPE_TANK_TOOLTIP = "message.scrapetank";
     public static final String ITEM_PLATFORM_TOOLTIP = "message.itemplatform";

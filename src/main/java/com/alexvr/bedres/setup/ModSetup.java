@@ -2,8 +2,8 @@ package com.alexvr.bedres.setup;
 
 import com.alexvr.bedres.BedrockResources;
 import com.alexvr.bedres.commands.ModCommands;
-import com.alexvr.bedres.dimension.MysBiomeProvider;
-import com.alexvr.bedres.dimension.MysChunkGenerator;
+import com.alexvr.bedres.world.dimension.MysBiomeProvider;
+import com.alexvr.bedres.world.dimension.MysChunkGenerator;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.CreativeModeTab;

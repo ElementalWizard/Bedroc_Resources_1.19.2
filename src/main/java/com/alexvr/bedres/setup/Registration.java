@@ -1,10 +1,11 @@
 package com.alexvr.bedres.setup;
 
-import com.alexvr.bedres.BedrockResources;
 import com.alexvr.bedres.blocks.*;
+import com.alexvr.bedres.blocks.bedrockiumTower.BedrociumTower;
+import com.alexvr.bedres.blocks.bedrockiumTower.BedrockiumTowerTile;
 import com.alexvr.bedres.blocks.decayingfluxedblocks.*;
-import com.alexvr.bedres.blocks.itemplatform.ItemPlatform;
-import com.alexvr.bedres.blocks.itemplatform.ItemPlatformTile;
+import com.alexvr.bedres.blocks.itemPlatform.ItemPlatform;
+import com.alexvr.bedres.blocks.itemPlatform.ItemPlatformTile;
 import com.alexvr.bedres.blocks.scrapeTank.ScrapeTank;
 import com.alexvr.bedres.blocks.scrapeTank.ScrapeTankMenu;
 import com.alexvr.bedres.blocks.scrapeTank.ScrapeTankTile;
@@ -14,7 +15,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.ItemTags;
-import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
@@ -39,7 +39,6 @@ public class Registration {
     private static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, MODID);
     private static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITIES = DeferredRegister.create(ForgeRegistries.BLOCK_ENTITIES, MODID);
     public static final DeferredRegister<MenuType<?>> CONTAINERS = DeferredRegister.create(ForgeRegistries.CONTAINERS, MODID);
-    private static final DeferredRegister<EntityType<?>> ENTITIES = DeferredRegister.create(ForgeRegistries.ENTITIES, MODID);
 
     public static  void init(){
         IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
@@ -94,13 +93,14 @@ public class Registration {
 
     public static final RegistryObject<BedrociumTower> BASE_SPIKE_BLOCK = BLOCKS.register(BedrockReferences.BASE_SPIKE_REGNAME, () -> new BedrociumTower(METAL_BLOCK_PROPERTIES));
     public static final RegistryObject<Item> BASE_SPIKE_ITEM = fromBlock(BASE_SPIKE_BLOCK);
+    public static final RegistryObject<BlockEntityType<BedrockiumTowerTile>> BASE_SPIKE_TILE = BLOCK_ENTITIES.register(BedrockReferences.BASE_SPIKE_REGNAME, () -> BlockEntityType.Builder.of(BedrockiumTowerTile::new, BASE_SPIKE_BLOCK.get()).build(null));
+
 
     public static final RegistryObject<BedrociumPedestal> PEDESTAL_BLOCK = BLOCKS.register(BedrockReferences.PEDESTAL_REGNAME, () -> new BedrociumPedestal(METAL_BLOCK_PROPERTIES));
     public static final RegistryObject<Item> PEDESTAL_ITEM = fromBlock(PEDESTAL_BLOCK);
 
     public static final RegistryObject<FaceAttachedHorizontalDirectionalBlock> ITEM_PLATFORM_BLOCK = BLOCKS.register(BedrockReferences.ITEM_PLATFORM_REGNAME, () -> new ItemPlatform(METAL_BLOCK_PROPERTIES.noOcclusion().noCollission().dynamicShape()));
     public static final RegistryObject<Item> ITEM_PLATFORM_ITEM = fromBlock(ITEM_PLATFORM_BLOCK);
-
     public static final RegistryObject<BlockEntityType<ItemPlatformTile>> ITEM_PLATFORM_TILE = BLOCK_ENTITIES.register(BedrockReferences.ITEM_PLATFORM_REGNAME, () -> BlockEntityType.Builder.of(ItemPlatformTile::new, ITEM_PLATFORM_BLOCK.get()).build(null));
 
     public static final RegistryObject<Blazium> BLAZIUM_BLOCK = BLOCKS.register(BedrockReferences.BLAZIUM_REGNAME, () -> new Blazium(PLANT_BLOCK_PROPERTIES.lightLevel(value -> 8).explosionResistance(2f)));

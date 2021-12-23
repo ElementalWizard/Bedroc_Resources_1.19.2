@@ -1,7 +1,6 @@
 package com.alexvr.bedres.client.renderer;
 
-import com.alexvr.bedres.blocks.itemplatform.ItemPlatformTile;
-import com.alexvr.bedres.setup.Registration;
+import com.alexvr.bedres.blocks.itemPlatform.ItemPlatformTile;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Quaternion;
 import net.minecraft.client.Minecraft;
@@ -9,11 +8,8 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.FaceAttachedHorizontalDirectionalBlock;
 import net.minecraftforge.items.CapabilityItemHandler;
-
-import java.util.concurrent.atomic.AtomicReference;
 
 public class ItemPlatformRenderer implements BlockEntityRenderer<ItemPlatformTile> {
 

@@ -1,12 +1,11 @@
 package com.alexvr.bedres.commands;
 
-import com.alexvr.bedres.dimension.ModDimensions;
+import com.alexvr.bedres.world.dimension.ModDimensions;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.builder.ArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import net.minecraft.commands.CommandSource;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.core.BlockPos;

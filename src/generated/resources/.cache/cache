@@ -3,7 +3,7 @@
 2702119213c2004c0db66a26648f33392ce6642e assets/bedres/blockstates/enderian_ore_end.json
 7e149bc1ba417545e78c3d75ef20ab71f21b2158 assets/bedres/blockstates/enderian_ore_nether.json
 8a2f82facdb854da2d4dc5f492c4cf25e6b9e187 assets/bedres/blockstates/enderian_ore_overworld.json
-be4754da63eff94967e4573bbd82e3c3dae921df assets/bedres/lang/en_us.json
+663907cb7332e4566cef08313f4e83811adf9303 assets/bedres/lang/en_us.json
 aca6215b75367ed97c74559f065a72cdeda8f1db assets/bedres/models/block/bedrock_compressed_wire.json
 6ab78f4fa5faf6ad2822069b4e314bda8fa623a9 assets/bedres/models/block/enderian_ore_deepslate.json
 966a2036e2053e328e8b8d4231464c75125b0fce assets/bedres/models/block/enderian_ore_end.json
@@ -103,12 +103,13 @@ bf46a6da3ba7eb8666d9439fd34834866ce6a048 data/minecraft/recipes/enderian_ingot2.
 93f2e0d9a87da6fa016bf2e1e50224ff2c7f252b data/minecraft/tags/blocks/dirt.json
 6a2ee71d2675e472ec3e29f3f94546de284483e7 data/minecraft/tags/blocks/flowers.json
 f77446ffa0ada00b6a040cfb1cb1b0932f86c19e data/minecraft/tags/blocks/leaves.json
-2ef052c74a89f7bff067a64063c97add10cd6c55 data/minecraft/tags/blocks/mineable/pickaxe.json
+c959db71ff5a05d94b2ce1ac22fd7e8cb4d84b18 data/minecraft/tags/blocks/mineable/pickaxe.json
 f9a9c07da77583eae54a3d800245278890f1e720 data/minecraft/tags/blocks/needs_diamond_tool.json
-f419025d3266d200b53c672c615d086feb02b847 data/minecraft/tags/blocks/needs_iron_tool.json
+9f7174f8d038ed89e0498e066f748e6985c37962 data/minecraft/tags/blocks/needs_iron_tool.json
 f588309dadfb2ea170bdcb65a1f5400a47fc2102 data/minecraft/tags/blocks/needs_stone_tool.json
 6b7ac6ef01a6bb65fd050f0c1041533fd127fd42 data/minecraft/tags/blocks/oak_logs.json
 d8c8aeda26f690a212a5bfccf097f526c970c8fe data/minecraft/tags/blocks/planks.json
+7d621e814fde8b2961ab792ffb1028a1ff48a7bb data/minecraft/tags/blocks/portals.json
 6608f8a2372866be6073f7c71d4a26be1cff90db data/minecraft/tags/blocks/saplings.json
 317a2ec40d0f29e7d4ebcd9c25c6aa66e548bbc6 data/minecraft/tags/blocks/slabs.json
 a15348108e481e7fe5404105d1a7a044c3c00bae data/minecraft/tags/blocks/stairs.json
