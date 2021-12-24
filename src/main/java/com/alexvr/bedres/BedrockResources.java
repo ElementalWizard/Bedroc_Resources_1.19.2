@@ -1,6 +1,9 @@
 package com.alexvr.bedres;
 
-import com.alexvr.bedres.setup.*;
+import com.alexvr.bedres.setup.ClientSetup;
+import com.alexvr.bedres.setup.ModSetup;
+import com.alexvr.bedres.setup.Registration;
+import com.alexvr.bedres.world.ModWorldgen;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -19,7 +22,7 @@ public class BedrockResources {
         IEventBus event = FMLJavaModLoadingContext.get().getModEventBus();
         event.addListener(ModSetup::init);
         DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> event.addListener(ClientSetup::init));
-
+        MinecraftForge.EVENT_BUS.register(new ModWorldgen());
     }
 
 }

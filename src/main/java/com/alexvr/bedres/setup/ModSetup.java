@@ -2,6 +2,7 @@ package com.alexvr.bedres.setup;
 
 import com.alexvr.bedres.BedrockResources;
 import com.alexvr.bedres.commands.ModCommands;
+import com.alexvr.bedres.world.ModWorldgen;
 import com.alexvr.bedres.world.dimension.MysBiomeProvider;
 import com.alexvr.bedres.world.dimension.MysChunkGenerator;
 import net.minecraft.core.Registry;
@@ -24,13 +25,15 @@ public class ModSetup {
         }
     };
 
-
+    @SubscribeEvent
     public static void init(FMLCommonSetupEvent event) {
+
         event.enqueueWork(() -> {
             Registry.register(Registry.CHUNK_GENERATOR, new ResourceLocation(BedrockResources.MODID, "chunkgen"),
                     MysChunkGenerator.CODEC);
             Registry.register(Registry.BIOME_SOURCE, new ResourceLocation(BedrockResources.MODID, "biomes"),
                     MysBiomeProvider.CODEC);
+            ModWorldgen.onCommonSetup();
         });
     }
 
