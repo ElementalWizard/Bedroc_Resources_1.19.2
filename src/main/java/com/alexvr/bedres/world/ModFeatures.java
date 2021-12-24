@@ -33,6 +33,7 @@ public class ModFeatures {
 
     public static final class Configured {
 
+        @SuppressWarnings("ConstantConditions")
         public static final ConfiguredFeature<TreeConfiguration, ?> DF_TREE = ModFeatures.DF_TREE.configured(new TreeConfiguration.TreeConfigurationBuilder(null, null, null, null, null).build());
         public static final ConfiguredFeature<NoneFeatureConfiguration, ?> SUN_DAIZE = ModFeatures.SUN_DAIZE.configured(FeatureConfiguration.NONE);
         public static final ConfiguredFeature<NoneFeatureConfiguration, ?> ENDER_HUSH = ModFeatures.ENDER_HUSH.configured(FeatureConfiguration.NONE);

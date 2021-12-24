@@ -57,6 +57,7 @@ public class WorldGenFlower extends Feature<NoneFeatureConfiguration> {
         return any;
     }
 
+    @SuppressWarnings("deprecation")
     private boolean tryPlace(WorldGenLevel level, BlockPos pos) {
         var state = this.block.defaultBlockState();
 

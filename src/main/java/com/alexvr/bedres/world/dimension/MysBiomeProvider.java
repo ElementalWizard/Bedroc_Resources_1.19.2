@@ -8,6 +8,7 @@ import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.BiomeSource;
 import net.minecraft.world.level.biome.Biomes;
 import net.minecraft.world.level.biome.Climate;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Collections;
 import java.util.List;
@@ -37,17 +38,17 @@ public class MysBiomeProvider extends BiomeSource {
     }
 
     @Override
-    protected Codec<? extends BiomeSource> codec() {
+    protected @NotNull Codec<? extends BiomeSource> codec() {
         return CODEC;
     }
 
     @Override
-    public BiomeSource withSeed(long seed) {
+    public @NotNull BiomeSource withSeed(long seed) {
         return this;
     }
 
     @Override
-    public Biome getNoiseBiome(int x, int y, int z, Climate.Sampler sampler) {
+    public @NotNull Biome getNoiseBiome(int x, int y, int z, Climate.@NotNull Sampler sampler) {
         return biome;
     }
 }

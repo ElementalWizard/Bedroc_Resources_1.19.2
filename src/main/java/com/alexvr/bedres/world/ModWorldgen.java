@@ -18,6 +18,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.function.Supplier;
 
 public class ModWorldgen {
@@ -33,17 +34,11 @@ public class ModWorldgen {
             return;
         generation.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, placedEnderianOreFeature);
         switch (category) {
-            case NETHER -> {
-                generation.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, ModFeatures.Placed.BLAZIUM);
-            }
-            case THEEND -> {
-                generation.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, ModFeatures.Placed.ENDER_HUSH);
-            }
+            case NETHER -> generation.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, ModFeatures.Placed.BLAZIUM);
+            case THEEND -> generation.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, ModFeatures.Placed.ENDER_HUSH);
             default -> {
                 generation.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, ModFeatures.Placed.SUN_DAIZE);
                 generation.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, ModFeatures.Placed.ENDER_HUSH);
-
-
             }
         }
     }
@@ -76,7 +71,7 @@ public class ModWorldgen {
         for (var entry : ModFeatures.Configured.class.getFields()) {
             try {
                 var feature = (ConfiguredFeature<?, ?>) entry.get(null);
-                Registry.register(BuiltinRegistries.CONFIGURED_FEATURE, feature.feature.getRegistryName(), feature);
+                Registry.register(BuiltinRegistries.CONFIGURED_FEATURE, Objects.requireNonNull(feature.feature.getRegistryName()), feature);
             } catch (IllegalAccessException e) {
                 //LOGGER.error(e);
             }
@@ -86,7 +81,8 @@ public class ModWorldgen {
                 var placed = (PlacedFeature) entry.get(null);
                 // why are you making this so difficult for me
                 Supplier<ConfiguredFeature<?, ?>> feature = ObfuscationReflectionHelper.getPrivateValue(PlacedFeature.class, placed, "f_191775_");
-                Registry.register(BuiltinRegistries.PLACED_FEATURE, feature.get().feature.getRegistryName(), placed);
+                assert feature != null;
+                Registry.register(BuiltinRegistries.PLACED_FEATURE, Objects.requireNonNull(feature.get().feature.getRegistryName()), placed);
             } catch (IllegalAccessException e) {
                 //LOGGER.error(e);
             }

@@ -39,7 +39,7 @@ public class ModLootTablesProvider extends BaseLootTableProvider {
         lootTables.put(Registration.SUN_DAIZE_BLOCK.get(),createSimpleTable(BedrockReferences.SUN_DAIZE_REGNAME, Registration.SUN_DAIZE_BLOCK.get()));
         lootTables.put(Registration.FLUXED_SPORES_BLOCK.get(),createSimpleTable(BedrockReferences.FLUXED_SPORES_REGNAME, Registration.FLUXED_SPORES_BLOCK.get()));
 
-        lootTables.put(Registration.DF_COOBLE_BLOCK.get(),createSimpleTable(BedrockReferences.DF_COOBLE_REGNAME, Registration.DF_COOBLE_BLOCK.get()));
+        lootTables.put(Registration.DF_COOBLE_BLOCK.get(),createSimpleTable(BedrockReferences.DF_COBBLE_REGNAME, Registration.DF_COOBLE_BLOCK.get()));
         lootTables.put(Registration.DF_DIRT_BLOCK.get(),createSimpleTable(BedrockReferences.DF_DIRT_REGNAME, Registration.DF_DIRT_BLOCK.get()));
         lootTables.put(Registration.DF_GRASS_BLOCK.get(),createSimpleTable(BedrockReferences.DF_GRASS_REGNAME, Registration.DF_GRASS_BLOCK.get()));
         lootTables.put(Registration.DF_OAK_LEAVE_BLOCK.get(),createShearTable(BedrockReferences.DF_OAK_LEAVES_REGNAME, Registration.DF_OAK_LEAVE_BLOCK.get()));

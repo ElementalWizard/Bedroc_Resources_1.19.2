@@ -129,7 +129,7 @@ public class WorldGenDFTree extends Feature<NoneFeatureConfiguration> {
         if (highest > 0) {
             if (x == highest) {
                 axis = Axis.X;
-            } else if (y == highest) {
+            } else {
                 axis = Axis.Z;
             }
         }

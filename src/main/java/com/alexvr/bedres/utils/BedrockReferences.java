@@ -1,12 +1,8 @@
 package com.alexvr.bedres.utils;
 
+@SuppressWarnings("unused")
 public class BedrockReferences {
 
-
-    public static final String NORTH = "north";
-    public static final String SOUTH = "south";
-    public static final String EAST = "east";
-    public static final String WEST = "west";
 
     public static final String SCREEN_SCRAPE_TANK = "screen.bedres.scrape_tank";
 
@@ -63,7 +59,7 @@ public class BedrockReferences {
     public static final String DF_OAK_PLANKS_REGNAME = "decaying_fluxed_oak_planks";
     public static final String DF_OAK_SLAB_REGNAME = "decaying_fluxed_oak_slab";
     public static final String DF_OAK_LEAVES_REGNAME = "decaying_fluxed_oak_leave";
-    public static final String DF_COOBLE_REGNAME = "decaying_fluxed_cobblestone";
+    public static final String DF_COBBLE_REGNAME = "decaying_fluxed_cobblestone";
     public static final String FLUXED_SPORES_REGNAME = "fluxed_spores";
     public static final String FLUXED_GRAVITY_BUBBLE_REGNAME = "fluxed_gravity_bubble";
     public static final String RANGE_VIEW_REGNAME = "range_view";

@@ -8,6 +8,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.dimension.DimensionType;
 
 public class ModDimensions {
+    @SuppressWarnings("unused")
     public static final ResourceKey<DimensionType> MYSTERY_DIM_TYPE = ResourceKey.create(Registry.DIMENSION_TYPE_REGISTRY, new ResourceLocation(BedrockResources.MODID, "mysdim"));
     public static final ResourceKey<Level> MYSDIM = ResourceKey.create(Registry.DIMENSION_REGISTRY, new ResourceLocation(BedrockResources.MODID, "mysdim"));
 

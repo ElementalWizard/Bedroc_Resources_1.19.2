@@ -54,11 +54,11 @@ public class Registration {
 
     private static final BlockBehaviour.Properties ORE_PROPERTIES = BlockBehaviour.Properties.of(Material.STONE).strength(2f);
     private static final BlockBehaviour.Properties BLOCK_PROPERTIES = BlockBehaviour.Properties.of(Material.STONE).strength(2f);
-    private static final BlockBehaviour.Properties METAL_BLOCK_PROPERTIES = BlockBehaviour.Properties.of(Material.HEAVY_METAL).strength(3,800f).requiresCorrectToolForDrops();
-    private static final BlockBehaviour.Properties PLANT_BLOCK_PROPERTIES = BlockBehaviour.Properties.of(Material.PLANT).dynamicShape().noCollission().lightLevel(value -> 3).instabreak();
-    private static final BlockBehaviour.Properties DIRT_BLOCK_PROPERTIES = BlockBehaviour.Properties.of(Material.DIRT).strength(1f);
-    private static final BlockBehaviour.Properties WOOD_BLOCK_PROPERTIES = BlockBehaviour.Properties.of(Material.WOOD).strength(2f);
-    private static final BlockBehaviour.Properties LEAVES_BLOCK_PROPERTIES = BlockBehaviour.Properties.of(Material.LEAVES).noOcclusion().sound(SoundType.AZALEA_LEAVES);
+    private static final BlockBehaviour.Properties METAL_BLOCK_PROPERTIES = BlockBehaviour.Properties.of(Material.HEAVY_METAL).strength(3,800f).sound(SoundType.METAL).requiresCorrectToolForDrops();
+    private static final BlockBehaviour.Properties PLANT_BLOCK_PROPERTIES = BlockBehaviour.Properties.of(Material.PLANT).dynamicShape().noCollission().sound(SoundType.GRASS).lightLevel(value -> 3).instabreak();
+    private static final BlockBehaviour.Properties DIRT_BLOCK_PROPERTIES = BlockBehaviour.Properties.of(Material.DIRT).strength(1f).sound(SoundType.GRASS);
+    private static final BlockBehaviour.Properties WOOD_BLOCK_PROPERTIES = BlockBehaviour.Properties.of(Material.WOOD).strength(2f).sound(SoundType.WOOD);
+    private static final BlockBehaviour.Properties LEAVES_BLOCK_PROPERTIES = BlockBehaviour.Properties.of(Material.LEAVES).noOcclusion().sound(SoundType.GRASS);
 
     public static final RegistryObject<Block> ENDERIAN_ORE_OVERWORLD = BLOCKS.register(BedrockReferences.ENDERIAN_ORE_REGNAME + "_overworld", () -> new OreBlock(ORE_PROPERTIES));
     public static final RegistryObject<Item> ENDERIAN_ORE_OVERWORLD_ITEM = fromBlock(ENDERIAN_ORE_OVERWORLD);
@@ -118,7 +118,7 @@ public class Registration {
     public static final RegistryObject<FluxedSpores> FLUXED_SPORES_BLOCK = BLOCKS.register(BedrockReferences.FLUXED_SPORES_REGNAME, () -> new FluxedSpores(PLANT_BLOCK_PROPERTIES.lightLevel(value -> 0)));
     public static final RegistryObject<Item> FLUXED_SPORES_ITEM = fromBlock(FLUXED_SPORES_BLOCK);
 
-    public static final RegistryObject<DFBase> DF_COOBLE_BLOCK = BLOCKS.register(BedrockReferences.DF_COOBLE_REGNAME, () -> new DFBase(BLOCK_PROPERTIES.requiresCorrectToolForDrops()));
+    public static final RegistryObject<DFBase> DF_COOBLE_BLOCK = BLOCKS.register(BedrockReferences.DF_COBBLE_REGNAME, () -> new DFBase(BLOCK_PROPERTIES.requiresCorrectToolForDrops()));
     public static final RegistryObject<Item> DF_COOBLE_ITEM = fromBlock(DF_COOBLE_BLOCK);
     public static final RegistryObject<DFBase> DF_DIRT_BLOCK = BLOCKS.register(BedrockReferences.DF_DIRT_REGNAME, () -> new DFBase(DIRT_BLOCK_PROPERTIES));
     public static final RegistryObject<Item> DF_DIRT_ITEM = fromBlock(DF_DIRT_BLOCK);
@@ -128,7 +128,7 @@ public class Registration {
     public static final RegistryObject<Item> DF_OAK_LEAVE_ITEM = fromBlock(DF_OAK_LEAVE_BLOCK);
     public static final RegistryObject<RotatedPillarBlock> DF_OAK_LOG_BLOCK = BLOCKS.register(BedrockReferences.DF_OAK_LOG_REGNAME, () -> new DFOakLog(WOOD_BLOCK_PROPERTIES));
     public static final RegistryObject<Item> DF_OAK_LOG_ITEM = fromBlock(DF_OAK_LOG_BLOCK);
-    public static final RegistryObject<BushBlock> DF_SAPPLING_BLOCK = BLOCKS.register(BedrockReferences.DF_SAPPLING_REGNAME, () -> new DFOakSappling(PLANT_BLOCK_PROPERTIES.lightLevel(value -> 0)));
+    public static final RegistryObject<BushBlock> DF_SAPPLING_BLOCK = BLOCKS.register(BedrockReferences.DF_SAPPLING_REGNAME, () -> new DFOakSappling(PLANT_BLOCK_PROPERTIES.lightLevel(value -> 0).sound(SoundType.GRASS)));
     public static final RegistryObject<Item> DF_SAPPLING_ITEM = fromBlock(DF_SAPPLING_BLOCK);
     public static final RegistryObject<DFBase> DF_OAK_PLANKS_BLOCK = BLOCKS.register(BedrockReferences.DF_OAK_PLANKS_REGNAME, () -> new DFBase(WOOD_BLOCK_PROPERTIES));
     public static final RegistryObject<Item> DF_OAK_PLANKS_ITEM = fromBlock(DF_OAK_PLANKS_BLOCK);
@@ -146,7 +146,7 @@ public class Registration {
     public static final RegistryObject<VoidTears> VOID_TEAR_BLOCK = BLOCKS.register(BedrockReferences.VOID_TEAR_REGNAME, () -> new VoidTears(BLOCK_PROPERTIES));
     public static final RegistryObject<Item> VOID_TEAR_ITEM = fromBlock(VOID_TEAR_BLOCK);
 
-    public static final RegistryObject<BedrockWireBlock> BEDROCK_WIRE_BLOCK = BLOCKS.register(BedrockReferences.BEDROCK_WIRE_REGNAME, () -> new BedrockWireBlock(BLOCK_PROPERTIES.noCollission().instabreak().dynamicShape()));
+    public static final RegistryObject<BedrockWireBlock> BEDROCK_WIRE_BLOCK = BLOCKS.register(BedrockReferences.BEDROCK_WIRE_REGNAME, () -> new BedrockWireBlock(BLOCK_PROPERTIES.noCollission().sound(SoundType.WOOL).instabreak().dynamicShape()));
     public static final RegistryObject<Item> BEDROCK_WIRE_ITEM = fromBlock(BEDROCK_WIRE_BLOCK);
 
     public static final RegistryObject<ScrapeKnife> SCRAPE_KNIFE_ITEM = ITEMS.register(BedrockReferences.SCRAPE_KNIFE_REGNAME, () -> new ScrapeKnife((new Item.Properties()).tab(ModSetup.GROUP).stacksTo(1)));
@@ -164,10 +164,6 @@ public class Registration {
     public  static final Tags.IOptionalNamedTag<Block> DF_LOG = BlockTags.createOptional(new ResourceLocation(MODID,BedrockReferences.DF_OAK_LOG_REGNAME));
     public  static final Tags.IOptionalNamedTag<Item> ENDERIAN_ORE_ITEM = ItemTags.createOptional(new ResourceLocation(MODID,"enderian_ore"));
     public  static final Tags.IOptionalNamedTag<Item> DF_LOG_ITEM = ItemTags.createOptional(new ResourceLocation(MODID,BedrockReferences.DF_OAK_LOG_REGNAME));
-
-//    public static final RegistryObject<WorldGenSunDaize> SUN_DAIZE_FEATURE = FEATURES.register(BedrockReferences.SUN_DAIZE_REGNAME, () -> new WorldGenSunDaize(Registration.SUN_DAIZE_BLOCK.get(),60,false));
-//    public static final RegistryObject<WorldGenDFTree> DF_TREE_FEATURE = FEATURES.register("df_tree", WorldGenDFTree::new);
-
 
     public static <B extends  Block>RegistryObject<Item> fromBlock(RegistryObject<B> block) {
         return ITEMS.register(block.getId().getPath(), () -> new BlockItem(block.get(),(new Item.Properties()).tab(ModSetup.GROUP)));
