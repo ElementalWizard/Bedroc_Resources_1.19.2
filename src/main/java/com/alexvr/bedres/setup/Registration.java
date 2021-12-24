@@ -128,7 +128,7 @@ public class Registration {
     public static final RegistryObject<Item> DF_OAK_LEAVE_ITEM = fromBlock(DF_OAK_LEAVE_BLOCK);
     public static final RegistryObject<RotatedPillarBlock> DF_OAK_LOG_BLOCK = BLOCKS.register(BedrockReferences.DF_OAK_LOG_REGNAME, () -> new DFOakLog(WOOD_BLOCK_PROPERTIES));
     public static final RegistryObject<Item> DF_OAK_LOG_ITEM = fromBlock(DF_OAK_LOG_BLOCK);
-    public static final RegistryObject<SaplingBlock> DF_SAPPLING_BLOCK = BLOCKS.register(BedrockReferences.DF_SAPPLING_REGNAME, () -> new DFOakSappling(PLANT_BLOCK_PROPERTIES.lightLevel(value -> 0)));
+    public static final RegistryObject<BushBlock> DF_SAPPLING_BLOCK = BLOCKS.register(BedrockReferences.DF_SAPPLING_REGNAME, () -> new DFOakSappling(PLANT_BLOCK_PROPERTIES.lightLevel(value -> 0)));
     public static final RegistryObject<Item> DF_SAPPLING_ITEM = fromBlock(DF_SAPPLING_BLOCK);
     public static final RegistryObject<DFBase> DF_OAK_PLANKS_BLOCK = BLOCKS.register(BedrockReferences.DF_OAK_PLANKS_REGNAME, () -> new DFBase(WOOD_BLOCK_PROPERTIES));
     public static final RegistryObject<Item> DF_OAK_PLANKS_ITEM = fromBlock(DF_OAK_PLANKS_BLOCK);
@@ -164,6 +164,10 @@ public class Registration {
     public  static final Tags.IOptionalNamedTag<Block> DF_LOG = BlockTags.createOptional(new ResourceLocation(MODID,BedrockReferences.DF_OAK_LOG_REGNAME));
     public  static final Tags.IOptionalNamedTag<Item> ENDERIAN_ORE_ITEM = ItemTags.createOptional(new ResourceLocation(MODID,"enderian_ore"));
     public  static final Tags.IOptionalNamedTag<Item> DF_LOG_ITEM = ItemTags.createOptional(new ResourceLocation(MODID,BedrockReferences.DF_OAK_LOG_REGNAME));
+
+//    public static final RegistryObject<WorldGenSunDaize> SUN_DAIZE_FEATURE = FEATURES.register(BedrockReferences.SUN_DAIZE_REGNAME, () -> new WorldGenSunDaize(Registration.SUN_DAIZE_BLOCK.get(),60,false));
+//    public static final RegistryObject<WorldGenDFTree> DF_TREE_FEATURE = FEATURES.register("df_tree", WorldGenDFTree::new);
+
 
     public static <B extends  Block>RegistryObject<Item> fromBlock(RegistryObject<B> block) {
         return ITEMS.register(block.getId().getPath(), () -> new BlockItem(block.get(),(new Item.Properties()).tab(ModSetup.GROUP)));

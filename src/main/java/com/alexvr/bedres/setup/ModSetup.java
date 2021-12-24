@@ -34,6 +34,7 @@ public class ModSetup {
             Registry.register(Registry.BIOME_SOURCE, new ResourceLocation(BedrockResources.MODID, "biomes"),
                     MysBiomeProvider.CODEC);
             ModWorldgen.onCommonSetup();
+
         });
     }
 

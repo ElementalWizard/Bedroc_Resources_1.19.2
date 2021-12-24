@@ -11,14 +11,14 @@ import net.minecraft.world.level.levelgen.GenerationStep;
 import net.minecraft.world.level.levelgen.VerticalAnchor;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.minecraft.world.level.levelgen.feature.Feature;
-import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
 import net.minecraft.world.level.levelgen.feature.configurations.OreConfiguration;
-import net.minecraft.world.level.levelgen.feature.configurations.RandomPatchConfiguration;
 import net.minecraft.world.level.levelgen.placement.*;
 import net.minecraftforge.event.world.BiomeLoadingEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
 
 import java.util.List;
+import java.util.function.Supplier;
 
 public class ModWorldgen {
 
@@ -34,13 +34,14 @@ public class ModWorldgen {
         generation.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, placedEnderianOreFeature);
         switch (category) {
             case NETHER -> {
-                //generation.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, placedBlaziumFeature);
+                generation.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, ModFeatures.Placed.BLAZIUM);
             }
             case THEEND -> {
-                //generation.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, placedEnderHushFeature);
+                generation.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, ModFeatures.Placed.ENDER_HUSH);
             }
             default -> {
-                //generation.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, placedBlaziumFeature);
+                generation.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, ModFeatures.Placed.SUN_DAIZE);
+                generation.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, ModFeatures.Placed.ENDER_HUSH);
 
 
             }
@@ -50,9 +51,7 @@ public class ModWorldgen {
     public static void onCommonSetup() {
         int size, rate, minY, maxY;
         List<OreConfiguration.TargetBlockState> targets;
-        ConfiguredFeature<OreConfiguration, ?> feature;
-        ConfiguredFeature<RandomPatchConfiguration, ?> flowerFeature;
-        ConfiguredFeature<NoneFeatureConfiguration, ?> altartFeature;
+        ConfiguredFeature<OreConfiguration, ?> featureOre;
         size = 3;
         minY = -60;
         maxY = 20;
@@ -62,29 +61,35 @@ public class ModWorldgen {
                 OreConfiguration.target(OreFeatures.DEEPSLATE_ORE_REPLACEABLES, Registration.ENDERIAN_ORE_DEEPSLATE.get().defaultBlockState()),
                 OreConfiguration.target(OreFeatures.NETHER_ORE_REPLACEABLES, Registration.ENDERIAN_ORE_NETHER.get().defaultBlockState())
         );
-        feature = Feature.ORE.configured(new OreConfiguration(targets, size));
+        featureOre = Feature.ORE.configured(new OreConfiguration(targets, size));
 
-        placedEnderianOreFeature = feature.placed(List.of(
+        placedEnderianOreFeature = featureOre.placed(List.of(
                 CountPlacement.of(rate),
                 InSquarePlacement.spread(),
                 HeightRangePlacement.uniform(VerticalAnchor.absolute(minY), VerticalAnchor.absolute(maxY)),
                 BiomeFilter.biome()
         ));
 
-        Registry.register(BuiltinRegistries.CONFIGURED_FEATURE, new ResourceLocation(BedrockResources.MODID, BedrockReferences.ENDERIAN_ORE_REGNAME), feature);
+        Registry.register(BuiltinRegistries.CONFIGURED_FEATURE, new ResourceLocation(BedrockResources.MODID, BedrockReferences.ENDERIAN_ORE_REGNAME), featureOre);
         Registry.register(BuiltinRegistries.PLACED_FEATURE, new ResourceLocation(BedrockResources.MODID,  BedrockReferences.ENDERIAN_ORE_REGNAME), placedEnderianOreFeature);
 
-
-//        flowerFeature = Feature.FLOWER.configured(new RandomPatchConfiguration(64, 10, 4, () -> Feature.SIMPLE_BLOCK.configured(new SimpleBlockConfiguration(BlockStateProvider.simple(Registration.ENDER_HUSH_BLOCK.get()))).onlyWhenEmpty()));
-//
-//        placedBlaziumFeature = flowerFeature.placed(List.of(
-//                CountPlacement.of(20),
-//                InSquarePlacement.spread(),
-//                BiomeFilter.biome()
-//        ));
-//
-//        Registry.register(BuiltinRegistries.CONFIGURED_FEATURE, new ResourceLocation(BedrockResources.MODID, BedrockReferences.ENDER_HUSH_REGNAME), flowerFeature);
-//        Registry.register(BuiltinRegistries.PLACED_FEATURE, new ResourceLocation(BedrockResources.MODID,  BedrockReferences.ENDER_HUSH_REGNAME), placedBlaziumFeature);
-
+        for (var entry : ModFeatures.Configured.class.getFields()) {
+            try {
+                var feature = (ConfiguredFeature<?, ?>) entry.get(null);
+                Registry.register(BuiltinRegistries.CONFIGURED_FEATURE, feature.feature.getRegistryName(), feature);
+            } catch (IllegalAccessException e) {
+                //LOGGER.error(e);
+            }
+        }
+        for (var entry : ModFeatures.Placed.class.getFields()) {
+            try {
+                var placed = (PlacedFeature) entry.get(null);
+                // why are you making this so difficult for me
+                Supplier<ConfiguredFeature<?, ?>> feature = ObfuscationReflectionHelper.getPrivateValue(PlacedFeature.class, placed, "f_191775_");
+                Registry.register(BuiltinRegistries.PLACED_FEATURE, feature.get().feature.getRegistryName(), placed);
+            } catch (IllegalAccessException e) {
+                //LOGGER.error(e);
+            }
+        }
     }
 }
