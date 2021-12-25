@@ -1,5 +1,6 @@
 package com.alexvr.bedres.commands;
 
+import com.alexvr.bedres.setup.Registration;
 import com.alexvr.bedres.world.dimension.ModDimensions;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.CommandDispatcher;
@@ -30,13 +31,20 @@ public class CommandTPDim implements Command<CommandSourceStack> {
     public int run(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
         ServerPlayer player = context.getSource().getPlayerOrException();
         int x = player.blockPosition().getX();
+        int y = player.blockPosition().getY()+2;
         int z = player.blockPosition().getZ();
         if (player.getCommandSenderWorld().dimension().equals(ModDimensions.MYSDIM)) {
             ServerLevel world = player.getServer().getLevel(Level.OVERWORLD);
-            teleport(player, world, new BlockPos(x, 200, z));
+            teleport(player, world, new BlockPos(x, y, z));
         } else {
             ServerLevel world = player.getServer().getLevel(ModDimensions.MYSDIM);
-            teleport(player, world, new BlockPos(x, 200, z));
+            for (int i = -2; i < 3; i++) {
+                for (int k = -2; k < 3; k++) {
+                    assert world != null;
+                    world.setBlock(new BlockPos(x,y,z).offset(i,-1.0,k), Registration.ENDERIAN_BRICK_BLOCK.get().defaultBlockState(),3);
+                }
+            }
+            teleport(player, world, new BlockPos(x, y, z));
         }
         return 0;
     }
