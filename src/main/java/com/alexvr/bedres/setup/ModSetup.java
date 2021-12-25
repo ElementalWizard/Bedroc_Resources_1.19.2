@@ -2,9 +2,11 @@ package com.alexvr.bedres.setup;
 
 import com.alexvr.bedres.BedrockResources;
 import com.alexvr.bedres.commands.ModCommands;
+import com.alexvr.bedres.world.ModFeatures;
 import com.alexvr.bedres.world.ModWorldgen;
 import com.alexvr.bedres.world.dimension.MysBiomeProvider;
 import com.alexvr.bedres.world.dimension.MysChunkGenerator;
+import com.alexvr.bedres.world.features.ModConfigure;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.CreativeModeTab;
@@ -34,6 +36,9 @@ public class ModSetup {
             Registry.register(Registry.BIOME_SOURCE, new ResourceLocation(BedrockResources.MODID, "biomes"),
                     MysBiomeProvider.CODEC);
             ModWorldgen.onCommonSetup();
+
+            ModFeatures.setupStructures();
+            ModConfigure.registerConfiguredStructures();
 
         });
     }

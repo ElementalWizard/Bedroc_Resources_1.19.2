@@ -39,6 +39,7 @@ public class ModWorldgen {
             default -> {
                 generation.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, ModFeatures.Placed.SUN_DAIZE);
                 generation.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, ModFeatures.Placed.ENDER_HUSH);
+
             }
         }
     }
@@ -88,4 +89,7 @@ public class ModWorldgen {
             }
         }
     }
+
+
+
 }

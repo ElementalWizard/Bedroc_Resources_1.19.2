@@ -36,6 +36,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
 import static com.alexvr.bedres.BedrockResources.MODID;
+import static com.alexvr.bedres.world.ModFeatures.STRUCTURES;
 
 public class Registration {
 
@@ -46,10 +47,12 @@ public class Registration {
 
     public static  void init(){
         IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
+
         BLOCKS.register(bus);
         ITEMS.register(bus);
         BLOCK_ENTITIES.register(bus);
         CONTAINERS.register(bus);
+        STRUCTURES.register(bus);
     }
 
     private static final BlockBehaviour.Properties ORE_PROPERTIES = BlockBehaviour.Properties.of(Material.STONE).strength(2f);
