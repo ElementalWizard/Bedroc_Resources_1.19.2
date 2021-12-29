@@ -13,12 +13,15 @@ import com.alexvr.bedres.blocks.itemPlatform.ItemPlatformTile;
 import com.alexvr.bedres.blocks.scrapeTank.ScrapeTank;
 import com.alexvr.bedres.blocks.scrapeTank.ScrapeTankMenu;
 import com.alexvr.bedres.blocks.scrapeTank.ScrapeTankTile;
+import com.alexvr.bedres.entities.sporedeity.SporeDeityEntity;
 import com.alexvr.bedres.items.*;
 import com.alexvr.bedres.utils.BedrockReferences;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.ItemTags;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
@@ -27,6 +30,7 @@ import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.Material;
+import net.minecraftforge.common.ForgeSpawnEggItem;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.extensions.IForgeMenuType;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -44,6 +48,7 @@ public class Registration {
     private static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, MODID);
     private static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITIES = DeferredRegister.create(ForgeRegistries.BLOCK_ENTITIES, MODID);
     public static final DeferredRegister<MenuType<?>> CONTAINERS = DeferredRegister.create(ForgeRegistries.CONTAINERS, MODID);
+    public static final DeferredRegister<EntityType<?>> ENTITIES = DeferredRegister.create(ForgeRegistries.ENTITIES, MODID);
 
     public static  void init(){
         IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
@@ -53,7 +58,15 @@ public class Registration {
         BLOCK_ENTITIES.register(bus);
         CONTAINERS.register(bus);
         STRUCTURES.register(bus);
+        ENTITIES.register(bus);
     }
+
+    public static final RegistryObject<EntityType<SporeDeityEntity>> SPORE_DEITY = ENTITIES.register(BedrockReferences.SPORE_DEITY_REGNAME, () -> EntityType.Builder.of(SporeDeityEntity::new, MobCategory.MONSTER)
+            .sized(0.8f, 1.95f)
+            .clientTrackingRange(8)
+            .setShouldReceiveVelocityUpdates(false)
+            .build(BedrockReferences.SPORE_DEITY_REGNAME));
+    public static final RegistryObject<Item> SPORE_DEITY_EGG_ITEM = ITEMS.register(BedrockReferences.SPORE_DEITY_REGNAME, () -> new ForgeSpawnEggItem(SPORE_DEITY, 0xff0000, 0x00ff00, new Item.Properties().tab(ModSetup.GROUP)));
 
     private static final BlockBehaviour.Properties ORE_PROPERTIES = BlockBehaviour.Properties.of(Material.STONE).strength(2f);
     private static final BlockBehaviour.Properties BLOCK_PROPERTIES = BlockBehaviour.Properties.of(Material.STONE).strength(2f);
@@ -156,7 +169,6 @@ public class Registration {
     public static final RegistryObject<Item> RAW_ENDERIAN_CHUNK = ITEMS.register(BedrockReferences.RAW_ENDERIAN_REGNAME, () -> new Item((new Item.Properties()).tab(ModSetup.GROUP)));
     public static final RegistryObject<ScraperMesh> SCRAPER_MESH_ITEM = ITEMS.register(BedrockReferences.SCRAPER_MESH_REGNAME, () -> new ScraperMesh((new Item.Properties()).tab(ModSetup.GROUP)));
     public static final RegistryObject<FluxedCreepEggItem> FLUXED_CREEP_EGG_ITEM = ITEMS.register(BedrockReferences.FLUXED_CREEP_EGG_REGNAME, () -> new FluxedCreepEggItem((new Item.Properties()).tab(ModSetup.GROUP)));
-    public static final RegistryObject<SporeDeityEggItem> SPORE_DEITY_EGG_ITEM = ITEMS.register(BedrockReferences.SPORE_DEITY_EGG_REGNAME, () -> new SporeDeityEggItem((new Item.Properties()).tab(ModSetup.GROUP)));
     public static final RegistryObject<Staff> STAFF_ITEM = ITEMS.register(BedrockReferences.STAFF_REGNAME, () -> new Staff((new Item.Properties()).tab(ModSetup.GROUP).stacksTo(1)));
     public static final RegistryObject<FluxOracle> FLUX_ORACLE_ITEM = ITEMS.register(BedrockReferences.FLUX_ORACLE_REGNAME, () -> new FluxOracle((new Item.Properties()).tab(ModSetup.GROUP).stacksTo(1)));
     public static final RegistryObject<Item> ENDERIAN_INGOT_ITEM = ITEMS.register(BedrockReferences.ENDERIAN_INGOT_REGNAME, () -> new Item((new Item.Properties()).tab(ModSetup.GROUP)));

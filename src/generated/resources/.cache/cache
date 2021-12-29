@@ -3,7 +3,7 @@
 2702119213c2004c0db66a26648f33392ce6642e assets/bedres/blockstates/enderian_ore_end.json
 7e149bc1ba417545e78c3d75ef20ab71f21b2158 assets/bedres/blockstates/enderian_ore_nether.json
 8a2f82facdb854da2d4dc5f492c4cf25e6b9e187 assets/bedres/blockstates/enderian_ore_overworld.json
-663907cb7332e4566cef08313f4e83811adf9303 assets/bedres/lang/en_us.json
+8cc5d895d8db6383d56d34f154d5177a5a7ce26c assets/bedres/lang/en_us.json
 aca6215b75367ed97c74559f065a72cdeda8f1db assets/bedres/models/block/bedrock_compressed_wire.json
 6ab78f4fa5faf6ad2822069b4e314bda8fa623a9 assets/bedres/models/block/enderian_ore_deepslate.json
 966a2036e2053e328e8b8d4231464c75125b0fce assets/bedres/models/block/enderian_ore_end.json
@@ -20,6 +20,7 @@ fbdb904fc8bd4ddb20b8b92f87db76b2b650132a assets/bedres/models/item/fluxed_cupcak
 20ba3526a5c98020a08ca67b5d3407e2106f8702 assets/bedres/models/item/raw_enderian.json
 287efea2de1d499d3e701e7011265ff2e3eedbd1 assets/bedres/models/item/scrape_knife.json
 03f2bf3a0eca926497239b7f02f9c9d35f0d5d66 assets/bedres/models/item/scraper_mesh.json
+98167609bf3898587f7565736a6fc24a7966cacd assets/bedres/models/item/spore_deity.json
 9cdd9dc4f127c3716f3ead6a6d4d8802887f89f4 data/bedres/advancements/recipes/bedres/bedrock_stairs.json
 6627a79b6cfaf99d444c5bd2b4c2b111ae3f00d2 data/bedres/advancements/recipes/bedres/decaying_fluxed_oak_planks.json
 4ce0a1e1a242400391101178f109c9f83d7804cf data/bedres/advancements/recipes/bedres/decaying_fluxed_oak_slab.json
@@ -103,13 +104,12 @@ bf46a6da3ba7eb8666d9439fd34834866ce6a048 data/minecraft/recipes/enderian_ingot2.
 93f2e0d9a87da6fa016bf2e1e50224ff2c7f252b data/minecraft/tags/blocks/dirt.json
 6a2ee71d2675e472ec3e29f3f94546de284483e7 data/minecraft/tags/blocks/flowers.json
 f77446ffa0ada00b6a040cfb1cb1b0932f86c19e data/minecraft/tags/blocks/leaves.json
-c959db71ff5a05d94b2ce1ac22fd7e8cb4d84b18 data/minecraft/tags/blocks/mineable/pickaxe.json
+2ef052c74a89f7bff067a64063c97add10cd6c55 data/minecraft/tags/blocks/mineable/pickaxe.json
 f9a9c07da77583eae54a3d800245278890f1e720 data/minecraft/tags/blocks/needs_diamond_tool.json
-9f7174f8d038ed89e0498e066f748e6985c37962 data/minecraft/tags/blocks/needs_iron_tool.json
+f419025d3266d200b53c672c615d086feb02b847 data/minecraft/tags/blocks/needs_iron_tool.json
 f588309dadfb2ea170bdcb65a1f5400a47fc2102 data/minecraft/tags/blocks/needs_stone_tool.json
 6b7ac6ef01a6bb65fd050f0c1041533fd127fd42 data/minecraft/tags/blocks/oak_logs.json
 d8c8aeda26f690a212a5bfccf097f526c970c8fe data/minecraft/tags/blocks/planks.json
-7d621e814fde8b2961ab792ffb1028a1ff48a7bb data/minecraft/tags/blocks/portals.json
 6608f8a2372866be6073f7c71d4a26be1cff90db data/minecraft/tags/blocks/saplings.json
 317a2ec40d0f29e7d4ebcd9c25c6aa66e548bbc6 data/minecraft/tags/blocks/slabs.json
 a15348108e481e7fe5404105d1a7a044c3c00bae data/minecraft/tags/blocks/stairs.json

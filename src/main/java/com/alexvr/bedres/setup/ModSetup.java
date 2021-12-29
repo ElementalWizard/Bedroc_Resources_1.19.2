@@ -1,7 +1,6 @@
 package com.alexvr.bedres.setup;
 
 import com.alexvr.bedres.BedrockResources;
-import com.alexvr.bedres.commands.ModCommands;
 import com.alexvr.bedres.world.ModFeatures;
 import com.alexvr.bedres.world.ModWorldgen;
 import com.alexvr.bedres.world.dimension.MysBiomeProvider;
@@ -45,7 +44,6 @@ public class ModSetup {
 
     @SubscribeEvent
     public static void serverLoad(RegisterCommandsEvent event) {
-        ModCommands.register(event.getDispatcher());
+        com.alexvr.bedres.commands.ModCommands.register(event.getDispatcher());
     }
-
 }

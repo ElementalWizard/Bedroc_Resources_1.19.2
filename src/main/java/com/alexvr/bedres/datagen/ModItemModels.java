@@ -38,7 +38,7 @@ public class ModItemModels extends ItemModelProvider {
         singleTexture(Registration.SCRAPER_MESH_ITEM.get().getRegistryName().getPath(),
                 mcLoc("item/generated"),
                 "layer0",modLoc("block/frame"));
-
+        withExistingParent(Registration.SPORE_DEITY_EGG_ITEM.get().getRegistryName().getPath(), mcLoc("item/template_spawn_egg"));
 
     }
 }
