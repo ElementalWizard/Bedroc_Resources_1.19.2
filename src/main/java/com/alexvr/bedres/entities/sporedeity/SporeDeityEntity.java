@@ -5,6 +5,9 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -28,8 +31,6 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -38,6 +39,9 @@ import java.util.Random;
 public class SporeDeityEntity extends Monster {
 
     private boolean ATTACKING = false;
+    public static final EntityDataAccessor<Boolean> DATA_ATTACKING = SynchedEntityData.defineId(SporeDeityEntity.class, EntityDataSerializers.BOOLEAN);
+
+    private int counter = 0;
     public SporeDeityEntity(EntityType<? extends Monster> type, Level world) {
         super(type, world);
         if (GoalUtils.hasGroundPathNavigation(this)) {
@@ -53,18 +57,25 @@ public class SporeDeityEntity extends Monster {
         this.targetSelector.addGoal(3,   new RandomLookAroundGoal(this));
     }
 
-    @OnlyIn(Dist.CLIENT)
+    @Override
+    protected void defineSynchedData() {
+        super.defineSynchedData();
+        this.entityData.define(DATA_ATTACKING, false);
+
+    }
+
     public boolean isAttacking() {
-        return ATTACKING;
+        return this.entityData.get(DATA_ATTACKING);
     }
 
     public void setAttacking(boolean attacking) {
-        ATTACKING = attacking;
+        counter = 60;
+        this.entityData.set(DATA_ATTACKING, attacking);
     }
 
     public void tick() {
         super.tick();
-        if (!level.isClientSide() && this.getTarget() != null) {
+        if (!level.isClientSide() && this.getTarget() != null && ! isAttacking()) {
             LivingEntity livingentity = this.getTarget();
             int chance = 400;
             if (new Random().nextInt(chance) <= 1) {
@@ -79,13 +90,18 @@ public class SporeDeityEntity extends Monster {
             else if (new Random().nextInt(chance) <= 8) {
                 teleport();
             }
-
-
+        }else if (!level.isClientSide() &&isAttacking()){
+            if (counter <= 0){
+                setAttacking(false);
+            }else{
+                counter--;
+            }
         }
 
     }
 
     private void AOECloud(double x,double y, double z) {
+        setAttacking(true);
         AreaEffectCloud areaeffectcloudentity = new AreaEffectCloud(this.level, x,y,z);
         areaeffectcloudentity.setOwner(this);
         areaeffectcloudentity.setParticle(ParticleTypes.SQUID_INK);
@@ -100,6 +116,7 @@ public class SporeDeityEntity extends Monster {
     }
 
     private void spawnRandomEffectBall(LivingEntity livingentity) {
+        setAttacking(true);
         Vec3 vec3d = this.getEyePosition(1.0F);
         level.levelEvent(null, 1016, this.getOnPos(), 0);
         DragonFireball fireballentity = new DragonFireball(level, this, getX(), getY()+2, getZ());
@@ -145,6 +162,7 @@ public class SporeDeityEntity extends Monster {
     }
 
     private void teleport() {
+        setAttacking(true);
         boolean success = false;
         for (int i = 0; i<50;i++){
             BlockPos pos = getOnPos().south(new Random().nextInt(3)-3).east(new Random().nextInt(3)-3);
@@ -165,6 +183,7 @@ public class SporeDeityEntity extends Monster {
     }
 
     private void spawnFireBall(LivingEntity livingentity) {
+        setAttacking(true);
         double d1 = 4.0D;
         Vec3 vec3 = this.getViewVector(1.0F);
         double d2 = livingentity.getX() - (this.getX() + vec3.x * 4.0D);

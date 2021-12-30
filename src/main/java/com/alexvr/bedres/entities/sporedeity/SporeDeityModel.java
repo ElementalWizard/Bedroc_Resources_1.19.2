@@ -9,6 +9,7 @@ import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
 import net.minecraft.client.renderer.RenderType;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.LivingEntity;
@@ -103,6 +104,20 @@ public class SporeDeityModel<T extends LivingEntity> extends HumanoidModel<T> {
             this.cloak.z = -1.1F;
             this.cloak.y = -0.85F;
         }
+        if (pEntity.getEntityData().get(SporeDeityEntity.DATA_ATTACKING)){
+            this.rightArm.z = 0.0F;
+            this.rightArm.x = -5.0F;
+            this.leftArm.z = 0.0F;
+            this.leftArm.x = 5.0F;
+            this.rightArm.xRot = Mth.cos(pAgeInTicks * 0.6662F) * 0.25F;
+            this.leftArm.xRot = Mth.cos(pAgeInTicks * 0.6662F) * 0.25F;
+            this.rightArm.zRot = 2.3561945F;
+            this.leftArm.zRot = -2.3561945F;
+            this.rightArm.yRot = 0.0F;
+            this.leftArm.yRot = 0.0F;
+        }
+
+
 
     }
     public void setAllVisible(boolean pVisible) {

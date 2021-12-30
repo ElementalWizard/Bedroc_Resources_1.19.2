@@ -3,7 +3,7 @@
 2702119213c2004c0db66a26648f33392ce6642e assets/bedres/blockstates/enderian_ore_end.json
 7e149bc1ba417545e78c3d75ef20ab71f21b2158 assets/bedres/blockstates/enderian_ore_nether.json
 8a2f82facdb854da2d4dc5f492c4cf25e6b9e187 assets/bedres/blockstates/enderian_ore_overworld.json
-8cc5d895d8db6383d56d34f154d5177a5a7ce26c assets/bedres/lang/en_us.json
+c980e851efe04ea4d5feaa119fb6f3e45bb37a6f assets/bedres/lang/en_us.json
 aca6215b75367ed97c74559f065a72cdeda8f1db assets/bedres/models/block/bedrock_compressed_wire.json
 6ab78f4fa5faf6ad2822069b4e314bda8fa623a9 assets/bedres/models/block/enderian_ore_deepslate.json
 966a2036e2053e328e8b8d4231464c75125b0fce assets/bedres/models/block/enderian_ore_end.json
@@ -16,6 +16,7 @@ d095932895a4ae28fff4c0b6ac4718b4e4cb57f0 assets/bedres/models/item/enderian_ore_
 1eb5ae06d3db627278db89013933a1bb13c29a03 assets/bedres/models/item/enderian_ore_nether.json
 d63784704a95d19e36fd80d3516cde0ffcadb646 assets/bedres/models/item/enderian_ore_overworld.json
 a1d0f70b95261550e7d47a302bff855cd372dc56 assets/bedres/models/item/flux_oracle.json
+98167609bf3898587f7565736a6fc24a7966cacd assets/bedres/models/item/fluxed_creep.json
 fbdb904fc8bd4ddb20b8b92f87db76b2b650132a assets/bedres/models/item/fluxed_cupcake.json
 20ba3526a5c98020a08ca67b5d3407e2106f8702 assets/bedres/models/item/raw_enderian.json
 287efea2de1d499d3e701e7011265ff2e3eedbd1 assets/bedres/models/item/scrape_knife.json

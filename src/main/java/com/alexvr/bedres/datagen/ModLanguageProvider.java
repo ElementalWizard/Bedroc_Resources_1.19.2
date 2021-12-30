@@ -55,7 +55,6 @@ public class ModLanguageProvider extends LanguageProvider {
         add(Registration.SCRAPE_KNIFE_ITEM.get(), "Scrape Knife" );
         add(Registration.STAFF_ITEM.get(), "Gravity Staff" );
         add(Registration.SCRAPER_MESH_ITEM.get(), "Scraper Mesh" );
-        add(Registration.FLUXED_CREEP_EGG_ITEM.get(), "Fluxed Creep Spawn Egg" );
         add(Registration.NEBULA_HEART_ITEM.get(), "Nebula Heart" );
         add(Registration.FLUX_ORACLE_ITEM.get(), "Fluxed Oracle" );
         add(Registration.FLUXED_CUPCAKE_ITEM.get(), "Fluxed Cupcake" );
@@ -66,7 +65,9 @@ public class ModLanguageProvider extends LanguageProvider {
         add(BedrockReferences.CREATIVE_TAB_NAME, "Bedrock Resources Tab" );
         add(BedrockReferences.SCREEN_SCRAPE_TANK, "Scrape Tank" );
         add(Registration.SPORE_DEITY_EGG_ITEM.get(), "Spore Deity Spawn Egg");
+        add(Registration.FLUXED_CREEP_EGG_ITEM.get(), "Fluxed Creep Spawn Egg");
 
+        add(Registration.FLUXED_CREEP.get(), "Fluxed Creep");
         add(Registration.SPORE_DEITY.get(), "Spore Deity");
     }
 

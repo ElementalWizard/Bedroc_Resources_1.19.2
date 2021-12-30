@@ -39,6 +39,7 @@ public class ModItemModels extends ItemModelProvider {
                 mcLoc("item/generated"),
                 "layer0",modLoc("block/frame"));
         withExistingParent(Registration.SPORE_DEITY_EGG_ITEM.get().getRegistryName().getPath(), mcLoc("item/template_spawn_egg"));
+        withExistingParent(Registration.FLUXED_CREEP_EGG_ITEM.get().getRegistryName().getPath(), mcLoc("item/template_spawn_egg"));
 
     }
 }

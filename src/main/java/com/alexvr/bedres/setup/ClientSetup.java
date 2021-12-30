@@ -6,6 +6,8 @@ import com.alexvr.bedres.client.renderer.BedrockiumTowerRenderer;
 import com.alexvr.bedres.client.renderer.EnderianRitualPedestalRenderer;
 import com.alexvr.bedres.client.renderer.ItemPlatformRenderer;
 import com.alexvr.bedres.client.screen.ScrapeTankScreen;
+import com.alexvr.bedres.entities.fluxedcreep.FluxedCreepModel;
+import com.alexvr.bedres.entities.fluxedcreep.FluxedCreepRenderer;
 import com.alexvr.bedres.entities.sporedeity.SporeDeityRenderer;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
@@ -47,14 +49,16 @@ public class ClientSetup {
 
     }
 
-//    @SubscribeEvent
-//    public static void onRegisterLayers(EntityRenderersEvent.RegisterLayerDefinitions event) {
-//        event.registerLayerDefinition(SporeDeityModel.SPOREDIETY_LAYER, SporeDeityModel::createBodyLayer);
-//    }
+    @SubscribeEvent
+    public static void onRegisterLayers(EntityRenderersEvent.RegisterLayerDefinitions event) {
+        event.registerLayerDefinition(FluxedCreepModel.FLUXED_CREEP_LAYER, FluxedCreepModel::createInnerBodyLayer);
+        event.registerLayerDefinition(FluxedCreepModel.FLUXED_CREEP_OUTER_LAYER, FluxedCreepModel::createOuterBodyLayer);
+    }
 
     @SubscribeEvent
     public static void onRegisterRenderer(EntityRenderersEvent.RegisterRenderers event) {
         event.registerEntityRenderer(Registration.SPORE_DEITY.get(), SporeDeityRenderer::new);
+        event.registerEntityRenderer(Registration.FLUXED_CREEP.get(), FluxedCreepRenderer::new);
     }
 
 }

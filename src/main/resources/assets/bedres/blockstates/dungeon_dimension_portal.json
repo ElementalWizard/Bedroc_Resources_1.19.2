@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "axis=z": {
+      "model": "bedres:block/dungeon_dimension_portal_ew"
+    },
+    "axis=x": {
+      "model": "bedres:block/dungeon_dimension_portal_ns"
+    }
+  }
+}
