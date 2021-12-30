@@ -1,10 +1,8 @@
 package com.alexvr.bedres.blocks;
 
 import com.alexvr.bedres.setup.Registration;
-import com.alexvr.bedres.utils.BedrockReferences;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
-import com.google.common.collect.Sets;
 import com.mojang.math.Vector3f;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -31,7 +29,6 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 
 import java.util.Map;
 import java.util.Random;
-import java.util.Set;
 
 public class BedrockWireBlock extends Block {
     public static final EnumProperty<RedstoneSide> NORTH = BlockStateProperties.NORTH_REDSTONE;
@@ -300,21 +297,7 @@ public class BedrockWireBlock extends Block {
 
     public void neighborChanged(BlockState pState, Level pLevel, BlockPos pPos, Block pBlock, BlockPos pFromPos, boolean pIsMoving) {
         if (!pLevel.isClientSide) {
-            if (pState.canSurvive(pLevel, pPos)) {
-                if (pLevel.getBlockState(pPos) == pState) {
-                    pLevel.setBlock(pPos, pState, 2);
-                }
-                Set<BlockPos> set = Sets.newHashSet();
-                set.add(pPos);
-
-                for(Direction direction : Direction.values()) {
-                    set.add(pPos.relative(direction));
-                }
-
-                for(BlockPos blockpos : set) {
-                    pLevel.updateNeighborsAt(blockpos, this);
-                }
-            } else {
+            if (!pState.canSurvive(pLevel, pPos)) {
                 dropResources(pState, pLevel, pPos);
                 pLevel.removeBlock(pPos, false);
             }
