@@ -1,7 +1,7 @@
 package com.alexvr.bedres.blocks.decayingfluxedblocks;
 
 import com.alexvr.bedres.setup.Registration;
-import com.alexvr.bedres.world.ModFeatures;
+import com.alexvr.bedres.world.features.ModFeatures;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.BlockGetter;

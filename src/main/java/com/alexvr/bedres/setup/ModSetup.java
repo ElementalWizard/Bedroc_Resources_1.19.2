@@ -1,16 +1,16 @@
 package com.alexvr.bedres.setup;
 
 import com.alexvr.bedres.BedrockResources;
-import com.alexvr.bedres.world.ModFeatures;
 import com.alexvr.bedres.world.ModWorldgen;
-import com.alexvr.bedres.world.dimension.MysBiomeProvider;
-import com.alexvr.bedres.world.dimension.MysChunkGenerator;
-import com.alexvr.bedres.world.features.ModConfigure;
-import net.minecraft.core.Registry;
-import net.minecraft.resources.ResourceLocation;
+import com.alexvr.bedres.world.dimension.ModDimensions;
+import com.alexvr.bedres.world.features.ModStructures;
+import com.alexvr.bedres.world.ores.ModOres;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegisterCommandsEvent;
+import net.minecraftforge.eventbus.api.EventPriority;
+import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
@@ -26,19 +26,23 @@ public class ModSetup {
         }
     };
 
+    public static void setup() {
+        IEventBus bus = MinecraftForge.EVENT_BUS;
+        bus.addListener(ModOres::onBiomeLoadingEvent);
+        bus.addListener(EventPriority.NORMAL, ModStructures::addDimensionalSpacing);
+        bus.addListener(EventPriority.NORMAL, ModStructures::setupStructureSpawns);
+    }
+
     @SubscribeEvent
     public static void init(FMLCommonSetupEvent event) {
 
         event.enqueueWork(() -> {
-            Registry.register(Registry.CHUNK_GENERATOR, new ResourceLocation(BedrockResources.MODID, "chunkgen"),
-                    MysChunkGenerator.CODEC);
-            Registry.register(Registry.BIOME_SOURCE, new ResourceLocation(BedrockResources.MODID, "biomes"),
-                    MysBiomeProvider.CODEC);
+
             ModWorldgen.onCommonSetup();
-
-            ModFeatures.setupStructures();
-            ModConfigure.registerConfiguredStructures();
-
+            ModOres.registerConfiguredFeatures();
+            ModStructures.setupStructures();
+            ModStructures.registerConfiguredStructures();
+            ModDimensions.register();
         });
     }
 

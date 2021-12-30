@@ -1,22 +1,19 @@
 package com.alexvr.bedres.world.dimension;
 
+import com.alexvr.bedres.BedrockResources;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.RegistryLookupCodec;
 import net.minecraft.server.level.WorldGenRegion;
-import net.minecraft.world.level.LevelHeightAccessor;
-import net.minecraft.world.level.NoiseColumn;
-import net.minecraft.world.level.StructureFeatureManager;
+import net.minecraft.world.level.*;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.BiomeManager;
 import net.minecraft.world.level.biome.Climate;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.ChunkAccess;
 import net.minecraft.world.level.chunk.ChunkGenerator;
-import net.minecraft.world.level.levelgen.GenerationStep;
-import net.minecraft.world.level.levelgen.Heightmap;
-import net.minecraft.world.level.levelgen.StructureSettings;
+import net.minecraft.world.level.levelgen.*;
 import net.minecraft.world.level.levelgen.blending.Blender;
 import org.jetbrains.annotations.NotNull;
 
@@ -41,6 +38,7 @@ public class MysChunkGenerator extends ChunkGenerator {
     public MysChunkGenerator(Registry<Biome> registry, Settings settings) {
         super(new MysBiomeProvider(registry), new StructureSettings(false));
         this.settings = settings;
+        BedrockResources.LOGGER.info("Chunk generator settings: " + settings.getBaseHeight());
     }
 
     public Settings getTutorialSettings() {
@@ -117,8 +115,12 @@ public class MysChunkGenerator extends ChunkGenerator {
     }
 
     @Override
-    public void spawnOriginalMobs(@NotNull WorldGenRegion p_62167_) {
-
+    public void spawnOriginalMobs(@NotNull WorldGenRegion level) {
+        ChunkPos chunkpos = level.getCenter();
+        Biome biome = level.getBiome(chunkpos.getWorldPosition().atY(level.getMaxBuildHeight() - 1));
+        WorldgenRandom worldgenrandom = new WorldgenRandom(new LegacyRandomSource(RandomSupport.seedUniquifier()));
+        worldgenrandom.setDecorationSeed(level.getSeed(), chunkpos.getMinBlockX(), chunkpos.getMinBlockZ());
+        NaturalSpawner.spawnMobsForChunkGeneration(level, biome, chunkpos, worldgenrandom);
     }
 
     @Override

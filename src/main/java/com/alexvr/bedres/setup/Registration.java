@@ -17,6 +17,7 @@ import com.alexvr.bedres.entities.fluxedcreep.FluxedCreepEntity;
 import com.alexvr.bedres.entities.sporedeity.SporeDeityEntity;
 import com.alexvr.bedres.items.*;
 import com.alexvr.bedres.utils.BedrockReferences;
+import com.alexvr.bedres.world.features.AltarStructure;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
@@ -30,6 +31,8 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.levelgen.feature.StructureFeature;
+import net.minecraft.world.level.levelgen.feature.configurations.JigsawConfiguration;
 import net.minecraft.world.level.material.Material;
 import net.minecraftforge.common.ForgeSpawnEggItem;
 import net.minecraftforge.common.Tags;
@@ -41,7 +44,6 @@ import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
 import static com.alexvr.bedres.BedrockResources.MODID;
-import static com.alexvr.bedres.world.ModFeatures.STRUCTURES;
 
 public class Registration {
 
@@ -50,6 +52,7 @@ public class Registration {
     private static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITIES = DeferredRegister.create(ForgeRegistries.BLOCK_ENTITIES, MODID);
     public static final DeferredRegister<MenuType<?>> CONTAINERS = DeferredRegister.create(ForgeRegistries.CONTAINERS, MODID);
     public static final DeferredRegister<EntityType<?>> ENTITIES = DeferredRegister.create(ForgeRegistries.ENTITIES, MODID);
+    private static final DeferredRegister<StructureFeature<?>> STRUCTURES = DeferredRegister.create(ForgeRegistries.STRUCTURE_FEATURES, MODID);
 
     public static  void init(){
         IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
@@ -189,6 +192,7 @@ public class Registration {
     public  static final Tags.IOptionalNamedTag<Item> ENDERIAN_ORE_ITEM = ItemTags.createOptional(new ResourceLocation(MODID,"enderian_ore"));
     public  static final Tags.IOptionalNamedTag<Item> DF_LOG_ITEM = ItemTags.createOptional(new ResourceLocation(MODID,BedrockReferences.DF_OAK_LOG_REGNAME));
 
+    public static final RegistryObject<StructureFeature<JigsawConfiguration>> PORTAL_OVERWORLD = STRUCTURES.register("altar_overworld", () -> new AltarStructure(true));
     public static <B extends  Block>RegistryObject<Item> fromBlock(RegistryObject<B> block) {
         return ITEMS.register(block.getId().getPath(), () -> new BlockItem(block.get(),(new Item.Properties()).tab(ModSetup.GROUP)));
     }

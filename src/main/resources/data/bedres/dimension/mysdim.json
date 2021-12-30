@@ -1,7 +1,7 @@
 {
   "type": "bedres:mysdim",
   "generator": {
-    "type": "bedres:chunkgen",
+    "type": "bedres:mystery_dungeon_chunkgen",
     "seed": 0,
     "settings": {
       "base": 65
