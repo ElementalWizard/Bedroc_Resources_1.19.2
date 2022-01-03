@@ -8,6 +8,8 @@ import com.alexvr.bedres.blocks.bedrockiumTower.BedrockiumTowerTile;
 import com.alexvr.bedres.blocks.decayingfluxedblocks.*;
 import com.alexvr.bedres.blocks.enderianRitualPedestal.EnderianRitualPedestal;
 import com.alexvr.bedres.blocks.enderianRitualPedestal.EnderianRitualPedestalTile;
+import com.alexvr.bedres.blocks.gravityBubble.FluxedGravityBubble;
+import com.alexvr.bedres.blocks.gravityBubble.FluxedGravityBubbleTile;
 import com.alexvr.bedres.blocks.itemPlatform.ItemPlatform;
 import com.alexvr.bedres.blocks.itemPlatform.ItemPlatformTile;
 import com.alexvr.bedres.blocks.scrapeTank.ScrapeTank;
@@ -168,10 +170,12 @@ public class Registration {
 
     public static final RegistryObject<FluxedGravityBubble> FLUXED_GRAVITY_BUBBLE_BLOCK = BLOCKS.register(BedrockReferences.FLUXED_GRAVITY_BUBBLE_REGNAME, () -> new FluxedGravityBubble(METAL_BLOCK_PROPERTIES));
     public static final RegistryObject<Item> FLUXED_GRAVITY_BUBBLE_ITEM = fromBlock(FLUXED_GRAVITY_BUBBLE_BLOCK);
+    public static final RegistryObject<BlockEntityType<FluxedGravityBubbleTile>> FLUXED_GRAVITY_BUBBLE_TILE = BLOCK_ENTITIES.register(BedrockReferences.FLUXED_GRAVITY_BUBBLE_REGNAME, () -> BlockEntityType.Builder.of(FluxedGravityBubbleTile::new, FLUXED_GRAVITY_BUBBLE_BLOCK.get()).build(null));
 
     public static final RegistryObject<Block> BEDROCK_COMPRESSED_WIRE_BLOCK = BLOCKS.register(BedrockReferences.BEDROCK_COMPRESSED_WIRE_REGNAME, () ->  new Block(BLOCK_PROPERTIES.requiresCorrectToolForDrops()));
     public static final RegistryObject<Item> BEDROCK_COMPRESSED_WIRE_ITEM = fromBlock(BEDROCK_COMPRESSED_WIRE_BLOCK);
 
+    public static final RegistryObject<Block> RANGE_VIEW_BLOCK = BLOCKS.register(BedrockReferences.RANGE_VIEW_REGNAME, () -> new Block(BLOCK_PROPERTIES.dynamicShape().noCollission().noOcclusion()));
     public static final RegistryObject<VoidTears> VOID_TEAR_BLOCK = BLOCKS.register(BedrockReferences.VOID_TEAR_REGNAME, () -> new VoidTears(BLOCK_PROPERTIES));
     public static final RegistryObject<Item> VOID_TEAR_ITEM = fromBlock(VOID_TEAR_BLOCK);
 

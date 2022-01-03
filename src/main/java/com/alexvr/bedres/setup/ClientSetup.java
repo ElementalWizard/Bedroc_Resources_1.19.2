@@ -1,10 +1,7 @@
 package com.alexvr.bedres.setup;
 
 import com.alexvr.bedres.BedrockResources;
-import com.alexvr.bedres.client.renderer.BedrociumPedestalRenderer;
-import com.alexvr.bedres.client.renderer.BedrockiumTowerRenderer;
-import com.alexvr.bedres.client.renderer.EnderianRitualPedestalRenderer;
-import com.alexvr.bedres.client.renderer.ItemPlatformRenderer;
+import com.alexvr.bedres.client.renderer.*;
 import com.alexvr.bedres.client.screen.ScrapeTankScreen;
 import com.alexvr.bedres.entities.fluxedcreep.FluxedCreepModel;
 import com.alexvr.bedres.entities.fluxedcreep.FluxedCreepRenderer;
@@ -40,11 +37,13 @@ public class ClientSetup {
             ItemBlockRenderTypes.setRenderLayer(Registration.ENDER_HUSH_BLOCK.get(), RenderType.cutout());
             ItemBlockRenderTypes.setRenderLayer(Registration.ITEM_PLATFORM_BLOCK.get(), RenderType.cutout());
             ItemBlockRenderTypes.setRenderLayer(Registration.BEDROCK_WIRE_BLOCK.get(), RenderType.cutout());
+            ItemBlockRenderTypes.setRenderLayer(Registration.RANGE_VIEW_BLOCK.get(), RenderType.translucent());
 
             BlockEntityRenderers.register(Registration.ITEM_PLATFORM_TILE.get(), ItemPlatformRenderer::new);
             BlockEntityRenderers.register(Registration.BASE_SPIKE_TILE.get(), BedrockiumTowerRenderer::new);
             BlockEntityRenderers.register(Registration.PEDESTAL_TILE.get(), BedrociumPedestalRenderer::new);
             BlockEntityRenderers.register(Registration.ENDERIAN_RITUAL_PEDESTAL_TILE.get(), EnderianRitualPedestalRenderer::new);
+            BlockEntityRenderers.register(Registration.FLUXED_GRAVITY_BUBBLE_TILE.get(), FluxedGravityBubbleRenderer::new);
         });
 
     }

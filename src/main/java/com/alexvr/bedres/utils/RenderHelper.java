@@ -8,6 +8,7 @@ import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.Block;
 
 public class RenderHelper {
 
@@ -38,6 +39,21 @@ public class RenderHelper {
             poseStack.mulPose(rotations);
         }
         Minecraft.getInstance().getItemRenderer().renderStatic(itemStack, ItemTransforms.TransformType.FIXED, combinedLight, combinedOverlay, poseStack, bufferSource, (int) pos.asLong() + slotRendering);
+        poseStack.popPose();
+    }
+
+    public static void RenderBlock(PoseStack poseStack, Block block, MultiBufferSource bufferSource, int combinedLight, int combinedOverlay,
+                                   float xTranslate, float yTranslate, float zTranslate, float xScale, float yScale, float zScale, boolean rotate){
+        poseStack.pushPose();
+        poseStack.translate(xTranslate, yTranslate, zTranslate);
+        poseStack.scale(xScale, yScale, zScale);
+
+        if (rotate){
+            Quaternion rotations = Minecraft.getInstance().gameRenderer.getMainCamera().rotation();
+            rotations.set(0,rotations.j(),0,rotations.r());
+            poseStack.mulPose(rotations);
+        }
+        Minecraft.getInstance().getBlockRenderer().renderSingleBlock(block.defaultBlockState(), poseStack,bufferSource, combinedLight, combinedOverlay);
         poseStack.popPose();
     }
 
