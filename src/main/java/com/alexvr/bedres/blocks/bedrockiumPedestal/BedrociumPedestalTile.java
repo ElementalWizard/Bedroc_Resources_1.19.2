@@ -1,6 +1,8 @@
 package com.alexvr.bedres.blocks.bedrockiumPedestal;
 
 import com.alexvr.bedres.blocks.bedrockiumTower.BedrockiumTowerTile;
+import com.alexvr.bedres.recipes.ModRecipeRegistry;
+import com.alexvr.bedres.recipes.ritualAltar.RitualAltarRecipes;
 import com.alexvr.bedres.setup.Registration;
 import com.alexvr.bedres.utils.DirectionalItemStackHandler;
 import net.minecraft.core.BlockPos;
@@ -23,6 +25,8 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.alexvr.bedres.blocks.bedrockiumPedestal.BedrociumPedestal.TRIGGERED;
 
 
 public class BedrociumPedestalTile extends BlockEntity {
@@ -191,6 +195,21 @@ public class BedrociumPedestalTile extends BlockEntity {
 
         }
         return items;
+    }
+
+    public void updateRecipeRender(){
+        List<ItemStack> ing = getItemsForRecipe();
+        RitualAltarRecipes recipe = ModRecipeRegistry.findRecipeFromIngrent(ing);
+        if (recipe != null){
+            updateTriggered(true);
+        }else{
+            updateTriggered(false);
+        }
+    }
+    public void updateTriggered(boolean state){
+       level.setBlock(worldPosition, getBlockState().setValue(TRIGGERED, Boolean.valueOf(state)), 4);
+        getBlockState().updateNeighbourShapes(level,worldPosition,32);
+        sendUpdates();
     }
 
     public void tickServer() {

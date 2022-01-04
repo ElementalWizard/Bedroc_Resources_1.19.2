@@ -1,10 +1,6 @@
 package com.alexvr.bedres.blocks.bedrockiumPedestal;
 
-import com.alexvr.bedres.recipes.ModRecipeRegistry;
-import com.alexvr.bedres.recipes.ritualAltar.RitualAltarRecipes;
-import com.mojang.math.Vector3f;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
@@ -28,8 +24,6 @@ import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemHandlerHelper;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.List;
-
 public class BedrociumPedestal extends Block implements EntityBlock {
 
     private static final VoxelShape Base = Block.box(0, 0.0D, 0, 16, .3, 16);
@@ -45,17 +39,15 @@ public class BedrociumPedestal extends Block implements EntityBlock {
     public InteractionResult use(BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult trace) {
         if (world.isClientSide) {
             BlockEntity tileEntity = world.getBlockEntity(pos);
-            if (tileEntity instanceof BedrociumPedestalTile) {
-                world.getBlockEntity(pos).getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).ifPresent(h -> {
+            if (tileEntity instanceof BedrociumPedestalTile pedestalTile) {
+                pedestalTile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).ifPresent(h -> {
                     ItemStack itemInHand = player.getItemInHand(hand);
-
                     if(itemInHand.isEmpty() || player.isShiftKeyDown()){
-                        ((BedrociumPedestalTile) tileEntity).item = ItemStack.EMPTY;
+                        pedestalTile.item = ItemStack.EMPTY;
                     }else{
-                        ((BedrociumPedestalTile) tileEntity).item = itemInHand;
+                        pedestalTile.item = itemInHand;
                     }
-                    tileEntity.setChanged();
-                    ((BedrociumPedestalTile) tileEntity).sendUpdates();
+                    pedestalTile.sendUpdates();
                     state.updateNeighbourShapes(world,pos,32);
                 });
             } else {
@@ -63,8 +55,8 @@ public class BedrociumPedestal extends Block implements EntityBlock {
             }
         }else{
             BlockEntity tileEntity = world.getBlockEntity(pos);
-            if (tileEntity instanceof BedrociumPedestalTile) {
-                world.getBlockEntity(pos).getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).ifPresent(h -> {
+            if (tileEntity instanceof BedrociumPedestalTile pedestalTile) {
+                pedestalTile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).ifPresent(h -> {
                     ItemStack itemInHand = player.getItemInHand(hand);
 
                     if(itemInHand.isEmpty() || player.isShiftKeyDown()){
@@ -72,7 +64,6 @@ public class BedrociumPedestal extends Block implements EntityBlock {
                         if (extracted) {
                             h.insertItem(0,ItemStack.EMPTY,false);
                         }
-
                     }else{
                         ItemStack remainder = ItemHandlerHelper.insertItem(h, itemInHand, false);
                         if (remainder.isEmpty()) {
@@ -81,10 +72,7 @@ public class BedrociumPedestal extends Block implements EntityBlock {
                             player.setItemInHand(hand,remainder);
                         }
                     }
-                    world.setBlock(pos, state.setValue(TRIGGERED, Boolean.valueOf(false)), 4);
-                    tileEntity.setChanged();
-                    ((BedrociumPedestalTile) tileEntity).sendUpdates();
-                    state.updateNeighbourShapes(world,pos,32);
+                    pedestalTile.updateRecipeRender();
                 });
             } else {
                 throw new IllegalStateException("Our named container provider is missing!");
@@ -110,18 +98,8 @@ public class BedrociumPedestal extends Block implements EntityBlock {
     public void neighborChanged(BlockState pState, Level pLevel, BlockPos pPos, Block pBlock, BlockPos pFromPos, boolean pIsMoving) {
         if (pLevel.isClientSide()) return;
         if (pLevel.getBlockEntity(pPos) instanceof  BedrociumPedestalTile pedestalTile){
-            List<ItemStack> ing = pedestalTile.getItemsForRecipe();
-            RitualAltarRecipes recipe = ModRecipeRegistry.findRecipeFromIngrent(ing);
-            if (recipe != null){
-                pLevel.addParticle(new DustParticleOptions(new Vector3f(0,0,0),3),pPos.getX(),pPos.getY(),pPos.getZ(),0,2,0);
-                pLevel.setBlock(pPos, pState.setValue(TRIGGERED, Boolean.valueOf(true)), 4);
-
-            }else{
-                pLevel.setBlock(pPos, pState.setValue(TRIGGERED, Boolean.valueOf(false)), 4);
-
-            }
-            pState.updateNeighbourShapes(pLevel,pPos,32);
-            pedestalTile.sendUpdates();
+            pedestalTile.updateRecipeRender();
+            //craft
         }
         super.neighborChanged(pState, pLevel, pPos, pBlock, pFromPos, pIsMoving);
     }

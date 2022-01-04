@@ -1,5 +1,8 @@
 package com.alexvr.bedres.blocks.bedrockiumTower;
 
+import com.alexvr.bedres.blocks.bedrockiumPedestal.BedrociumPedestalTile;
+import com.alexvr.bedres.recipes.ModRecipeRegistry;
+import com.alexvr.bedres.recipes.ritualAltar.RitualAltarRecipes;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.InteractionHand;
@@ -19,6 +22,10 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemHandlerHelper;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.List;
+
+import static com.alexvr.bedres.blocks.bedrockiumPedestal.BedrociumPedestal.TRIGGERED;
 
 public class BedrociumTower extends Block implements EntityBlock {
 
@@ -94,7 +101,6 @@ public class BedrociumTower extends Block implements EntityBlock {
                 int finalSlotToInteract = slotToInteract;
                 world.getBlockEntity(pos).getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY,directionOfBlockClicked).ifPresent(h -> {
                     ItemStack itemInHand = player.getItemInHand(hand);
-
                     if((itemInHand.isEmpty() || player.isShiftKeyDown()) && !h.getStackInSlot(finalSlotToInteract).isEmpty()){
                         boolean extracted = player.addItem(h.getStackInSlot(finalSlotToInteract));
                         if (extracted) {
@@ -122,14 +128,42 @@ public class BedrociumTower extends Block implements EntityBlock {
                         } else {
                             player.getItemInHand(hand).shrink(1);
                         }
-
-
-
                     }
 
                     tileEntity.setChanged();
                     ((BedrockiumTowerTile) tileEntity).sendUpdates();
                     state.updateNeighbourShapes(world,pos,32);
+                    for(Direction dir: Direction.values()){
+                        BlockPos altarPos = new BlockPos(tileEntity.getBlockPos());
+                        switch (dir){
+                            case NORTH -> {
+                                altarPos = altarPos.north(2);
+                            }
+                            case SOUTH -> {
+                                altarPos = altarPos.south(2);
+                            }
+                            case EAST -> {
+                                altarPos = altarPos.east(2);
+                            }
+                            case WEST -> {
+                                altarPos = altarPos.west(2);
+                            }
+                        }
+                        if (world.getBlockEntity(altarPos) instanceof BedrociumPedestalTile pedestalTile){
+                            List<ItemStack> ing = pedestalTile.getItemsForRecipe();
+                            RitualAltarRecipes recipe = ModRecipeRegistry.findRecipeFromIngrent(ing);
+                            if (recipe != null){
+                                world.setBlock(altarPos, pedestalTile.getBlockState().setValue(TRIGGERED, Boolean.valueOf(true)), 4);
+
+                            }else{
+                                world.setBlock(altarPos, pedestalTile.getBlockState().setValue(TRIGGERED, Boolean.valueOf(false)), 4);
+
+                            }
+                            pedestalTile.getBlockState().updateNeighbourShapes(world,altarPos,32);
+                            pedestalTile.sendUpdates();
+                            break;
+                        }
+                    }
                 });
             } else {
                 throw new IllegalStateException("Our named container provider is missing!");
