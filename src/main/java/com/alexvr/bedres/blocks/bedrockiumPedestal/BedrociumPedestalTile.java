@@ -1,6 +1,8 @@
 package com.alexvr.bedres.blocks.bedrockiumPedestal;
 
+import com.alexvr.bedres.blocks.bedrockiumTower.BedrockiumTowerTile;
 import com.alexvr.bedres.setup.Registration;
+import com.alexvr.bedres.utils.DirectionalItemStackHandler;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -19,6 +21,8 @@ import net.minecraftforge.items.ItemStackHandler;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class BedrociumPedestalTile extends BlockEntity {
@@ -27,6 +31,7 @@ public class BedrociumPedestalTile extends BlockEntity {
     private LazyOptional<IItemHandler> handler = LazyOptional.of(() -> itemHandler);
 
     public ItemStack item = ItemStack.EMPTY;
+    public List<BlockPos> extensions = new ArrayList<>();
 
     public BedrociumPedestalTile(BlockPos pWorldPosition, BlockState pBlockState) {
         super(Registration.PEDESTAL_TILE.get(), pWorldPosition, pBlockState);
@@ -123,7 +128,6 @@ public class BedrociumPedestalTile extends BlockEntity {
         };
     }
 
-
     @Nonnull
     @Override
     public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side) {
@@ -133,8 +137,49 @@ public class BedrociumPedestalTile extends BlockEntity {
         return super.getCapability(cap, side);
     }
 
-    public void tickServer() {
+    public List<ItemStack> getItemsForRecipe(){
+        List<ItemStack> items = new ArrayList<>();
+        if (!extensions.isEmpty()){
+            for (BlockPos pos :extensions) {
+                if (level.getBlockEntity(pos) instanceof BedrockiumTowerTile tower){
+                    items.addAll(getItemsFromCap(tower.westItemHandler));
+                    items.addAll(getItemsFromCap(tower.eastItemHandler));
+                    items.addAll(getItemsFromCap(tower.northItemHandler));
+                    items.addAll(getItemsFromCap(tower.southItemHandler));
+                }
+            }
+        }
 
+        return items;
+    }
+
+    public List<ItemStack> getItemsFromCap(DirectionalItemStackHandler itemHandler){
+        List<ItemStack> items = new ArrayList<>();
+        for (int i = 0; i<itemHandler.getSlots();i++ ){
+            if (itemHandler.getStackInSlot(i).isEmpty()){
+                continue;
+            }
+            items.add(itemHandler.getStackInSlot(i));
+        }
+        return items;
+    }
+
+    public void tickServer() {
+        if (extensions.isEmpty()){
+            for (Direction dir :Direction.values()) {
+                BlockPos pos = getBlockPos();
+                switch (dir){
+                    case NORTH -> pos = pos.north(2);
+                    case SOUTH -> pos = pos.south(2);
+                    case EAST -> pos = pos.east(2);
+                    case WEST -> pos = pos.west(2);
+                }
+                if (level.getBlockEntity(pos) instanceof BedrockiumTowerTile){
+                    extensions.add(pos);
+                }
+            }
+            sendUpdates();
+        }
     }
 
 }
