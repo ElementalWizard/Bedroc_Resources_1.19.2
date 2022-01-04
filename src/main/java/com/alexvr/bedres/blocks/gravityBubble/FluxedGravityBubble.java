@@ -44,40 +44,34 @@ public class FluxedGravityBubble extends Block implements EntityBlock {
 
     @Override
     public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult result) {
-        if (!level.isClientSide()) {
-            BlockEntity be = level.getBlockEntity(pos);
-            if (be instanceof FluxedGravityBubbleTile generator) {
-                ItemStack itemInHand = player.getItemInHand(hand);
-                level.getBlockEntity(pos).getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).ifPresent(h -> {
-                    if(player.isShiftKeyDown() && itemInHand.isEmpty()){
-                        generator.setAreaVisible(!generator.isAreaVisible());
-                    }else if(itemInHand.isEmpty()){
-                        if (h.getStackInSlot(0).isEmpty()){
-                            generator.setAreaVisible(false);
-                        }else{
-                            boolean extracted = player.addItem(h.getStackInSlot(0));
-                            if (extracted) {
-                                h.insertItem(0,ItemStack.EMPTY,false);
-                            }
-                        }
-
-
+        BlockEntity be = level.getBlockEntity(pos);
+        if (be instanceof FluxedGravityBubbleTile bubbleTile) {
+            ItemStack itemInHand = player.getItemInHand(hand);
+            level.getBlockEntity(pos).getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).ifPresent(h -> {
+                if(player.isShiftKeyDown() && itemInHand.isEmpty()){
+                    bubbleTile.setAreaVisible(!bubbleTile.isAreaVisible());
+                }else if(itemInHand.isEmpty()){
+                    if (h.getStackInSlot(0).isEmpty()){
+                        bubbleTile.setAreaVisible(false);
                     }else{
-                        ItemStack remainder = ItemHandlerHelper.insertItem(h, itemInHand, false);
-                        if (remainder.isEmpty()) {
-                            player.setItemInHand(hand,ItemStack.EMPTY);
-                        } else {
-                            player.setItemInHand(hand,remainder);
+                        boolean extracted = player.addItem(h.getStackInSlot(0));
+                        if (extracted) {
+                            h.insertItem(0,ItemStack.EMPTY,false);
                         }
-
-
                     }
-                    generator.setChanged();
-                    generator.sendUpdates();
-                    level.sendBlockUpdated(pos, generator.getBlockState(), generator.getBlockState(), Block.UPDATE_ALL);
-                });
-            }
+                }else{
+                    ItemStack remainder = ItemHandlerHelper.insertItem(h, itemInHand, false);
+                    if (remainder.isEmpty()) {
+                        player.setItemInHand(hand,ItemStack.EMPTY);
+                    } else {
+                        player.setItemInHand(hand,remainder);
+                    }
+                }
+                bubbleTile.sendUpdates();
+                level.sendBlockUpdated(pos, bubbleTile.getBlockState(), bubbleTile.getBlockState(), Block.UPDATE_ALL);
+            });
         }
+
         return InteractionResult.SUCCESS;
     }
 

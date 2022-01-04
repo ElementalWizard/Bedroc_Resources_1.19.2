@@ -39,11 +39,6 @@ public class BedrockiumTowerTile extends BlockEntity {
 
     private final LazyOptional<IItemHandler> combinedItemHandler = LazyOptional.of(this::createCombinedItemHandler);
 
-    public ItemStack[] northItems = {ItemStack.EMPTY,ItemStack.EMPTY};
-    public ItemStack[] southItems = {ItemStack.EMPTY,ItemStack.EMPTY};
-    public ItemStack[] eastItems = {ItemStack.EMPTY,ItemStack.EMPTY};
-    public ItemStack[] westItems = {ItemStack.EMPTY,ItemStack.EMPTY};
-
     public BedrockiumTowerTile(BlockPos pWorldPosition, BlockState pBlockState) {
         super(Registration.BASE_SPIKE_TILE.get(), pWorldPosition, pBlockState);
 
@@ -62,23 +57,15 @@ public class BedrockiumTowerTile extends BlockEntity {
         super.load(tag);
         if (tag.contains("ninv")) {
             northItemHandler.deserializeNBT(tag.getCompound("ninv"));
-            northItems[0] = northItemHandler.getStackInSlot(0);
-            northItems[1] = northItemHandler.getStackInSlot(1);
         }
         if (tag.contains("sinv")) {
             southItemHandler.deserializeNBT(tag.getCompound("sinv"));
-            southItems[0] = southItemHandler.getStackInSlot(0);
-            southItems[1] = southItemHandler.getStackInSlot(1);
         }
         if (tag.contains("einv")) {
             eastItemHandler.deserializeNBT(tag.getCompound("einv"));
-            eastItems[0] = eastItemHandler.getStackInSlot(0);
-            eastItems[1] = eastItemHandler.getStackInSlot(1);
         }
         if (tag.contains("winv")) {
             westItemHandler.deserializeNBT(tag.getCompound("winv"));
-            westItems[0] = westItemHandler.getStackInSlot(0);
-            westItems[1] = westItemHandler.getStackInSlot(1);
         }
 
 
@@ -138,14 +125,6 @@ public class BedrockiumTowerTile extends BlockEntity {
                 !southItems[0].getItem().getRegistryName().equals(southItemHandler.getStackInSlot(0).getItem().getRegistryName())||!southItems[1].getItem().getRegistryName().equals(southItemHandler.getStackInSlot(1).getItem().getRegistryName())||
                 !eastItems[0].getItem().getRegistryName().equals(eastItemHandler.getStackInSlot(0).getItem().getRegistryName())||!eastItems[1].getItem().getRegistryName().equals(eastItemHandler.getStackInSlot(1).getItem().getRegistryName())||
                 !westItems[0].getItem().getRegistryName().equals(westItemHandler.getStackInSlot(0).getItem().getRegistryName())||!westItems[1].getItem().getRegistryName().equals(westItemHandler.getStackInSlot(1).getItem().getRegistryName())) {
-            this.northItems[0] = northItemHandler.getStackInSlot(0);
-            this.northItems[1] = northItemHandler.getStackInSlot(1);
-            this.southItems[0] = southItemHandler.getStackInSlot(0);
-            this.southItems[1] = southItemHandler.getStackInSlot(1);
-            this.westItems[0] = westItemHandler.getStackInSlot(0);
-            this.westItems[1] = westItemHandler.getStackInSlot(1);
-            this.eastItems[0] = eastItemHandler.getStackInSlot(0);
-            this.eastItems[1] = eastItemHandler.getStackInSlot(1);
             ModelDataManager.requestModelDataRefresh(this);
             level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_ALL);
 
@@ -170,12 +149,6 @@ public class BedrockiumTowerTile extends BlockEntity {
             protected void onContentsChanged(int slot) {
                 // To make sure the TE persists when the chunk is saved later we need to
                 // mark it dirty every time the item handler changes
-                switch (direction){
-                    case NORTH -> northItems[slot] = getStackInSlot(slot);
-                    case SOUTH -> southItems[slot] = getStackInSlot(slot);
-                    case WEST -> westItems[slot] = getStackInSlot(slot);
-                    case EAST -> eastItems[slot] = getStackInSlot(slot);
-                }
                 sendUpdates();
             }
 
@@ -184,18 +157,6 @@ public class BedrockiumTowerTile extends BlockEntity {
                 return 1;
             }
 
-            @Override
-            protected void onLoad() {
-                super.onLoad();
-                for (int slot = 0; slot < 2; slot++) {
-                    switch (direction){
-                        case NORTH -> northItems[slot] = getStackInSlot(slot);
-                        case SOUTH -> southItems[slot] = getStackInSlot(slot);
-                        case WEST -> westItems[slot] = getStackInSlot(slot);
-                        case EAST -> eastItems[slot] = getStackInSlot(slot);
-                    }
-                }
-            }
         };
     }
 

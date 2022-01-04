@@ -35,52 +35,32 @@ public class EnderianRitualPedestal extends Block  implements EntityBlock {
 
     @Override
     public InteractionResult use(BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult trace) {
-        if (world.isClientSide) {
-            BlockEntity tileEntity = world.getBlockEntity(pos);
-            if (tileEntity instanceof EnderianRitualPedestalTile) {
-                world.getBlockEntity(pos).getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).ifPresent(h -> {
-                    ItemStack itemInHand = player.getItemInHand(hand);
 
-                    if(itemInHand.isEmpty() || player.isShiftKeyDown()){
-                        ((EnderianRitualPedestalTile) tileEntity).item = ItemStack.EMPTY;
-                    }else{
-                        ((EnderianRitualPedestalTile) tileEntity).item = itemInHand;
-                    }
-                    tileEntity.setChanged();
-                    ((EnderianRitualPedestalTile) tileEntity).sendUpdates();
-                    state.updateNeighbourShapes(world,pos,32);
-                });
-            } else {
-                throw new IllegalStateException("Our named container provider is missing!");
-            }
-        }else{
-            BlockEntity tileEntity = world.getBlockEntity(pos);
-            if (tileEntity instanceof EnderianRitualPedestalTile) {
-                world.getBlockEntity(pos).getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).ifPresent(h -> {
-                    ItemStack itemInHand = player.getItemInHand(hand);
+        BlockEntity tileEntity = world.getBlockEntity(pos);
+        if (tileEntity instanceof EnderianRitualPedestalTile  pedestalTile) {
+            pedestalTile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).ifPresent(h -> {
+                ItemStack itemInHand = player.getItemInHand(hand);
 
-                    if(itemInHand.isEmpty() || player.isShiftKeyDown()){
-                        boolean extracted = player.addItem(h.getStackInSlot(0));
-                        if (extracted) {
-                            h.insertItem(0,ItemStack.EMPTY,false);
-                        }
-
-                    }else{
-                        ItemStack remainder = ItemHandlerHelper.insertItem(h, itemInHand, false);
-                        if (remainder.isEmpty()) {
-                            player.setItemInHand(hand,ItemStack.EMPTY);
-                        } else {
-                            player.setItemInHand(hand,remainder);
-                        }
+                if(itemInHand.isEmpty() || player.isShiftKeyDown()){
+                    boolean extracted = player.addItem(h.getStackInSlot(0));
+                    if (extracted) {
+                        h.insertItem(0,ItemStack.EMPTY,false);
                     }
 
-                    tileEntity.setChanged();
-                    ((EnderianRitualPedestalTile) tileEntity).sendUpdates();
-                    state.updateNeighbourShapes(world,pos,32);
-                });
-            } else {
-                throw new IllegalStateException("Our named container provider is missing!");
-            }
+                }else{
+                    ItemStack remainder = ItemHandlerHelper.insertItem(h, itemInHand, false);
+                    if (remainder.isEmpty()) {
+                        player.setItemInHand(hand,ItemStack.EMPTY);
+                    } else {
+                        player.setItemInHand(hand,remainder);
+                    }
+                }
+
+                pedestalTile.sendUpdates();
+                state.updateNeighbourShapes(world,pos,32);
+            });
+        } else {
+            throw new IllegalStateException("Our named container provider is missing!");
         }
         return InteractionResult.SUCCESS;
     }

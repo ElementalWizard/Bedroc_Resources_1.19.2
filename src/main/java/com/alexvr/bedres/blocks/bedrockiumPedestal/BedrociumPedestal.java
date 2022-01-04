@@ -37,47 +37,31 @@ public class BedrociumPedestal extends Block implements EntityBlock {
 
     @Override
     public InteractionResult use(BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult trace) {
-        if (world.isClientSide) {
-            BlockEntity tileEntity = world.getBlockEntity(pos);
-            if (tileEntity instanceof BedrociumPedestalTile pedestalTile) {
-                pedestalTile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).ifPresent(h -> {
-                    ItemStack itemInHand = player.getItemInHand(hand);
-                    if(itemInHand.isEmpty() || player.isShiftKeyDown()){
-                        pedestalTile.item = ItemStack.EMPTY;
-                    }else{
-                        pedestalTile.item = itemInHand;
-                    }
-                    pedestalTile.sendUpdates();
-                    state.updateNeighbourShapes(world,pos,32);
-                });
-            } else {
-                throw new IllegalStateException("Our named container provider is missing!");
-            }
-        }else{
-            BlockEntity tileEntity = world.getBlockEntity(pos);
-            if (tileEntity instanceof BedrociumPedestalTile pedestalTile) {
-                pedestalTile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).ifPresent(h -> {
-                    ItemStack itemInHand = player.getItemInHand(hand);
 
-                    if(itemInHand.isEmpty() || player.isShiftKeyDown()){
-                        boolean extracted = player.addItem(h.getStackInSlot(0));
-                        if (extracted) {
-                            h.insertItem(0,ItemStack.EMPTY,false);
-                        }
-                    }else{
-                        ItemStack remainder = ItemHandlerHelper.insertItem(h, itemInHand, false);
-                        if (remainder.isEmpty()) {
-                            player.setItemInHand(hand,ItemStack.EMPTY);
-                        } else {
-                            player.setItemInHand(hand,remainder);
-                        }
+        BlockEntity tileEntity = world.getBlockEntity(pos);
+        if (tileEntity instanceof BedrociumPedestalTile pedestalTile) {
+            pedestalTile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).ifPresent(h -> {
+                ItemStack itemInHand = player.getItemInHand(hand);
+
+                if(itemInHand.isEmpty() || player.isShiftKeyDown()){
+                    boolean extracted = player.addItem(h.getStackInSlot(0));
+                    if (extracted) {
+                        h.insertItem(0,ItemStack.EMPTY,false);
                     }
-                    pedestalTile.updateRecipeRender();
-                });
-            } else {
-                throw new IllegalStateException("Our named container provider is missing!");
-            }
+                }else{
+                    ItemStack remainder = ItemHandlerHelper.insertItem(h, itemInHand, false);
+                    if (remainder.isEmpty()) {
+                        player.setItemInHand(hand,ItemStack.EMPTY);
+                    } else {
+                        player.setItemInHand(hand,remainder);
+                    }
+                }
+                pedestalTile.updateRecipeRender();
+            });
+        } else {
+            throw new IllegalStateException("Our named container provider is missing!");
         }
+
         return InteractionResult.SUCCESS;
     }
 

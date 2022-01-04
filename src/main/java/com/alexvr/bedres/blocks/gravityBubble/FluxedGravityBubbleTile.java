@@ -8,7 +8,6 @@ import net.minecraft.network.Connection;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
-import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
@@ -28,7 +27,10 @@ import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 
 public class FluxedGravityBubbleTile extends BlockEntity {
@@ -47,9 +49,6 @@ public class FluxedGravityBubbleTile extends BlockEntity {
     private int maxPlayers = 2;
     private Map<String, Integer> playersFlying = new HashMap<>();
     List<Player> playersTracked = new ArrayList<>(maxPlayers);
-
-    private static final UUID REDUCED_GRAVITY_ID = UUID.fromString("DEB06000-7979-4242-8888-00000DEB0600");
-    private static final AttributeModifier REDUCED_GRAVITY = (new AttributeModifier(REDUCED_GRAVITY_ID, "Reduced gravity", (double)-0.80, AttributeModifier.Operation.MULTIPLY_TOTAL));
 
     public FluxedGravityBubbleTile(BlockPos pWorldPosition, BlockState pBlockState) {
         super(Registration.FLUXED_GRAVITY_BUBBLE_TILE.get(), pWorldPosition, pBlockState);
@@ -130,8 +129,12 @@ public class FluxedGravityBubbleTile extends BlockEntity {
     private void loadClientData(CompoundTag tag) {
         if (tag.contains("Info")) {
             CompoundTag infoTag = tag.getCompound("Info");
-            area_visible = infoTag.getBoolean("area");
-            fuel_amount = infoTag.getInt("fuel");
+            if (infoTag.contains("area")){
+                area_visible = infoTag.getBoolean("area");
+            }
+            if (infoTag.contains("fuel")){
+                fuel_amount = infoTag.getInt("fuel");
+            }
         }
     }
 

@@ -1,5 +1,6 @@
 package com.alexvr.bedres.client.renderer;
 
+import com.alexvr.bedres.BedrockResources;
 import com.alexvr.bedres.blocks.gravityBubble.FluxedGravityBubbleTile;
 import com.alexvr.bedres.setup.Registration;
 import com.alexvr.bedres.utils.RenderHelper;
@@ -15,6 +16,7 @@ public class FluxedGravityBubbleRenderer implements BlockEntityRenderer<FluxedGr
     @Override
     public void render(FluxedGravityBubbleTile tile, float partialTick, PoseStack poseStack, MultiBufferSource bufferSource, int combinedLight, int combinedOverlay) {
         if (tile.isAreaVisible() ){
+            BedrockResources.LOGGER.info(tile.getFuelAmount());
             //RenderBlock(poseStack, Registration.RANGE_VIEW_BLOCK.get(),bufferSource,combinedLight, OverlayTexture.NO_OVERLAY,-7,-4,-7,15,15,15,false);
             RenderHelper.renderBlock(poseStack,bufferSource,tile.getBlockPos(),Registration.RANGE_VIEW_BLOCK.get().defaultBlockState(),tile.getLevel(),-7,-4,-7,15,15,15);
         }

@@ -34,8 +34,6 @@ public class BedrociumPedestalTile extends BlockEntity {
     public ItemStackHandler itemHandler = createHandler();
     private LazyOptional<IItemHandler> handler = LazyOptional.of(() -> itemHandler);
 
-    public ItemStack item = ItemStack.EMPTY;
-
     public List<BlockPos> extensions = new ArrayList<>();
 
     public BedrociumPedestalTile(BlockPos pWorldPosition, BlockState pBlockState) {
@@ -53,7 +51,6 @@ public class BedrociumPedestalTile extends BlockEntity {
         super.load(tag);
         if (tag.contains("inv")) {
             itemHandler.deserializeNBT(tag.getCompound("inv"));
-            item = itemHandler.getStackInSlot(0);
         }
 
 
@@ -96,7 +93,6 @@ public class BedrociumPedestalTile extends BlockEntity {
         // If any of the values was changed we request a refresh of our model data and send a block update (this will cause
         // the baked model to be recreated)
         if (!item.getItem().getRegistryName().equals(itemHandler.getStackInSlot(0).getItem().getRegistryName())) {
-            this.item = itemHandler.getStackInSlot(0);
             ModelDataManager.requestModelDataRefresh(this);
             level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_ALL);
         }
@@ -120,16 +116,9 @@ public class BedrociumPedestalTile extends BlockEntity {
             protected void onContentsChanged(int slot) {
                 // To make sure the TE persists when the chunk is saved later we need to
                 // mark it dirty every time the item handler changes
-                item = getStackInSlot(0);
                 sendUpdates();
             }
 
-            @Override
-            protected void onLoad() {
-                super.onLoad();
-                item = getStackInSlot(0);
-
-            }
         };
     }
 

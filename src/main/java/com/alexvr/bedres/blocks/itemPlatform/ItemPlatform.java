@@ -50,52 +50,30 @@ public class ItemPlatform extends FaceAttachedHorizontalDirectionalBlock impleme
 
     @Override
     public InteractionResult use(BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult trace) {
-        if (world.isClientSide) {
-            BlockEntity tileEntity = world.getBlockEntity(pos);
-            if (tileEntity instanceof ItemPlatformTile) {
-                world.getBlockEntity(pos).getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).ifPresent(h -> {
-                    ItemStack itemInHand = player.getItemInHand(hand);
 
-                    if(itemInHand.isEmpty() || player.isShiftKeyDown()){
-                        ((ItemPlatformTile) tileEntity).item = ItemStack.EMPTY;
-                    }else{
-                        ((ItemPlatformTile) tileEntity).item = itemInHand;
+        BlockEntity tileEntity = world.getBlockEntity(pos);
+        if (tileEntity instanceof ItemPlatformTile itemPlatformTile) {
+            itemPlatformTile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).ifPresent(h -> {
+                ItemStack itemInHand = player.getItemInHand(hand);
+
+                if(itemInHand.isEmpty() || player.isShiftKeyDown()){
+                    boolean extracted = player.addItem(h.getStackInSlot(0));
+                    if (extracted) {
+                        h.insertItem(0,ItemStack.EMPTY,false);
                     }
-                    tileEntity.setChanged();
-                    ((ItemPlatformTile) tileEntity).sendUpdates();
-                    state.updateNeighbourShapes(world,pos,32);
-                });
-            } else {
-                throw new IllegalStateException("Our named container provider is missing!");
-            }
-        }else{
-            BlockEntity tileEntity = world.getBlockEntity(pos);
-            if (tileEntity instanceof ItemPlatformTile) {
-                world.getBlockEntity(pos).getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).ifPresent(h -> {
-                    ItemStack itemInHand = player.getItemInHand(hand);
-
-                    if(itemInHand.isEmpty() || player.isShiftKeyDown()){
-                        boolean extracted = player.addItem(h.getStackInSlot(0));
-                        if (extracted) {
-                            h.insertItem(0,ItemStack.EMPTY,false);
-                        }
-
-                    }else{
-                        ItemStack remainder = ItemHandlerHelper.insertItem(h, itemInHand, false);
-                        if (remainder.isEmpty()) {
-                            player.setItemInHand(hand,ItemStack.EMPTY);
-                        } else {
-                            player.setItemInHand(hand,remainder);
-                        }
+                }else{
+                    ItemStack remainder = ItemHandlerHelper.insertItem(h, itemInHand, false);
+                    if (remainder.isEmpty()) {
+                        player.setItemInHand(hand,ItemStack.EMPTY);
+                    } else {
+                        player.setItemInHand(hand,remainder);
                     }
-
-                    tileEntity.setChanged();
-                    ((ItemPlatformTile) tileEntity).sendUpdates();
-                    state.updateNeighbourShapes(world,pos,32);
-                });
-            } else {
-                throw new IllegalStateException("Our named container provider is missing!");
-            }
+                }
+                itemPlatformTile.sendUpdates();
+                state.updateNeighbourShapes(world,pos,32);
+            });
+        } else {
+            throw new IllegalStateException("Our named container provider is missing!");
         }
         return InteractionResult.SUCCESS;
     }
