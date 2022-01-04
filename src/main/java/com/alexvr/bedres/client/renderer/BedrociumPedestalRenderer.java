@@ -22,7 +22,7 @@ public class BedrociumPedestalRenderer implements BlockEntityRenderer<BedrociumP
             RenderItemstack(poseStack,tile.item,bufferSource,combinedLight,combinedOverlay,tile.getBlockPos(),0,.5f, .6f, .5f,0.75F, 0.75F, 0.75F,true );
             RitualAltarRecipes recipe = ModRecipeRegistry.findRecipeFromCatalyst(tile.item);
             if (recipe!= null && tile.getBlockState().getValue(TRIGGERED)){
-                RenderItemstack(poseStack,recipe.getResultItem(),bufferSource,combinedLight,combinedOverlay,tile.getBlockPos(),0,.5f, 1.1f, .5f,1.0F, 1.0F, 1.0F,true );
+                RenderItemstack(poseStack,recipe.getResultItem(),bufferSource,combinedLight,combinedOverlay,tile.getBlockPos(),0,.5f, 1.1f, .5f,1.0F, 1.0F, 1.0F,false );
             }
         }
 

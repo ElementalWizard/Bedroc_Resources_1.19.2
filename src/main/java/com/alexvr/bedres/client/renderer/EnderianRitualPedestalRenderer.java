@@ -15,7 +15,7 @@ public class EnderianRitualPedestalRenderer implements BlockEntityRenderer<Ender
     @Override
     public void render(EnderianRitualPedestalTile tile, float partialTick, PoseStack poseStack, MultiBufferSource bufferSource, int combinedLight, int combinedOverlay) {
         if (!tile.item.isEmpty()){
-            RenderItemstack(poseStack,tile.item,bufferSource,combinedLight,combinedOverlay,tile.getBlockPos(),0,.5f, 1f, .5f,0.40F, 0.40F, 0.40F,true );
+            RenderItemstack(poseStack,tile.item,bufferSource,combinedLight,combinedOverlay,tile.getBlockPos(),0,.5f, 1f, .5f,0.40F, 0.40F, 0.40F,false );
         }
     }
 
