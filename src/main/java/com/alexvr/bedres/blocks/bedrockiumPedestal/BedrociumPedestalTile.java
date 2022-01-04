@@ -31,6 +31,7 @@ public class BedrociumPedestalTile extends BlockEntity {
     private LazyOptional<IItemHandler> handler = LazyOptional.of(() -> itemHandler);
 
     public ItemStack item = ItemStack.EMPTY;
+
     public List<BlockPos> extensions = new ArrayList<>();
 
     public BedrociumPedestalTile(BlockPos pWorldPosition, BlockState pBlockState) {
@@ -137,15 +138,31 @@ public class BedrociumPedestalTile extends BlockEntity {
         return super.getCapability(cap, side);
     }
 
+
     public List<ItemStack> getItemsForRecipe(){
         List<ItemStack> items = new ArrayList<>();
         if (!extensions.isEmpty()){
+            items.add(itemHandler.getStackInSlot(0).copy());
             for (BlockPos pos :extensions) {
+                List<ItemStack> temp = new ArrayList<>();
                 if (level.getBlockEntity(pos) instanceof BedrockiumTowerTile tower){
-                    items.addAll(getItemsFromCap(tower.westItemHandler));
-                    items.addAll(getItemsFromCap(tower.eastItemHandler));
-                    items.addAll(getItemsFromCap(tower.northItemHandler));
-                    items.addAll(getItemsFromCap(tower.southItemHandler));
+                    temp.addAll(getItemsFromCap(tower.westItemHandler));
+                    temp.addAll(getItemsFromCap(tower.eastItemHandler));
+                    temp.addAll(getItemsFromCap(tower.northItemHandler));
+                    temp.addAll(getItemsFromCap(tower.southItemHandler));
+                }
+                for (ItemStack stack :temp) {
+                    boolean grew = false;
+                    for (ItemStack stack2: items) {
+                        if (stack.is(stack2.getItem())){
+                            stack2.grow(stack.getCount());
+                            grew = true;
+                            break;
+                        }
+                    }
+                    if (!grew){
+                       items.add(stack) ;
+                    }
                 }
             }
         }
@@ -156,10 +173,22 @@ public class BedrociumPedestalTile extends BlockEntity {
     public List<ItemStack> getItemsFromCap(DirectionalItemStackHandler itemHandler){
         List<ItemStack> items = new ArrayList<>();
         for (int i = 0; i<itemHandler.getSlots();i++ ){
-            if (itemHandler.getStackInSlot(i).isEmpty()){
+            ItemStack stack = itemHandler.getStackInSlot(i).copy();
+            if (stack.isEmpty()){
                 continue;
             }
-            items.add(itemHandler.getStackInSlot(i));
+            boolean grew = false;
+            for (ItemStack stack2: items) {
+                if (stack.is(stack2.getItem())){
+                    stack2.grow(1);
+                    grew = true;
+                    break;
+                }
+            }
+            if (!grew){
+                items.add(stack) ;
+            }
+
         }
         return items;
     }

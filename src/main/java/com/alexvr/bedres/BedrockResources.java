@@ -1,5 +1,6 @@
 package com.alexvr.bedres;
 
+import com.alexvr.bedres.recipes.ModRecipeRegistry;
 import com.alexvr.bedres.setup.ClientSetup;
 import com.alexvr.bedres.setup.ModSetup;
 import com.alexvr.bedres.setup.Registration;
@@ -36,7 +37,7 @@ public class BedrockResources {
     public BedrockResources() {
         ModSetup.setup();
         Registration.init();
-
+        ModRecipeRegistry.register();
         IEventBus event = FMLJavaModLoadingContext.get().getModEventBus();
 
         event.addListener(ModSetup::init);
