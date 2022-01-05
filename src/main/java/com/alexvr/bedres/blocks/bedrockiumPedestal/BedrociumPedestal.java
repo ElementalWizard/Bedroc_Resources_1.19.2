@@ -28,10 +28,11 @@ public class BedrociumPedestal extends Block implements EntityBlock {
 
     private static final VoxelShape Base = Block.box(0, 0.0D, 0, 16, .3, 16);
     public static final BooleanProperty TRIGGERED = BlockStateProperties.TRIGGERED;
+    public static final BooleanProperty CRAFTING = BlockStateProperties.LOCKED;
 
     public BedrociumPedestal(BlockBehaviour.Properties props) {
         super(props);
-        this.registerDefaultState(this.stateDefinition.any().setValue(TRIGGERED, Boolean.valueOf(false)));
+        this.registerDefaultState(this.stateDefinition.any().setValue(TRIGGERED, Boolean.valueOf(false)).setValue(CRAFTING, Boolean.valueOf(false)));
 
     }
 
@@ -68,9 +69,6 @@ public class BedrociumPedestal extends Block implements EntityBlock {
     @Nullable
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
-        if (level.isClientSide()) {
-            return null;
-        }
         return (level1, blockPos, blockState, t) -> {
             if (t instanceof BedrociumPedestalTile tile) {
                 tile.tickServer();
@@ -107,6 +105,6 @@ public class BedrociumPedestal extends Block implements EntityBlock {
     }
 
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> pBuilder) {
-        pBuilder.add(TRIGGERED);
+        pBuilder.add(TRIGGERED).add(CRAFTING);
     }
 }

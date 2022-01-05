@@ -86,11 +86,14 @@ public class ModRecipeRegistry {
         // @todo optimize
         for (RitualAltarRecipes recipe : getRecipes()) {
             boolean validRec = true;
+            List<ItemStack> ingCopy = new ArrayList<>(ing);
+
             for (ItemStack stack: recipe.getIngredientList()){
                 boolean valid = false;
                 for (ItemStack stack2: ing){
                     if (stack2.is(stack.getItem()) && stack2.equals(stack,false)){
                         valid = true;
+                        ingCopy.remove(stack2);
                         break;
                     }
                 }
@@ -99,7 +102,7 @@ public class ModRecipeRegistry {
                     break;
                 }
             }
-            if (validRec){
+            if (validRec && ingCopy.isEmpty()){
                 return recipe;
             }
 

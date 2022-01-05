@@ -17,7 +17,6 @@ import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.wrapper.CombinedInvWrapper;
-import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -162,14 +161,7 @@ public class BedrockiumTowerTile extends BlockEntity {
 
     @Nonnull
     private IItemHandler createCombinedItemHandler() {
-        return new CombinedInvWrapper(northItemHandler, southItemHandler,eastItemHandler,westItemHandler) {
-
-            @NotNull
-            @Override
-            public ItemStack insertItem(int slot, @NotNull ItemStack stack, boolean simulate) {
-                return stack;
-            }
-        };
+        return new CombinedInvWrapper(northItemHandler, southItemHandler,eastItemHandler,westItemHandler);
     }
 
     @Nonnull

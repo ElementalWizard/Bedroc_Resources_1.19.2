@@ -18,13 +18,6 @@ public class RitualAltarRecipes implements Recipe<RitualAltarContext> {
     private final ItemStack destination;
     private final List<ItemStack> ingredients;
 
-    public RitualAltarRecipes(ResourceLocation id, ItemStack destination, float chance, ItemStack... ingredients) {
-        this.id = id;
-        this.destination = destination;
-        this.ingredients = new ArrayList<>(ingredients.length);
-        Collections.addAll(this.ingredients, ingredients);
-    }
-
     public RitualAltarRecipes(ItemStack destination, ItemStack... ingredients) {
         this.id = destination.getItem().getRegistryName();
         this.destination = destination;

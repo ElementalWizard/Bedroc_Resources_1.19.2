@@ -11,6 +11,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.items.CapabilityItemHandler;
 import org.jetbrains.annotations.NotNull;
 
+import static com.alexvr.bedres.blocks.bedrockiumPedestal.BedrociumPedestal.CRAFTING;
 import static com.alexvr.bedres.blocks.bedrockiumPedestal.BedrociumPedestal.TRIGGERED;
 import static com.alexvr.bedres.utils.RenderHelper.RenderItemstack;
 
@@ -24,7 +25,7 @@ public class BedrociumPedestalRenderer implements BlockEntityRenderer<BedrociumP
                     ItemStack stack = h.getStackInSlot(0);
             RenderItemstack(poseStack,stack,bufferSource,combinedLight,combinedOverlay,tile.getBlockPos(),0,.5f, .6f, .5f,0.75F, 0.75F, 0.75F,false );
             RitualAltarRecipes recipe = ModRecipeRegistry.findRecipeFromCatalyst(stack);
-            if (recipe!= null && tile.getBlockState().getValue(TRIGGERED)){
+            if (recipe!= null && (tile.getBlockState().getValue(TRIGGERED)||tile.getBlockState().getValue(CRAFTING))){
                 RenderItemstack(poseStack,recipe.getResultItem(),bufferSource,combinedLight,combinedOverlay,tile.getBlockPos(),0,.5f, 1.3f, .5f,1.0F, 1.0F, 1.0F,false );
             }
         });
