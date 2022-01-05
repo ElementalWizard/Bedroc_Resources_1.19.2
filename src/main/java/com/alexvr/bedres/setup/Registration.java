@@ -22,6 +22,7 @@ import com.alexvr.bedres.utils.BedrockReferences;
 import com.alexvr.bedres.world.features.AltarStructure;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.entity.EntityType;
@@ -39,6 +40,7 @@ import net.minecraft.world.level.material.Material;
 import net.minecraftforge.common.ForgeSpawnEggItem;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.extensions.IForgeMenuType;
+import net.minecraftforge.common.util.ForgeSoundType;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.DeferredRegister;
@@ -55,6 +57,7 @@ public class Registration {
     public static final DeferredRegister<MenuType<?>> CONTAINERS = DeferredRegister.create(ForgeRegistries.CONTAINERS, MODID);
     public static final DeferredRegister<EntityType<?>> ENTITIES = DeferredRegister.create(ForgeRegistries.ENTITIES, MODID);
     private static final DeferredRegister<StructureFeature<?>> STRUCTURES = DeferredRegister.create(ForgeRegistries.STRUCTURE_FEATURES, MODID);
+    private static final DeferredRegister<SoundEvent> SOUND_EVENTS = DeferredRegister.create(ForgeRegistries.SOUND_EVENTS, MODID);
 
     public static  void init(){
         IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
@@ -65,7 +68,15 @@ public class Registration {
         CONTAINERS.register(bus);
         STRUCTURES.register(bus);
         ENTITIES.register(bus);
+        SOUND_EVENTS.register(bus);
     }
+
+    public static final RegistryObject<SoundEvent> FLUXED_CREEP_IDLE = SOUND_EVENTS.register("fluxed_creep_idle",
+            () -> new SoundEvent(new ResourceLocation(MODID, "fluxed_creep_idle")));
+    public static final RegistryObject<SoundEvent> FLUXED_CREEP_ROAR = SOUND_EVENTS.register("fluxed_creep_roar",
+            () -> new SoundEvent(new ResourceLocation(MODID, "fluxed_creep_roar")));
+    public static final SoundType FLUXED_CREEP_TYPE = new ForgeSoundType(1.0F, 1.0F, FLUXED_CREEP_IDLE, FLUXED_CREEP_IDLE, FLUXED_CREEP_IDLE, FLUXED_CREEP_ROAR, FLUXED_CREEP_ROAR);
+
 
     public static final RegistryObject<EntityType<SporeDeityEntity>> SPORE_DEITY = ENTITIES.register(BedrockReferences.SPORE_DEITY_REGNAME, () -> EntityType.Builder.of(SporeDeityEntity::new, MobCategory.MONSTER)
             .sized(0.8f, 1.95f)

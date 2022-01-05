@@ -1,11 +1,13 @@
 package com.alexvr.bedres.entities.fluxedcreep;
 
+import com.alexvr.bedres.setup.Registration;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.damagesource.DamageSource;
@@ -24,6 +26,7 @@ import net.minecraft.world.entity.projectile.LargeFireball;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
+import org.jetbrains.annotations.Nullable;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.EnumSet;
@@ -82,6 +85,24 @@ public class FluxedCreepEntity extends FlyingMob implements Enemy {
         }else {
             return super.hurt(source, amount);
         }
+    }
+
+    @Nullable
+    @Override
+    protected SoundEvent getAmbientSound() {
+        return Registration.FLUXED_CREEP_TYPE.getStepSound();
+    }
+
+    @Nullable
+    @Override
+    protected SoundEvent getHurtSound(DamageSource pDamageSource) {
+        return Registration.FLUXED_CREEP_TYPE.getFallSound();
+    }
+
+    @Nullable
+    @Override
+    protected SoundEvent getDeathSound() {
+        return Registration.FLUXED_CREEP_TYPE.getHitSound();
     }
 
     public static AttributeSupplier.Builder prepareAttributes() {
