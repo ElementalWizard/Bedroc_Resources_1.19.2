@@ -17,7 +17,6 @@ import net.minecraft.world.level.levelgen.structure.PoolElementStructurePiece;
 import net.minecraft.world.level.levelgen.structure.PostPlacementProcessor;
 import net.minecraft.world.level.levelgen.structure.pieces.PieceGenerator;
 import net.minecraft.world.level.levelgen.structure.pieces.PieceGeneratorSupplier;
-import org.apache.logging.log4j.Level;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Optional;
@@ -57,7 +56,7 @@ public class AltarStructure extends StructureFeature<JigsawConfiguration> {
 
         if (generator.isPresent()) {
             // Debugging help to quickly find our structures
-            BedrockResources.LOGGER.log(Level.INFO, "Portal at " + blockpos);
+            BedrockResources.LOGGER.debug("Portal at " + blockpos);
         }
 
         // Return the pieces generator that is now set up so that the game runs it when it needs to create the layout of structure pieces.

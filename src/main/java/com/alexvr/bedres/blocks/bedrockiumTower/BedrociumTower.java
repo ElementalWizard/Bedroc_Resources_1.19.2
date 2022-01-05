@@ -22,6 +22,10 @@ import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemHandlerHelper;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Objects;
+
+import static com.alexvr.bedres.blocks.bedrockiumPedestal.BedrociumPedestal.CRAFTING;
+
 public class BedrociumTower extends Block implements EntityBlock {
 
     public BedrociumTower(BlockBehaviour.Properties props) {
@@ -34,52 +38,53 @@ public class BedrociumTower extends Block implements EntityBlock {
             if (trace.getDirection() == Direction.UP || trace.getDirection() == Direction.DOWN){
                 return InteractionResult.PASS;
             }
-            bedrockiumTowerTile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY,trace.getDirection()).ifPresent(h -> {
-                int slotToInteract = 0;
-                Vec3 hit = trace.getLocation().subtract(pos.getX(), pos.getY(), pos.getZ());
-                if(hit.y >= 0.5){
-                    slotToInteract = 1;
-                }
-                ItemStack itemInHand = player.getItemInHand(hand);
-                if((itemInHand.isEmpty() || player.isShiftKeyDown()) && !h.getStackInSlot(slotToInteract).isEmpty()){
-                    boolean extracted = player.addItem(h.getStackInSlot(slotToInteract));
-                    if (extracted) {
-                        h.insertItem(slotToInteract,ItemStack.EMPTY,false);
+            if (!getPedestalTile(world,bedrockiumTowerTile).getBlockState().getValue(CRAFTING)) {
+                bedrockiumTowerTile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, trace.getDirection()).ifPresent(h -> {
+                    int slotToInteract = 0;
+                    Vec3 hit = trace.getLocation().subtract(pos.getX(), pos.getY(), pos.getZ());
+                    if (hit.y >= 0.5) {
+                        slotToInteract = 1;
                     }
-                }else{
-                    if (!h.getStackInSlot(slotToInteract).isEmpty()){
-                        boolean end = h.getStackInSlot(slotToInteract).is(itemInHand.getItem());
+                    ItemStack itemInHand = player.getItemInHand(hand);
+                    if ((itemInHand.isEmpty() || player.isShiftKeyDown()) && !h.getStackInSlot(slotToInteract).isEmpty()) {
                         boolean extracted = player.addItem(h.getStackInSlot(slotToInteract));
                         if (extracted) {
-                            h.insertItem(slotToInteract,ItemStack.EMPTY,false);
-                            if (end){
-                                bedrockiumTowerTile.sendUpdates();
-                                state.updateNeighbourShapes(world,pos,32);
-                                return;
-                            }
+                            h.insertItem(slotToInteract, ItemStack.EMPTY, false);
                         }
-
-                    }
-                    ItemStack remainder = ItemHandlerHelper.insertItem(h, itemInHand, true);
-                    h.insertItem(slotToInteract,itemInHand,false);
-                    if (remainder.isEmpty()) {
-                        player.setItemInHand(hand,ItemStack.EMPTY);
                     } else {
-                        player.getItemInHand(hand).shrink(1);
-                    }
-                }
+                        if (!h.getStackInSlot(slotToInteract).isEmpty()) {
+                            boolean end = h.getStackInSlot(slotToInteract).is(itemInHand.getItem());
+                            boolean extracted = player.addItem(h.getStackInSlot(slotToInteract));
+                            if (extracted) {
+                                h.insertItem(slotToInteract, ItemStack.EMPTY, false);
+                                if (end) {
+                                    bedrockiumTowerTile.sendUpdates();
+                                    state.updateNeighbourShapes(world, pos, 32);
+                                    return;
+                                }
+                            }
 
-                bedrockiumTowerTile.sendUpdates();
-                state.updateNeighbourShapes(world,pos,32);
-                updatePedestal(world, bedrockiumTowerTile);
-            });
+                        }
+                        ItemStack remainder = ItemHandlerHelper.insertItem(h, itemInHand, true);
+                        h.insertItem(slotToInteract, itemInHand, false);
+                        if (remainder.isEmpty()) {
+                            player.setItemInHand(hand, ItemStack.EMPTY);
+                        } else {
+                            player.getItemInHand(hand).shrink(1);
+                        }
+                    }
+
+                    bedrockiumTowerTile.sendUpdates();
+                    state.updateNeighbourShapes(world, pos, 32);
+                    updatePedestal(world, bedrockiumTowerTile);
+                });
+            }
         } else {
             throw new IllegalStateException("Our named container provider is missing!");
         }
         return InteractionResult.SUCCESS;
     }
-
-    private void updatePedestal(Level world, BedrockiumTowerTile bedrockiumTowerTile) {
+    private BedrociumPedestalTile getPedestalTile(Level world, BedrockiumTowerTile bedrockiumTowerTile) {
         for(Direction dir: Direction.values()){
             BlockPos altarPos = new BlockPos(bedrockiumTowerTile.getBlockPos());
             switch (dir){
@@ -97,10 +102,14 @@ public class BedrociumTower extends Block implements EntityBlock {
                 }
             }
             if (world.getBlockEntity(altarPos) instanceof BedrociumPedestalTile pedestalTile){
-                pedestalTile.updateRecipeRender();
-                break;
+                return pedestalTile;
             }
         }
+        return null;
+    }
+
+    private void updatePedestal(Level world, BedrockiumTowerTile bedrockiumTowerTile) {
+        Objects.requireNonNull(getPedestalTile(world, bedrockiumTowerTile)).updateRecipeRender();
     }
 
     @Override

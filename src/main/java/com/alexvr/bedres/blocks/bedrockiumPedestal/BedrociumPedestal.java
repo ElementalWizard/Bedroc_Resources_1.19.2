@@ -28,20 +28,21 @@ import org.jetbrains.annotations.Nullable;
 public class BedrociumPedestal extends Block implements EntityBlock {
 
     private static final VoxelShape Base = Block.box(0, 0.0D, 0, 16, .3, 16);
-    public static final BooleanProperty TRIGGERED = BlockStateProperties.TRIGGERED;
+    public static final BooleanProperty VALIDRECIPE = BlockStateProperties.TRIGGERED;
     public static final BooleanProperty CRAFTING = BlockStateProperties.LOCKED;
 
     public BedrociumPedestal(BlockBehaviour.Properties props) {
         super(props);
-        this.registerDefaultState(this.stateDefinition.any().setValue(TRIGGERED, Boolean.valueOf(false)).setValue(CRAFTING, Boolean.valueOf(false)));
+        this.registerDefaultState(this.stateDefinition.any().setValue(VALIDRECIPE, Boolean.valueOf(false)).setValue(CRAFTING, Boolean.valueOf(false)));
 
     }
 
     @Override
     public InteractionResult use(BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult trace) {
-
-        BlockEntity tileEntity = world.getBlockEntity(pos);
-        if (tileEntity instanceof BedrociumPedestalTile pedestalTile) {
+        if (state.getValue(CRAFTING)){
+            return InteractionResult.PASS;
+        }
+        if (world.getBlockEntity(pos) instanceof BedrociumPedestalTile pedestalTile) {
             pedestalTile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).ifPresent(h -> {
                 ItemStack itemInHand = player.getItemInHand(hand);
 
@@ -59,7 +60,8 @@ public class BedrociumPedestal extends Block implements EntityBlock {
                     }
                 }
                 pedestalTile.updateRecipeRender();
-            });
+
+                });
         } else {
             throw new IllegalStateException("Our named container provider is missing!");
         }
@@ -80,9 +82,8 @@ public class BedrociumPedestal extends Block implements EntityBlock {
     @Override
     public void neighborChanged(BlockState pState, Level pLevel, BlockPos pPos, Block pBlock, BlockPos pFromPos, boolean pIsMoving) {
         if (pLevel.isClientSide()) return;
-        if (pLevel.getBlockEntity(pPos) instanceof  BedrociumPedestalTile pedestalTile){
-            pedestalTile.updateRecipeRender();
-            //craft
+        if (pLevel.getBlockEntity(pPos) instanceof  BedrociumPedestalTile pedestalTile && pLevel.getBlockEntity(pPos).getBlockState().getValue(VALIDRECIPE)){
+            pedestalTile.updateCrafting(true);
         }
         super.neighborChanged(pState, pLevel, pPos, pBlock, pFromPos, pIsMoving);
     }
@@ -114,6 +115,6 @@ public class BedrociumPedestal extends Block implements EntityBlock {
     }
 
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> pBuilder) {
-        pBuilder.add(TRIGGERED).add(CRAFTING);
+        pBuilder.add(VALIDRECIPE).add(CRAFTING);
     }
 }

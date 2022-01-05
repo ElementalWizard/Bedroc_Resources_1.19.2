@@ -17,7 +17,7 @@ import net.minecraftforge.client.model.data.EmptyModelData;
 
 public class RenderHelper {
 
-    public static void renderBlock(PoseStack matrix,MultiBufferSource buffer , BlockPos pos, BlockState state, Level level, float xTranslate, float yTranslate, float zTranslate, float xScale, float yScale, float zScale){
+    public static void renderTransparentBlock(PoseStack matrix, MultiBufferSource buffer , BlockPos pos, BlockState state, Level level, float xTranslate, float yTranslate, float zTranslate, float xScale, float yScale, float zScale){
         var builder = buffer.getBuffer(ModRenderTypes.GHOST);
         matrix.pushPose();
         matrix.translate(xTranslate, yTranslate, zTranslate);

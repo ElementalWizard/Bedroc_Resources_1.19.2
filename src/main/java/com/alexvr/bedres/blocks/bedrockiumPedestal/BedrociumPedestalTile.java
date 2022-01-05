@@ -1,5 +1,6 @@
 package com.alexvr.bedres.blocks.bedrockiumPedestal;
 
+import com.alexvr.bedres.BedrockResources;
 import com.alexvr.bedres.blocks.bedrockiumTower.BedrockiumTowerTile;
 import com.alexvr.bedres.recipes.ModRecipeRegistry;
 import com.alexvr.bedres.recipes.ritualAltar.RitualAltarRecipes;
@@ -32,7 +33,7 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import static com.alexvr.bedres.blocks.bedrockiumPedestal.BedrociumPedestal.CRAFTING;
-import static com.alexvr.bedres.blocks.bedrockiumPedestal.BedrociumPedestal.TRIGGERED;
+import static com.alexvr.bedres.blocks.bedrockiumPedestal.BedrociumPedestal.VALIDRECIPE;
 
 
 public class BedrociumPedestalTile extends BlockEntity {
@@ -43,26 +44,36 @@ public class BedrociumPedestalTile extends BlockEntity {
     public List<BlockPos> extensions = new ArrayList<>();
     public List<BedrockiumTowerTile> towers = new ArrayList<>();
 
-    public ItemStackHandler itemCraftingHandler = createCraftingHandler();
-    private final LazyOptional<IItemHandler> craftingHandler = LazyOptional.of(() -> itemCraftingHandler);
-
-    private int craftingItemAmount = 0;
-    private int craftingItemConsumed = 0;
-    public int MaxItemConsumptionTicks = 100;
-    public int itemConsumptionTicks = MaxItemConsumptionTicks;
+    public int craftingItemAmount = 0;
+    public int craftingItemConsumed = 0;
+    public float craftingProgress = 0f;
+    public float MaxItemConsumptionTicks = 100f;
+    public float itemConsumptionTicks = 0f;
     public ItemStack outPut = ItemStack.EMPTY;
     public BedrockiumTowerTile target;
+    public RitualAltarRecipes craftingRecipe;
 
     public BedrociumPedestalTile(BlockPos pWorldPosition, BlockState pBlockState) {
         super(Registration.PEDESTAL_TILE.get(), pWorldPosition, pBlockState);
 
     }
 
+    public float getCraftingProgress(){
+        float done = (craftingItemConsumed) + (itemConsumptionTicks/MaxItemConsumptionTicks);
+        float toGo = (craftingItemAmount);
+        float ratio = done/toGo;
+        if (craftingProgress < ratio){
+            BedrockResources.LOGGER.info(craftingProgress + ":::" +done + ":::" +toGo + ":::"+craftingItemConsumed + ":::" +craftingItemAmount + ":::" +itemConsumptionTicks);
+            craftingProgress = ratio;
+            sendUpdates();
+        }
+        return craftingProgress;
+    }
+
     @Override
     public void setRemoved() {
         super.setRemoved();
         handler.invalidate();
-        craftingHandler.invalidate();
     }
     @Override
     public void load(CompoundTag tag) {
@@ -70,17 +81,20 @@ public class BedrociumPedestalTile extends BlockEntity {
         if (tag.contains("inv")) {
             itemHandler.deserializeNBT(tag.getCompound("inv"));
         }
-        if (tag.contains("cinv")) {
-            itemCraftingHandler.deserializeNBT(tag.getCompound("cinv"));
-        }
+
         if (tag.contains("camount")) {
             craftingItemAmount = tag.getInt("camount");
         }
+        if (tag.contains("cconsumed")) {
+            craftingItemConsumed = tag.getInt("cconsumed");
+        }
         if (tag.contains("cprogress")) {
-            craftingItemConsumed = tag.getInt("cprogress");
+            craftingProgress = tag.getFloat("cprogress");
         }
         if (tag.contains("out")) {
             outPut.deserializeNBT(tag.getCompound("out"));
+            craftingRecipe = ModRecipeRegistry.findRecipeFromOutput(outPut);
+
         }
     }
 
@@ -93,10 +107,10 @@ public class BedrociumPedestalTile extends BlockEntity {
     public void saveAdditional(CompoundTag tag) {
         saveClientData(tag);
         tag.put("inv", itemHandler.serializeNBT());
-        tag.put("cinv", itemCraftingHandler.serializeNBT());
         tag.put("out", outPut.serializeNBT());
         tag.putInt("camount", craftingItemAmount);
-        tag.putInt("cprogress", craftingItemConsumed);
+        tag.putInt("cconsumed", craftingItemConsumed);
+        tag.putFloat("cprogress", craftingProgress);
         CompoundTag infoTag = new CompoundTag();
         tag.put("Info", infoTag);
     }
@@ -117,10 +131,10 @@ public class BedrociumPedestalTile extends BlockEntity {
     public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket pkt) {
 
         ItemStack item = itemHandler.getStackInSlot(0);
-        ItemStack itemC = itemCraftingHandler.getStackInSlot(0);
         ItemStack out = outPut;
         int amount = craftingItemAmount;
         int consumed = craftingItemConsumed;
+        float progress = craftingProgress;
         CompoundTag tag = pkt.getTag();
         // This will call loadClientData()
         handleUpdateTag(tag);
@@ -128,8 +142,8 @@ public class BedrociumPedestalTile extends BlockEntity {
         // If any of the values was changed we request a refresh of our model data and send a block update (this will cause
         // the baked model to be recreated)
         if (!out.is(outPut.getItem()) || !item.is(itemHandler.getStackInSlot(0).getItem())||
-                !itemC.is(itemCraftingHandler.getStackInSlot(0).getItem()) ||
-                amount!= craftingItemAmount || consumed != craftingItemConsumed) {
+                amount!= craftingItemAmount || consumed != craftingItemConsumed || progress != craftingProgress) {
+            craftingRecipe = ModRecipeRegistry.findRecipeFromOutput(outPut);
             ModelDataManager.requestModelDataRefresh(this);
             level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_ALL);
         }
@@ -159,18 +173,6 @@ public class BedrociumPedestalTile extends BlockEntity {
         };
     }
 
-    private ItemStackHandler createCraftingHandler() {
-        return new ItemStackHandler(18) {
-
-            @Override
-            protected void onContentsChanged(int slot) {
-                // To make sure the TE persists when the chunk is saved later we need to
-                // mark it dirty every time the item handler changes
-                sendUpdates();
-            }
-
-        };
-    }
 
     @Nonnull
     @Override
@@ -180,12 +182,7 @@ public class BedrociumPedestalTile extends BlockEntity {
         }
         return super.getCapability(cap, side);
     }
-    public <T> LazyOptional<T> getCraftingCapability(@Nonnull Capability<T> cap) {
-        if (cap == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
-            return craftingHandler.cast();
-        }
-        return super.getCapability(cap);
-    }
+
 
     private void spawnItemParticles(BlockPos towerPos, ItemStack stack) {
         if (this.getLevel() == null || this.getLevel().isClientSide() || stack.isEmpty())
@@ -271,28 +268,32 @@ public class BedrociumPedestalTile extends BlockEntity {
         return items;
     }
 
-    public void updateRecipeRender(){
+    public RitualAltarRecipes updateRecipeRender(){
         List<ItemStack> ing = getItemsForRecipe();
         RitualAltarRecipes recipe = ModRecipeRegistry.findRecipeFromIngrent(ing);
-        craftingItemConsumed = 0;
-        itemConsumptionTicks = MaxItemConsumptionTicks;
         if (recipe != null){
             recipe.getIngredientList().forEach(ingridient -> craftingItemAmount+= ingridient.getCount());
             target = null;
             outPut = recipe.getResultItem();
-            updateTriggered(true);
+            craftingRecipe = recipe;
+            updateValidRecipe(true);
         }else{
-            updateTriggered(false);
+            updateValidRecipe(false);
             updateCrafting(false);
         }
+
+        return recipe;
     }
-    public void updateTriggered(boolean state){
-       level.setBlock(worldPosition, getBlockState().setValue(TRIGGERED, Boolean.valueOf(state)), 4);
+    public void updateValidRecipe(boolean state){
+       level.setBlock(worldPosition, getBlockState().setValue(VALIDRECIPE, Boolean.valueOf(state)), 4);
         getBlockState().updateNeighbourShapes(level,worldPosition,32);
         sendUpdates();
     }
 
     public void updateCrafting(boolean state){
+        craftingItemConsumed = 0;
+        itemConsumptionTicks = 0;
+        craftingProgress = 0f;
         level.setBlock(worldPosition, getBlockState().setValue(CRAFTING, Boolean.valueOf(state)), 4);
         getBlockState().updateNeighbourShapes(level,worldPosition,32);
         sendUpdates();
@@ -315,78 +316,98 @@ public class BedrociumPedestalTile extends BlockEntity {
             }
             sendUpdates();
         }
-        if (getBlockState().getValue(TRIGGERED) && !getBlockState().getValue(CRAFTING)){
-            updateCrafting(true);
-        }
+//        if (getBlockState().getValue(TRIGGERED) && !getBlockState().getValue(CRAFTING)){
+//            updateCrafting(true);
+//        }
         if (getBlockState().getValue(CRAFTING)){
-            if (target != null){
-                AtomicBoolean end = new AtomicBoolean(false);
-                for (Direction dir: Direction.values()){
-                    switch (dir){
-                        case UP:
-                        case DOWN:
-                            continue;
-                        default:
-                            level.getBlockEntity(target.getBlockPos()).getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY,dir).ifPresent(h -> {
-                                for (int i = 0; i < h.getSlots();i++){
-                                    if (!h.getStackInSlot(i).isEmpty()){
-                                        end.set(true);
-                                        itemConsumptionTicks--;
-                                        spawnItemParticles(target.getBlockPos(), h.getStackInSlot(i));
-                                        if (itemConsumptionTicks <= 0){
-                                            itemConsumptionTicks = MaxItemConsumptionTicks;
-                                            craftingItemConsumed++;
-                                            h.extractItem(i,1,false);
-                                            sendUpdates();
-                                            ((BedrockiumTowerTile)level.getBlockEntity(target.getBlockPos())).sendUpdates();
+            if (!checkFinishTowers()){
+                if (target != null){
+                    AtomicBoolean end = new AtomicBoolean(false);
+                    for (Direction dir: Direction.values()){
+                        switch (dir){
+                            case UP:
+                            case DOWN:
+                                continue;
+                            default:
+                                level.getBlockEntity(target.getBlockPos()).getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY,dir).ifPresent(h -> {
+                                    for (int i = 0; i < h.getSlots();i++){
+                                        if (craftingRecipeContains(h.getStackInSlot(i))){
+                                            end.set(true);
+                                            itemConsumptionTicks++;
+                                            spawnItemParticles(target.getBlockPos(), h.getStackInSlot(i));
+                                            if (itemConsumptionTicks >= MaxItemConsumptionTicks){
+                                                itemConsumptionTicks = 0;
+                                                h.extractItem(i,1,false);
+                                                craftingItemConsumed++;
+                                                sendUpdates();
+                                                ((BedrockiumTowerTile)level.getBlockEntity(target.getBlockPos())).sendUpdates();
+                                            }
+                                            return;
                                         }
-                                        return;
                                     }
+                                });
+                                if (end.get()){
+                                    return;
                                 }
-                            });
-                            if (end.get()){
-                                return;
-                            }
-                    }
-                }
-                if (end.get()){
-                    return;
-                }
-                if (craftingItemConsumed+1 == craftingItemAmount){
-                    itemConsumptionTicks--;
-                    spawnItemParticlesWithVelocity(getBlockPos(), itemHandler.getStackInSlot(0),1,3.35f,0,-0.2f,0.4f,0.4f);
-                    spawnItemParticlesWithVelocity(getBlockPos(), itemHandler.getStackInSlot(0),-1,3.35f,0,1.2f,0.4f,0.4f);
-                    spawnItemParticlesWithVelocity(getBlockPos(), itemHandler.getStackInSlot(0),0,3.35f,1,.4f,0.4f,-0.2f);
-                    spawnItemParticlesWithVelocity(getBlockPos(), itemHandler.getStackInSlot(0),0,3.35f,-1,.4f,0.4f,1.0f);
-                    if (itemConsumptionTicks == 0){
-                        itemConsumptionTicks = MaxItemConsumptionTicks;
-                        craftingItemConsumed = 0;
-                        craftingItemAmount = 0;
-                        itemHandler.extractItem(0,itemHandler.getStackInSlot(0).getCount(),false);
-                        ItemEntity itementity = new ItemEntity(level, worldPosition.getX(), worldPosition.getY() + 1, worldPosition.getZ(), outPut);
-                        itementity.setDeltaMovement(0, level.random.nextGaussian() * (double)0.0075F * (double)4 + (double)0.2F, 0);
-                        level.addFreshEntity(itementity);
-                        outPut = ItemStack.EMPTY;
-                        updateTriggered(false);
-                        updateCrafting(false);
-                    }
-                }else{
-                    target = null;
-                }
-            }else{
-                for (BedrockiumTowerTile tower: towers){
-                    level.getBlockEntity(tower.getBlockPos()).getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).ifPresent(h -> {
-                        for (int i = 0; i < h.getSlots();i++){
-                            if (!h.getStackInSlot(i).isEmpty()){
-                                target = tower;
-                                itemConsumptionTicks = MaxItemConsumptionTicks;
-                                return;
-                            }
                         }
-                    });
+                    }
+                    if (end.get()){
+                        return;
+                    }
+                    target = null;
+                }else{
+                    for (BedrockiumTowerTile tower: towers){
+                        level.getBlockEntity(tower.getBlockPos()).getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).ifPresent(h -> {
+                            for (int i = 0; i < h.getSlots();i++){
+                                if (craftingRecipeContains(h.getStackInSlot(i))){
+                                    target = tower;
+                                    itemConsumptionTicks = 0;
+                                    return;
+                                }
+                            }
+                        });
+                    }
                 }
             }
-
         }
+    }
+
+    private boolean checkFinishTowers() {
+        if (craftingItemConsumed+1 == craftingItemAmount){
+            itemConsumptionTicks++;
+            spawnItemParticlesWithVelocity(getBlockPos(), itemHandler.getStackInSlot(0),1,3.35f,0,-0.2f,0.4f,0.4f);
+            spawnItemParticlesWithVelocity(getBlockPos(), itemHandler.getStackInSlot(0),-1,3.35f,0,1.2f,0.4f,0.4f);
+            spawnItemParticlesWithVelocity(getBlockPos(), itemHandler.getStackInSlot(0),0,3.35f,1,.4f,0.4f,-0.2f);
+            spawnItemParticlesWithVelocity(getBlockPos(), itemHandler.getStackInSlot(0),0,3.35f,-1,.4f,0.4f,1.0f);
+            if (itemConsumptionTicks >= MaxItemConsumptionTicks){
+                itemHandler.extractItem(0,itemHandler.getStackInSlot(0).getCount(),false);
+                ItemEntity itementity = new ItemEntity(level, worldPosition.getX(), worldPosition.getY() + 1, worldPosition.getZ(), outPut);
+                itementity.setDeltaMovement(0, level.random.nextGaussian() * (double)0.0075F * (double)4 + (double)0.2F, 0);
+                level.addFreshEntity(itementity);
+                outPut = ItemStack.EMPTY;
+                updateValidRecipe(false);
+                updateCrafting(false);
+                itemConsumptionTicks = 0;
+                craftingItemConsumed = 0;
+                craftingItemAmount = 0;
+                craftingProgress = 0;
+            }
+            return true;
+        }
+        return false;
+
+    }
+
+    private boolean craftingRecipeContains(ItemStack itemStack) {
+        boolean check = false;
+        if (craftingRecipe == null){
+            return check;
+        }
+        for (ItemStack stack: craftingRecipe.getIngredientList()){
+            if (!itemStack.isEmpty() && stack.is(itemStack.getItem())){
+                check = true;
+            }
+        }
+        return check;
     }
 }
