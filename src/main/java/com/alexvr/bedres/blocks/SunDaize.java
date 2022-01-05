@@ -2,7 +2,9 @@ package com.alexvr.bedres.blocks;
 
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.LevelReader;
@@ -11,6 +13,8 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
+
+import java.util.Random;
 
 public class SunDaize extends FlowerBlock {
 
@@ -28,7 +32,13 @@ public class SunDaize extends FlowerBlock {
         var down = pos.below();
         return super.mayPlaceOn(levelIn.getBlockState(down), levelIn, down);
     }
-
+    @Override
+    public void randomTick(BlockState pState, ServerLevel pLevel, BlockPos pPos, Random pRandom) {
+        if (new Random().nextInt(500) == 1){
+            pLevel.getNearestPlayer(pPos.getX(),pPos.getY(),pPos.getZ(),8,false).addEffect(new MobEffectInstance(MobEffects.GLOWING,30));
+        }
+        super.randomTick(pState, pLevel, pPos, pRandom);
+    }
     @Override
     public VoxelShape getShape(BlockState state, BlockGetter levelIn, BlockPos pos, CollisionContext context) {
         var vec3d = state.getOffset(levelIn, pos);

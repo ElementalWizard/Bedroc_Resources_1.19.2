@@ -15,6 +15,7 @@ import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.items.CapabilityItemHandler;
@@ -70,32 +71,44 @@ public class BedrociumTower extends Block implements EntityBlock {
 
                 bedrockiumTowerTile.sendUpdates();
                 state.updateNeighbourShapes(world,pos,32);
-                for(Direction dir: Direction.values()){
-                    BlockPos altarPos = new BlockPos(bedrockiumTowerTile.getBlockPos());
-                    switch (dir){
-                        case NORTH -> {
-                            altarPos = altarPos.north(2);
-                        }
-                        case SOUTH -> {
-                            altarPos = altarPos.south(2);
-                        }
-                        case EAST -> {
-                            altarPos = altarPos.east(2);
-                        }
-                        case WEST -> {
-                            altarPos = altarPos.west(2);
-                        }
-                    }
-                    if (world.getBlockEntity(altarPos) instanceof BedrociumPedestalTile pedestalTile){
-                        pedestalTile.updateRecipeRender();
-                        break;
-                    }
-                }
+                updatePedestal(world, bedrockiumTowerTile);
             });
         } else {
             throw new IllegalStateException("Our named container provider is missing!");
         }
         return InteractionResult.SUCCESS;
+    }
+
+    private void updatePedestal(Level world, BedrockiumTowerTile bedrockiumTowerTile) {
+        for(Direction dir: Direction.values()){
+            BlockPos altarPos = new BlockPos(bedrockiumTowerTile.getBlockPos());
+            switch (dir){
+                case NORTH -> {
+                    altarPos = altarPos.north(2);
+                }
+                case SOUTH -> {
+                    altarPos = altarPos.south(2);
+                }
+                case EAST -> {
+                    altarPos = altarPos.east(2);
+                }
+                case WEST -> {
+                    altarPos = altarPos.west(2);
+                }
+            }
+            if (world.getBlockEntity(altarPos) instanceof BedrociumPedestalTile pedestalTile){
+                pedestalTile.updateRecipeRender();
+                break;
+            }
+        }
+    }
+
+    @Override
+    public boolean onDestroyedByPlayer(BlockState state, Level world, BlockPos pos, Player player, boolean willHarvest, FluidState fluid) {
+        if (world.getBlockEntity(pos) instanceof BedrockiumTowerTile bedrockiumTowerTile){
+            updatePedestal(world,bedrockiumTowerTile);
+        }
+        return super.onDestroyedByPlayer(state, world, pos, player, willHarvest, fluid);
     }
 
     @Nullable

@@ -1,6 +1,7 @@
 package com.alexvr.bedres.blocks;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.player.Player;
@@ -15,6 +16,8 @@ import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.common.PlantType;
+
+import java.util.Random;
 
 public class Blazium extends FlowerBlock {
 
@@ -32,7 +35,13 @@ public class Blazium extends FlowerBlock {
         var down = pos.below();
         return this.mayPlaceOn(levelIn.getBlockState(down), levelIn, down);
     }
-
+    @Override
+    public void randomTick(BlockState pState, ServerLevel pLevel, BlockPos pPos, Random pRandom) {
+        if (new Random().nextInt(500) == 1){
+            pLevel.getNearestPlayer(pPos.getX(),pPos.getY(),pPos.getZ(),8,false).setSecondsOnFire(8);
+        }
+        super.randomTick(pState, pLevel, pPos, pRandom);
+    }
     @Override
     public VoxelShape getShape(BlockState state, BlockGetter levelIn, BlockPos pos, CollisionContext context) {
         var vec3d = state.getOffset(levelIn, pos);
