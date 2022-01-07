@@ -2,6 +2,7 @@ package com.alexvr.bedres.world.features;
 
 import com.alexvr.bedres.BedrockResources;
 import com.alexvr.bedres.setup.Registration;
+import com.alexvr.bedres.world.dimension.ModDimensions;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
@@ -35,17 +36,26 @@ import java.util.List;
 import java.util.Map;
 
 public class ModStructures {
-    public static ConfiguredStructureFeature<?, ?> CONFIGURED_ALTAR_OVERWORLD = Registration.PORTAL_OVERWORLD.get()
+    public static ConfiguredStructureFeature<?, ?> CONFIGURED_ALTAR_OVERWORLD = Registration.ALTAR_OVERWORLD.get()
+            .configured(new JigsawConfiguration(() -> PlainVillagePools.START, 0));
+
+    public static ConfiguredStructureFeature<?, ?> CONFIGURED_DUNGEON = Registration.DUNGEON.get()
             .configured(new JigsawConfiguration(() -> PlainVillagePools.START, 0));
 
     public static void registerConfiguredStructures() {
         Registry.register(BuiltinRegistries.CONFIGURED_STRUCTURE_FEATURE, new ResourceLocation(BedrockResources.MODID, "altar_overworld"), CONFIGURED_ALTAR_OVERWORLD);
+        Registry.register(BuiltinRegistries.CONFIGURED_STRUCTURE_FEATURE, new ResourceLocation(BedrockResources.MODID, "dungeon"), CONFIGURED_DUNGEON);
     }
+
     public static void setupStructures() {
 
         setupMapSpacingAndLand(
-                Registration.PORTAL_OVERWORLD.get(),
+                Registration.ALTAR_OVERWORLD.get(),
                 new StructureFeatureConfiguration(10,5,1294567890),
+                false);
+        setupMapSpacingAndLand(
+                Registration.DUNGEON.get(),
+                new StructureFeatureConfiguration(64,32,1294567890),
                 false);
 
     }
@@ -122,6 +132,10 @@ public class ModStructures {
             if (serverLevel.dimension().equals(Level.OVERWORLD)) {
                 portalFeature = CONFIGURED_ALTAR_OVERWORLD;
             }
+            ConfiguredStructureFeature<?, ?> dungeonFeature = null;
+            if (serverLevel.dimension().equals(ModDimensions.MYSDIM)) {
+                dungeonFeature = CONFIGURED_DUNGEON;
+            }
 
             StructureSettings worldStructureConfig = chunkGenerator.getSettings();
 
@@ -142,6 +156,11 @@ public class ModStructures {
                 if (portalFeature != null) {
                     if (category != Biome.BiomeCategory.THEEND && category != Biome.BiomeCategory.NETHER && category != Biome.BiomeCategory.NONE) {
                         associateBiomeToConfiguredStructure(structureToMultimap, portalFeature, biomeEntry.getKey());
+                    }
+                }
+                if (dungeonFeature != null) {
+                    if (category != Biome.BiomeCategory.THEEND && category != Biome.BiomeCategory.NETHER && category != Biome.BiomeCategory.NONE) {
+                        associateBiomeToConfiguredStructure(structureToMultimap, dungeonFeature, biomeEntry.getKey());
                     }
                 }
             }
@@ -208,7 +227,7 @@ public class ModStructures {
     ));
 
     public static void setupStructureSpawns(final StructureSpawnListGatherEvent event) {
-        if (event.getStructure() == Registration.PORTAL_OVERWORLD.get()) {
+        if (event.getStructure() == Registration.ALTAR_OVERWORLD.get() || event.getStructure() == Registration.DUNGEON.get()) {
             event.addEntitySpawns(MobCategory.MONSTER, STRUCTURE_MONSTERS.get());
         }
     }

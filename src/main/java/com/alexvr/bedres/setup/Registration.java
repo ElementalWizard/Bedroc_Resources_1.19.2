@@ -20,6 +20,7 @@ import com.alexvr.bedres.entities.sporedeity.SporeDeityEntity;
 import com.alexvr.bedres.items.*;
 import com.alexvr.bedres.utils.BedrockReferences;
 import com.alexvr.bedres.world.features.AltarStructure;
+import com.alexvr.bedres.world.features.DungeonStructure;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
@@ -207,7 +208,11 @@ public class Registration {
     public  static final Tags.IOptionalNamedTag<Item> ENDERIAN_ORE_ITEM = ItemTags.createOptional(new ResourceLocation(MODID,"enderian_ore"));
     public  static final Tags.IOptionalNamedTag<Item> DF_LOG_ITEM = ItemTags.createOptional(new ResourceLocation(MODID,BedrockReferences.DF_OAK_LOG_REGNAME));
 
-    public static final RegistryObject<StructureFeature<JigsawConfiguration>> PORTAL_OVERWORLD = STRUCTURES.register("altar_overworld", () -> new AltarStructure(true));
+    public static final RegistryObject<StructureFeature<JigsawConfiguration>> ALTAR_OVERWORLD = STRUCTURES.register("altar_overworld", () -> new AltarStructure(true));
+
+    public static final RegistryObject<StructureFeature<JigsawConfiguration>> DUNGEON = STRUCTURES.register("dungeon", () -> new DungeonStructure(false));
+
+
     public static <B extends  Block>RegistryObject<Item> fromBlock(RegistryObject<B> block) {
         return ITEMS.register(block.getId().getPath(), () -> new BlockItem(block.get(),(new Item.Properties()).tab(ModSetup.GROUP)));
     }

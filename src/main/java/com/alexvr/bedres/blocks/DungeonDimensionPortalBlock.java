@@ -97,6 +97,7 @@ public class DungeonDimensionPortalBlock extends NetherPortalBlock {
 				entity.setPortalCooldown();
 				teleportToDimension(entity, pos, Level.OVERWORLD);
 			}
+
 		}
 	}
 
