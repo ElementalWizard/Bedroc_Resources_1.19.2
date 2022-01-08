@@ -33,6 +33,7 @@ public class ModLanguageProvider extends LanguageProvider {
         add(Registration.BEDROCK_COMPRESSED_WIRE_BLOCK.get(),"Bedrock Compressed Wire" );
         add(Registration.ENDERIAN_RITUAL_PEDESTAL_BLOCK.get(),"Enderian Ritual Pedestal" );
         add(Registration.SCRAPER_MOTOR_BLOCK.get(),"Scraper Motor" );
+        add(Registration.ROPE_BLOCK.get(),"Rope" );
 
         add(Registration.DF_OAK_LEAVE_BLOCK.get(),"Decaying Fluxed Leaves" );
         add(Registration.DF_SAPPLING_BLOCK.get(),"Decaying Fluxed Sappling" );

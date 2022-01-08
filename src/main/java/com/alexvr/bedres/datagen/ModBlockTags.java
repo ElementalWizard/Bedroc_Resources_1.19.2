@@ -68,6 +68,9 @@ public class ModBlockTags extends BlockTagsProvider {
                 .add(Registration.DF_STRIPPED_OAK_LOG_BLOCK.get())
                 .add(Registration.DF_OAK_LOG_BLOCK.get());
 
+        tag(BlockTags.CLIMBABLE)
+                .add(Registration.ROPE_BLOCK.get());
+
         tag(BlockTags.STAIRS)
                 .add(Registration.ENDERIAN_STAIRS_BLOCK.get());
 

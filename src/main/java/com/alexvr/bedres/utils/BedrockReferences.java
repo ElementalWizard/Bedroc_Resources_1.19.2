@@ -50,6 +50,7 @@ public class BedrockReferences {
     public static final String ENDERIAN_STAIRS_REGNAME = "bedrock_stairs";
     public static final String BEDROCK_WIRE_REGNAME = "bedrock_wire";
     public static final String SCRAPER_MOTOR_REGNAME = "scraper_motor";
+    public static final String ROPE_REGNAME = "rope";
     public static final String DF_DIRT_REGNAME = "decaying_fluxed_dirt";
     public static final String DF_SAPPLING_REGNAME = "decaying_fluxed_sappling";
     public static final String DF_GRASS_REGNAME = "decaying_fluxed_grass";

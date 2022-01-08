@@ -127,6 +127,9 @@ public class Registration {
     public static final RegistryObject<ScraperMotor> SCRAPER_MOTOR_BLOCK = BLOCKS.register(BedrockReferences.SCRAPER_MOTOR_REGNAME, () -> new ScraperMotor(METAL_BLOCK_PROPERTIES.noOcclusion()));
     public static final RegistryObject<Item> SCRAPER_MOTOR_ITEM = fromBlock(SCRAPER_MOTOR_BLOCK);
 
+    public static final RegistryObject<Rope> ROPE_BLOCK = BLOCKS.register(BedrockReferences.ROPE_REGNAME, () -> new Rope(BLOCK_PROPERTIES.noOcclusion().instabreak().noCollission().friction(3)));
+    public static final RegistryObject<Item> ROPE_ITEM = fromBlock(ROPE_BLOCK);
+
     public static final RegistryObject<Block> ENDERIAN_BRICK_BLOCK = BLOCKS.register(BedrockReferences.ENDERIAN_BRICK_REGNAME, () -> new Block(BLOCK_PROPERTIES.requiresCorrectToolForDrops()));
     public static final RegistryObject<Item> ENDERIAN_BRICK_ITEM = fromBlock(ENDERIAN_BRICK_BLOCK);
     public static final RegistryObject<StairBlock> ENDERIAN_STAIRS_BLOCK = BLOCKS.register(BedrockReferences.ENDERIAN_STAIRS_REGNAME, () -> new StairBlock(ENDERIAN_BRICK_BLOCK.get().defaultBlockState() ,BlockBehaviour.Properties.copy(ENDERIAN_BRICK_BLOCK.get())));

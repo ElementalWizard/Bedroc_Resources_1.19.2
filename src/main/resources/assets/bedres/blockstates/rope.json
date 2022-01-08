@@ -1,0 +1,13 @@
+{
+	"variants": {
+		"axis=x": {
+			"model": "bedres:block/rope"
+		},
+		"axis=y": {
+			"model": "bedres:block/rope"
+		},
+		"axis=z": {
+			"model": "bedres:block/rope"
+		}
+	}
+}
