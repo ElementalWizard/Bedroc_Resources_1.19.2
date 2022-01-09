@@ -31,6 +31,7 @@ public class BedrockReferences {
     public static final String STAFF_REGNAME = "fire_staff";
     public static final String FLUXED_CUPCAKE_REGNAME = "fluxed_cupcake";
     public static final String NEBULA_HEART_REGNAME = "nebula_heart";
+    public static final String MAGE_STAFF_REGNAME = "mage_staff";
 
     public static final String SCRAPE_TANK_REGNAME = "scrape_tank";
     public static final String ENDERIAN_BLOCK_REGNAME = "enderian_block";

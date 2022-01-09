@@ -11,8 +11,7 @@ public class FluxedCreepRenderer extends MobRenderer<FluxedCreepEntity, FluxedCr
 
     private static final ResourceLocation RESOURCE_LOCATION =  new ResourceLocation(BedrockResources.MODID, "textures/entity/"+ BedrockReferences.FLUXED_CREEP_REGNAME +".png");
     public FluxedCreepRenderer(EntityRendererProvider.Context context) {
-        super(context,  new FluxedCreepModel<>(context.bakeLayer(FluxedCreepModel.FLUXED_CREEP_LAYER)), 0.5F);
-        this.addLayer(new FluxedCreepOuterLayer<>(this, context.getModelSet()));
+        super(context,  new FluxedCreepModel<>(context.bakeLayer(FluxedCreepModel.LAYER_LOCATION)), 0.5F);
 
     }
 
@@ -21,7 +20,4 @@ public class FluxedCreepRenderer extends MobRenderer<FluxedCreepEntity, FluxedCr
         return RESOURCE_LOCATION;
     }
 
-//    protected void preRenderCallback(FluxedCreepEntity entitylivingbaseIn, float partialTickTime) {
-//        EffectBallRenderer.preRenderCallbackTransparentEntity();
-//    }
 }

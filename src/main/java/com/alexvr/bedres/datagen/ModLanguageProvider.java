@@ -59,6 +59,7 @@ public class ModLanguageProvider extends LanguageProvider {
         add(Registration.NEBULA_HEART_ITEM.get(), "Nebula Heart" );
         add(Registration.FLUX_ORACLE_ITEM.get(), "Fluxed Oracle" );
         add(Registration.FLUXED_CUPCAKE_ITEM.get(), "Fluxed Cupcake" );
+        add(Registration.MAGE_STAFF_ITEM.get(), "Mage Staff" );
 
         add(BedrockReferences.SCRAPE_TANK_TOOLTIP, "Bedrock Scrape Tank, can hold up to 256" );
         add(BedrockReferences.ITEM_PLATFORM_TOOLTIP, "Can hold up to a stack of an item and display it." );

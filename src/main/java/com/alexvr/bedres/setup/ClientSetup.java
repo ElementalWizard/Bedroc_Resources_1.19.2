@@ -51,8 +51,7 @@ public class ClientSetup {
 
     @SubscribeEvent
     public static void onRegisterLayers(EntityRenderersEvent.RegisterLayerDefinitions event) {
-        event.registerLayerDefinition(FluxedCreepModel.FLUXED_CREEP_LAYER, FluxedCreepModel::createInnerBodyLayer);
-        event.registerLayerDefinition(FluxedCreepModel.FLUXED_CREEP_OUTER_LAYER, FluxedCreepModel::createOuterBodyLayer);
+        event.registerLayerDefinition(FluxedCreepModel.LAYER_LOCATION, FluxedCreepModel::createBodyLayer);
     }
 
     @SubscribeEvent
