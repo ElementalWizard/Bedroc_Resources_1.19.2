@@ -1,4 +1,4 @@
-package com.alexvr.bedres.recipes.ritualAltar;
+package com.alexvr.bedres.recipes.eventRituals;
 
 import com.alexvr.bedres.recipes.ModRecipeRegistry;
 import net.minecraft.resources.ResourceLocation;
@@ -13,44 +13,59 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class RitualAltarRecipes implements Recipe<RitualAltarContext> {
+public class EventRitualsRecipes implements Recipe<EventRitualsContext> {
 
     private final ResourceLocation id;
     private final ItemStack destination;
     private final List<ItemStack> ingredients;
+    private final List<String> pattern; // w for wire, i for item
 
-    public RitualAltarRecipes(ItemStack destination, ItemStack... ingredients) {
+    public EventRitualsRecipes(ItemStack destination, List<String> pattern, ItemStack... ingredients) {
         this.id = destination.getItem().getRegistryName();
         this.destination = destination;
         this.ingredients = new ArrayList<>(ingredients.length);
+        this.pattern = pattern;
         Collections.addAll(this.ingredients, ingredients);
     }
 
-    public static RitualAltarRecipes findRecipeFromOutput(ItemStack destination) {
-        // @todo optimize
-        for (RitualAltarRecipes recipe : ModRecipeRegistry.getRitualAltarRecipes()) {
+    public static EventRitualsRecipes findRecipeFromOutput(ItemStack destination) {
+        for (EventRitualsRecipes recipe : ModRecipeRegistry.getEventRitualRecipes()) {
             if (ItemHandlerHelper.canItemStacksStack(recipe.getDestination(), destination)) {
                 return recipe;
             }
         }
         return null;
     }
+    public static EventRitualsRecipes findRecipeFromPattern(List<String> pat) {
+        for (EventRitualsRecipes recipe : ModRecipeRegistry.getEventRitualRecipes()) {
+            boolean validRec = true;
+            List<String> ingCopy = new ArrayList<>(pat);
 
-    public static RitualAltarRecipes findRecipeFromCatalyst(ItemStack stack) {
-        // @todo optimize
-        for (RitualAltarRecipes recipe : ModRecipeRegistry.getRitualAltarRecipes()) {
-            ItemStack stack2 = recipe.getIngredientList().get(0);
-            if (stack2.is(stack.getItem()) && stack2.equals(stack,false)){
+            for (String row: recipe.getPattern()){
+                boolean valid = false;
+                for (String row2: pat){
+                    if (row2.equals(row)){
+                        valid = true;
+                        ingCopy.remove(row2);
+                        break;
+                    }
+                }
+                if (!valid){
+                    validRec = false;
+                    break;
+                }
+            }
+            if (validRec && ingCopy.isEmpty()){
                 return recipe;
             }
+
         }
         return null;
     }
 
-    //pedestal item must be first in index
-    public static RitualAltarRecipes findRecipeFromIngrent(List<ItemStack> ing) {
+    public static EventRitualsRecipes findRecipeFromIngrent(List<ItemStack> ing) {
         // @todo optimize
-        for (RitualAltarRecipes recipe : ModRecipeRegistry.getRitualAltarRecipes()) {
+        for (EventRitualsRecipes recipe : ModRecipeRegistry.getEventRitualRecipes()) {
             boolean validRec = true;
             List<ItemStack> ingCopy = new ArrayList<>(ing);
 
@@ -75,7 +90,6 @@ public class RitualAltarRecipes implements Recipe<RitualAltarContext> {
         }
         return null;
     }
-
     public ItemStack getDestination() {
         return destination;
     }
@@ -85,12 +99,12 @@ public class RitualAltarRecipes implements Recipe<RitualAltarContext> {
     }
 
     @Override
-    public boolean matches(RitualAltarContext inv, Level worldIn) {
+    public boolean matches(EventRitualsContext inv, Level worldIn) {
         return false;
     }
 
     @Override
-    public ItemStack assemble(RitualAltarContext inv) {
+    public ItemStack assemble(EventRitualsContext inv) {
         return null;
     }
 
@@ -104,6 +118,10 @@ public class RitualAltarRecipes implements Recipe<RitualAltarContext> {
         return destination;
     }
 
+    public List<String> getPattern() {
+        return pattern;
+    }
+
     @Override
     public ResourceLocation getId() {
         return id;
@@ -111,11 +129,11 @@ public class RitualAltarRecipes implements Recipe<RitualAltarContext> {
 
     @Override
     public RecipeSerializer<?> getSerializer() {
-        return ModRecipeRegistry.ALTAR_RECIPES.get();
+        return ModRecipeRegistry.EVENT_RITUAL_RECIPES.get();
     }
 
     @Override
     public RecipeType<?> getType() {
-        return ModRecipeRegistry.ALTAR;
+        return ModRecipeRegistry.EVENT_RITUAL;
     }
 }

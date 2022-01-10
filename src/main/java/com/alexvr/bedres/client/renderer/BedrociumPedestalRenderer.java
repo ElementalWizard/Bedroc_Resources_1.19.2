@@ -1,7 +1,6 @@
 package com.alexvr.bedres.client.renderer;
 
 import com.alexvr.bedres.blocks.bedrockiumPedestal.BedrociumPedestalTile;
-import com.alexvr.bedres.recipes.ModRecipeRegistry;
 import com.alexvr.bedres.recipes.ritualAltar.RitualAltarRecipes;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -24,7 +23,7 @@ public class BedrociumPedestalRenderer implements BlockEntityRenderer<BedrociumP
         tile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).ifPresent(h -> {
                     ItemStack stack = h.getStackInSlot(0);
             RenderItemstack(poseStack,stack,bufferSource,combinedLight,combinedOverlay,tile.getBlockPos(),0,.5f, .6f, .5f,0.75F, 0.75F, 0.75F,false );
-            RitualAltarRecipes recipe = ModRecipeRegistry.findRecipeFromCatalyst(stack);
+            RitualAltarRecipes recipe = RitualAltarRecipes.findRecipeFromCatalyst(stack);
             if (recipe!= null && (tile.getBlockState().getValue(VALIDRECIPE)||tile.getBlockState().getValue(CRAFTING))){
                 float ration = tile.getBlockState().getValue(CRAFTING) ? tile.getCraftingProgress() : 1f;
                 RenderItemstack(poseStack,recipe.getResultItem(),bufferSource,combinedLight,combinedOverlay,tile.getBlockPos(),0,.5f, 1.3f, .5f,ration, ration, ration,false );

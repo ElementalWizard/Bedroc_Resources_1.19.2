@@ -1,5 +1,7 @@
 package com.alexvr.bedres.blocks.itemPlatform;
 
+import com.alexvr.bedres.BedrockResources;
+import com.alexvr.bedres.blocks.enderianRitualPedestal.EnderianRitualPedestalTile;
 import com.alexvr.bedres.setup.Registration;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -19,16 +21,66 @@ import net.minecraftforge.items.ItemStackHandler;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class ItemPlatformTile extends BlockEntity {
 
     public ItemStackHandler itemHandler = createHandler();
-    private LazyOptional<IItemHandler> handler = LazyOptional.of(() -> itemHandler);
+    private LazyOptional<IItemHandler> handler = LazyOptional.of(() -> itemHandler
+    );
 
     public ItemPlatformTile(BlockPos pWorldPosition, BlockState pBlockState) {
         super(Registration.ITEM_PLATFORM_TILE.get(), pWorldPosition, pBlockState);
 
+    }
+
+    public List<ItemStack> getItemsForRecipe(BlockPos position, int xRadius, int zRadius){
+        List<ItemStack> items = new ArrayList<>();
+        items.clear();
+        for (int x = position.getX() - xRadius; x <= position.getX() + xRadius; x++){
+            for (int z = position.getZ() - zRadius; z <= position.getZ() + zRadius; z++){
+                BlockPos newPosition = new BlockPos(x,position.getY(),z);
+                BedrockResources.LOGGER.info("Checking at: " + newPosition.toString() + " got " + level.getBlockState(newPosition).getBlock().getName());
+                if (level.getBlockEntity(newPosition) instanceof EnderianRitualPedestalTile tower){
+                    tower.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null).ifPresent(h -> {
+                        boolean grew = false;
+                        ItemStack stack = h.getStackInSlot(0).copy();
+                        for (ItemStack stack2: items) {
+                            if (stack.is(stack2.getItem())){
+                                stack2.grow(1);
+                                grew = true;
+                                break;
+                            }
+                        }
+                        if (!grew){
+                            items.add(stack) ;
+                        }
+                    });
+                }
+            }
+        }
+        return items;
+    }
+
+    public List<String> getPatterRecipe(BlockPos position, int xRadius, int zRadius){
+        List<String> patter = new ArrayList<>((zRadius*2)+1);
+        for (int z = position.getZ() - zRadius; z <= position.getZ() + zRadius; z++){
+            StringBuilder row = new StringBuilder();
+            for (int x = position.getX() - xRadius; x <= position.getX() + xRadius; x++){
+                BlockPos newPosition = new BlockPos(x,position.getY(),z);
+                if (level.getBlockEntity(newPosition) instanceof EnderianRitualPedestalTile){
+                    row.append('i');
+                }else if (level.getBlockState(newPosition).is(Registration.BEDROCK_WIRE_BLOCK.get())){
+                    row.append('w');
+                }else{
+                    row.append(' ');
+                }
+            }
+            patter.add(row.toString());
+        }
+        return patter;
     }
 
     @Override

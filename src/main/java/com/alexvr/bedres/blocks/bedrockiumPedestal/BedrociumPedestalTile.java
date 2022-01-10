@@ -2,7 +2,6 @@ package com.alexvr.bedres.blocks.bedrockiumPedestal;
 
 import com.alexvr.bedres.BedrockResources;
 import com.alexvr.bedres.blocks.bedrockiumTower.BedrockiumTowerTile;
-import com.alexvr.bedres.recipes.ModRecipeRegistry;
 import com.alexvr.bedres.recipes.ritualAltar.RitualAltarRecipes;
 import com.alexvr.bedres.setup.Registration;
 import com.alexvr.bedres.utils.DirectionalItemStackHandler;
@@ -93,7 +92,7 @@ public class BedrociumPedestalTile extends BlockEntity {
         }
         if (tag.contains("out")) {
             outPut.deserializeNBT(tag.getCompound("out"));
-            craftingRecipe = ModRecipeRegistry.findRecipeFromOutput(outPut);
+            craftingRecipe = RitualAltarRecipes.findRecipeFromOutput(outPut);
 
         }
     }
@@ -143,7 +142,7 @@ public class BedrociumPedestalTile extends BlockEntity {
         // the baked model to be recreated)
         if (!out.is(outPut.getItem()) || !item.is(itemHandler.getStackInSlot(0).getItem())||
                 amount!= craftingItemAmount || consumed != craftingItemConsumed || progress != craftingProgress) {
-            craftingRecipe = ModRecipeRegistry.findRecipeFromOutput(outPut);
+            craftingRecipe = RitualAltarRecipes.findRecipeFromOutput(outPut);
             ModelDataManager.requestModelDataRefresh(this);
             level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_ALL);
         }
@@ -270,7 +269,7 @@ public class BedrociumPedestalTile extends BlockEntity {
 
     public RitualAltarRecipes updateRecipeRender(){
         List<ItemStack> ing = getItemsForRecipe();
-        RitualAltarRecipes recipe = ModRecipeRegistry.findRecipeFromIngrent(ing);
+        RitualAltarRecipes recipe = RitualAltarRecipes.findRecipeFromIngrent(ing);
         if (recipe != null){
             recipe.getIngredientList().forEach(ingridient -> craftingItemAmount+= ingridient.getCount());
             target = null;

@@ -1,5 +1,5 @@
 modLoader="javafml" #mandatory
-loaderVersion="[39,)" #mandatory (25 is current forge version)
+loaderVersion="[39,)" #mandatory
 license="All Rights Reserved"
 updateJSONURL="${update_json}" #optional
 issueTrackerURL="https://github.com/ElementalWizard/Bedrock-Resources/issues" #optional

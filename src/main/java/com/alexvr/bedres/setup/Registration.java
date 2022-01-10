@@ -205,6 +205,7 @@ public class Registration {
     public static final RegistryObject<Item> ENDERIAN_INGOT_ITEM = ITEMS.register(BedrockReferences.ENDERIAN_INGOT_REGNAME, () -> new Item((new Item.Properties()).tab(ModSetup.GROUP)));
     public static final RegistryObject<FluxedCupcake> FLUXED_CUPCAKE_ITEM = ITEMS.register(BedrockReferences.FLUXED_CUPCAKE_REGNAME, () -> new FluxedCupcake((new Item.Properties()).tab(ModSetup.GROUP)));
     public static final RegistryObject<Item> NEBULA_HEART_ITEM = ITEMS.register(BedrockReferences.NEBULA_HEART_REGNAME, () -> new Item((new Item.Properties()).tab(ModSetup.GROUP)));
+    public static final RegistryObject<XPMedallion> XP_MEDALLION_ITEM = ITEMS.register(BedrockReferences.XP_MEDALLION_REGNAME, () -> new XPMedallion((new Item.Properties()).tab(ModSetup.GROUP)));
     public static final RegistryObject<MageStaff> MAGE_STAFF_ITEM = ITEMS.register(BedrockReferences.MAGE_STAFF_REGNAME, () -> new MageStaff((new Item.Properties().stacksTo(1)).tab(ModSetup.GROUP)));
 
     public  static final Tags.IOptionalNamedTag<Block> ENDERIAN_ORE = BlockTags.createOptional(new ResourceLocation(MODID,"enderian_ore"));

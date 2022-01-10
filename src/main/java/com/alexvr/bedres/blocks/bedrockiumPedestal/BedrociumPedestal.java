@@ -27,7 +27,7 @@ import org.jetbrains.annotations.Nullable;
 
 public class BedrociumPedestal extends Block implements EntityBlock {
 
-    private static final VoxelShape Base = Block.box(0, 0.0D, 0, 16, .3, 16);
+    private static final VoxelShape Base = Block.box(0, 0.0D, 0, 16, 3, 16);
     public static final BooleanProperty VALIDRECIPE = BlockStateProperties.TRIGGERED;
     public static final BooleanProperty CRAFTING = BlockStateProperties.LOCKED;
 

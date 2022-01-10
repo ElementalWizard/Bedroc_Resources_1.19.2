@@ -14,6 +14,9 @@ import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
@@ -25,10 +28,16 @@ import javax.annotation.Nullable;
 public class FluxedGravityBubble extends Block implements EntityBlock {
 
     private static final VoxelShape SHAPE = Block.box(4.5D, 4.0D, 4.5D, 11.5D, 11.5D, 11.5D);
+    public static final BooleanProperty ENABLED = BlockStateProperties.ENABLED;
 
     public FluxedGravityBubble(BlockBehaviour.Properties props) {
         super(props);
+        this.registerDefaultState(this.stateDefinition.any().setValue(ENABLED, Boolean.valueOf(false)));
 
+    }
+
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> pBuilder) {
+        pBuilder.add(ENABLED);
     }
 
     @Override
@@ -49,10 +58,11 @@ public class FluxedGravityBubble extends Block implements EntityBlock {
             ItemStack itemInHand = player.getItemInHand(hand);
             level.getBlockEntity(pos).getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).ifPresent(h -> {
                 if(player.isShiftKeyDown() && itemInHand.isEmpty()){
-                    bubbleTile.setAreaVisible(!bubbleTile.isAreaVisible());
+                    bubbleTile.updateEnabled(!bubbleTile.getBlockState().getValue(ENABLED));
+
                 }else if(itemInHand.isEmpty()){
                     if (h.getStackInSlot(0).isEmpty()){
-                        bubbleTile.setAreaVisible(false);
+                        bubbleTile.updateEnabled(false);
                     }else{
                         boolean extracted = player.addItem(h.getStackInSlot(0));
                         if (extracted) {
