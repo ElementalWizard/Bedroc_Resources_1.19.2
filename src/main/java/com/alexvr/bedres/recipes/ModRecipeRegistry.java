@@ -73,10 +73,12 @@ public class ModRecipeRegistry {
 
         eventRitualsRecipes.add(new EventRitualsRecipes(new ItemStack(Registration.STAFF_ITEM.get()),
                 genPattern(
-                        "iwi",
-                                "w w",
-                                "iwi"),
-                new ItemStack(Registration.ENDERIAN_INGOT_ITEM.get(), 4)
+                        "wiwiw",
+                                "iwwwi",
+                                "iw wi",
+                                "iwwwi",
+                                "wiwiw"),
+                new ItemStack(Registration.ENDERIAN_INGOT_ITEM.get(), 10)
         ));
 
     }

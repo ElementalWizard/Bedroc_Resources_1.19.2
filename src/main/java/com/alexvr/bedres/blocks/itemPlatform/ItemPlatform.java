@@ -1,7 +1,5 @@
 package com.alexvr.bedres.blocks.itemPlatform;
 
-import com.alexvr.bedres.BedrockResources;
-import com.alexvr.bedres.recipes.eventRituals.EventRitualsRecipes;
 import com.alexvr.bedres.utils.BedrockReferences;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -43,30 +41,10 @@ public class ItemPlatform extends FaceAttachedHorizontalDirectionalBlock impleme
     private static final VoxelShape ITEM_PLATFORM_UP_AABB = Block.box(6.0D, 15.0D, 6.0D, 10, 16.0D, 10.0D);
     private static final VoxelShape ITEM_PLATFORM_DOWN_AABB = Block.box(6.0D, 0.0D, 6.0D, 10, 1.0D, 10.0D);
 
-
     public ItemPlatform(BlockBehaviour.Properties props) {
         super(props);
         this.registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.NORTH).setValue(FACE, WALL));
 
-    }
-
-    @Override
-    public void neighborChanged(BlockState pState, Level pLevel, BlockPos pPos, Block pBlock, BlockPos pFromPos, boolean pIsMoving) {
-        if (pLevel.getBlockEntity(pPos) instanceof ItemPlatformTile platformTile){
-            EventRitualsRecipes recipe = EventRitualsRecipes.findRecipeFromPattern(platformTile.getPatterRecipe(pPos,1,1));
-            EventRitualsRecipes recipe2 = EventRitualsRecipes.findRecipeFromIngrent(platformTile.getItemsForRecipe(pPos,1,1));
-            if (recipe != null){
-                BedrockResources.LOGGER.info(recipe.getPattern());
-            }
-            if (recipe2 != null){
-                BedrockResources.LOGGER.info(recipe2.getIngredientList());
-            }
-            if (recipe != null && recipe.equals(recipe2)){
-                BedrockResources.LOGGER.info("CRAFTING");
-
-            }
-        }
-        super.neighborChanged(pState, pLevel, pPos, pBlock, pFromPos, pIsMoving);
     }
 
     @Override
