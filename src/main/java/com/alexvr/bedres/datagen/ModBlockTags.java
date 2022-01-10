@@ -33,6 +33,7 @@ public class ModBlockTags extends BlockTagsProvider {
                 .add(Registration.VOID_TEAR_BLOCK.get())
                 .add(Registration.ENDERIAN_STAIRS_BLOCK.get())
                 .add(Registration.DF_COOBLE_BLOCK.get())
+                .add(Registration.EVENT_ALTAR_BLOCK.get())
                 .add(Registration.ITEM_PLATFORM_BLOCK.get());
 
         tag(BlockTags.NEEDS_STONE_TOOL)
@@ -55,6 +56,7 @@ public class ModBlockTags extends BlockTagsProvider {
         tag(BlockTags.NEEDS_DIAMOND_TOOL)
                 .add(Registration.ENDERIAN_ORE_OVERWORLD.get())
                 .add(Registration.ENDERIAN_ORE_NETHER.get())
+                .add(Registration.EVENT_ALTAR_BLOCK.get())
                 .add(Registration.ENDERIAN_ORE_END.get())
                 .add(Registration.ENDERIAN_ORE_DEEPSLATE.get());
 

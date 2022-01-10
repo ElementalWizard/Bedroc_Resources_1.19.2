@@ -113,6 +113,10 @@ public class Registration {
     public static final RegistryObject<Block> ENDERIAN_BLOCK_BLOCK = BLOCKS.register(BedrockReferences.ENDERIAN_BLOCK_REGNAME, () -> new Block(METAL_BLOCK_PROPERTIES));
     public static final RegistryObject<Item> ENDERIAN_BLOCK_ITEM = fromBlock(ENDERIAN_BLOCK_BLOCK);
 
+    public static final RegistryObject<EventAltar> EVENT_ALTAR_BLOCK = BLOCKS.register(BedrockReferences.EVENT_ALTAR_REGNAME, () -> new EventAltar(METAL_BLOCK_PROPERTIES.noOcclusion()));
+    public static final RegistryObject<Item> EVENT_ALTAR_ITEM = fromBlock(EVENT_ALTAR_BLOCK);
+
+
     public static final RegistryObject<DungeonDimensionPortalBlock> DUNGEON_DIMENSION_PORTAL = BLOCKS.register(BedrockReferences.DUNGEON_DIM_PORTAL_REGNAME, DungeonDimensionPortalBlock::new);
 
     public static final RegistryObject<ScrapeTank> SCRAPE_TANK_BLOCK = BLOCKS.register(BedrockReferences.SCRAPE_TANK_REGNAME, () -> new ScrapeTank(METAL_BLOCK_PROPERTIES.noOcclusion().randomTicks().lightLevel(value -> 12)));

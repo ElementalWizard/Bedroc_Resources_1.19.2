@@ -24,6 +24,7 @@ public class ModLootTablesProvider extends BaseLootTableProvider {
 
         lootTables.put(Registration.SCRAPE_TANK_BLOCK.get(),createStandardTable(BedrockReferences.SCRAPE_TANK_REGNAME, Registration.SCRAPE_TANK_BLOCK.get(),Registration.SCRAPE_TANK_TILE.get()));
         lootTables.put(Registration.SCRAPER_MOTOR_BLOCK.get(),createSimpleTable(BedrockReferences.SCRAPER_MOTOR_REGNAME, Registration.SCRAPER_MOTOR_BLOCK.get()));
+        lootTables.put(Registration.EVENT_ALTAR_BLOCK.get(),createSimpleTable(BedrockReferences.EVENT_ALTAR_REGNAME, Registration.EVENT_ALTAR_BLOCK.get()));
 
         lootTables.put(Registration.SPIKE_BLOCK.get(),createSimpleTable(BedrockReferences.SPIKE_REGNAME, Registration.SPIKE_BLOCK.get()));
         lootTables.put(Registration.BASE_SPIKE_BLOCK.get(),createSimpleTable(BedrockReferences.BASE_SPIKE_REGNAME, Registration.BASE_SPIKE_BLOCK.get()));

@@ -37,6 +37,7 @@ public class ClientSetup {
             ItemBlockRenderTypes.setRenderLayer(Registration.ENDER_HUSH_BLOCK.get(), RenderType.cutout());
             ItemBlockRenderTypes.setRenderLayer(Registration.ITEM_PLATFORM_BLOCK.get(), RenderType.cutout());
             ItemBlockRenderTypes.setRenderLayer(Registration.BEDROCK_WIRE_BLOCK.get(), RenderType.cutout());
+            ItemBlockRenderTypes.setRenderLayer(Registration.EVENT_ALTAR_BLOCK.get(), RenderType.cutoutMipped());
             ItemBlockRenderTypes.setRenderLayer(Registration.RANGE_VIEW_BLOCK.get(), RenderType.translucent());
             ItemBlockRenderTypes.setRenderLayer(Registration.ROPE_BLOCK.get(), RenderType.cutoutMipped());
 

@@ -41,6 +41,7 @@ public class BedrockReferences {
     public static final String ITEM_PLATFORM_TOOLTIP = "message.itemplatform";
 
     public static final String DUNGEON_DIM_PORTAL_REGNAME = "dungeon_dimension_portal";
+    public static final String EVENT_ALTAR_REGNAME = "event_altar";
     public static final String BLAZIUM_REGNAME = "blazium";
     public static final String ENDER_HUSH_REGNAME = "ender_hush";
     public static final String SUN_DAIZE_REGNAME = "sun_daize";
