@@ -2,6 +2,7 @@ package com.alexvr.bedres;
 
 import com.alexvr.bedres.recipes.ModRecipeRegistry;
 import com.alexvr.bedres.setup.ClientSetup;
+import com.alexvr.bedres.setup.Config;
 import com.alexvr.bedres.setup.ModSetup;
 import com.alexvr.bedres.setup.Registration;
 import com.alexvr.bedres.world.ModWorldgen;
@@ -36,6 +37,7 @@ public class BedrockResources {
 
     public BedrockResources() {
         ModSetup.setup();
+        Config.register();
         Registration.init();
         ModRecipeRegistry.register();
         IEventBus event = FMLJavaModLoadingContext.get().getModEventBus();

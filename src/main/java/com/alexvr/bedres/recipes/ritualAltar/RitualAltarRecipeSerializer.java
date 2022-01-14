@@ -33,7 +33,7 @@ public class RitualAltarRecipeSerializer extends ForgeRegistryEntry<RecipeSerial
                 if (object.has("item")) {
                     String inputStr = object.get("item").getAsString();
                     ResourceLocation in = new ResourceLocation(inputStr);
-                    item = new ItemStack(Optional.ofNullable(ForgeRegistries.ITEMS.getValue(resourcelocation)).orElseThrow(() -> new IllegalStateException("Item: " + inputStr + " does not exist")));
+                    item = new ItemStack(Optional.ofNullable(ForgeRegistries.ITEMS.getValue(in)).orElseThrow(() -> new IllegalStateException("Item: " + inputStr + " does not exist")));
                 }
                 if (object.has("count")) {
                     int count = object.get("count").getAsInt();

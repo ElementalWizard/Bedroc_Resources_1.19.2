@@ -8,6 +8,7 @@ import com.alexvr.bedres.setup.Registration;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
@@ -71,7 +72,7 @@ public class ModRecipeRegistry {
                 new ItemStack(Registration.ENDERIAN_INGOT_ITEM.get(), 4)
         ));
 
-        eventRitualsRecipes.add(new EventRitualsRecipes(new ItemStack(Registration.STAFF_ITEM.get()),
+        eventRitualsRecipes.add(new EventRitualsRecipes(new ItemStack(Items.WATER_BUCKET),"rain",
                 genPattern(
                         "wiwiw",
                                 "iwwwi",
@@ -79,6 +80,16 @@ public class ModRecipeRegistry {
                                 "iwwwi",
                                 "wiwiw"),
                 new ItemStack(Registration.ENDERIAN_INGOT_ITEM.get(), 10)
+        ));
+
+        eventRitualsRecipes.add(new EventRitualsRecipes(new ItemStack(Items.BUCKET),"rain",
+                genPattern(
+                        "wiwiw",
+                                "iwwwi",
+                                "iw wi",
+                                "iwwwi",
+                                "wiwiw"),
+                new ItemStack(Registration.DF_OAK_LEAVE_BLOCK.get(), 10)
         ));
 
     }

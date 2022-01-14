@@ -7,12 +7,9 @@ import com.alexvr.bedres.setup.Registration;
 import com.alexvr.bedres.utils.DirectionalItemStackHandler;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.particles.ItemParticleOption;
-import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.Connection;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
@@ -33,6 +30,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import static com.alexvr.bedres.blocks.bedrockiumPedestal.BedrociumPedestal.CRAFTING;
 import static com.alexvr.bedres.blocks.bedrockiumPedestal.BedrociumPedestal.VALIDRECIPE;
+import static com.alexvr.bedres.utils.ParticleHelper.spawnItemParticles;
+import static com.alexvr.bedres.utils.ParticleHelper.spawnItemParticlesWithVelocity;
 
 
 public class BedrociumPedestalTile extends BlockEntity {
@@ -182,37 +181,6 @@ public class BedrociumPedestalTile extends BlockEntity {
         return super.getCapability(cap, side);
     }
 
-
-    private void spawnItemParticles(BlockPos towerPos, ItemStack stack) {
-        if (this.getLevel() == null || this.getLevel().isClientSide() || stack.isEmpty())
-            return;
-
-        var level = (ServerLevel) this.getLevel();
-        var pos = this.getBlockPos();
-
-        double x = towerPos.getX() + (level.getRandom().nextDouble() * 0.2D) + 0.4D;
-        double y = towerPos.getY() + (level.getRandom().nextDouble() * 0.2D) + 1.8D;
-        double z = towerPos.getZ() + (level.getRandom().nextDouble() * 0.2D) + 0.4D;
-
-        double velX = pos.getX() - towerPos.getX();
-        double velY = -0.55D;
-        double velZ = pos.getZ() - towerPos.getZ();
-
-        level.sendParticles(new ItemParticleOption(ParticleTypes.ITEM, stack), x, y, z, 0, velX, velY, velZ, 0.10D);
-    }
-
-    private void spawnItemParticlesWithVelocity(BlockPos blockPos, ItemStack stack, double pXVel, double pYVel, double pZVel,double pXOffset, double pYOffset, double pZOffset) {
-        if (this.getLevel() == null || this.getLevel().isClientSide() || stack.isEmpty())
-            return;
-
-        var level = (ServerLevel) this.getLevel();
-
-        double x = blockPos.getX() + (level.getRandom().nextDouble() * 0.2D) + pXOffset;
-        double y = blockPos.getY() + (level.getRandom().nextDouble() * 0.2D) + pYOffset;
-        double z = blockPos.getZ() + (level.getRandom().nextDouble() * 0.2D) + pZOffset;
-
-        level.sendParticles(new ItemParticleOption(ParticleTypes.ITEM, stack), x, y, z, 0, pXVel, pYVel, pZVel, 0.10D);
-    }
     public List<ItemStack> getItemsForRecipe(){
         List<ItemStack> items = new ArrayList<>();
         if (!extensions.isEmpty()){
@@ -333,7 +301,7 @@ public class BedrociumPedestalTile extends BlockEntity {
                                         if (craftingRecipeContains(h.getStackInSlot(i))){
                                             end.set(true);
                                             itemConsumptionTicks++;
-                                            spawnItemParticles(target.getBlockPos(), h.getStackInSlot(i));
+                                            spawnItemParticles(target.getBlockPos(), h.getStackInSlot(i),level,getBlockPos(),-0.55,0.4,1.8,0.4);
                                             if (itemConsumptionTicks >= MaxItemConsumptionTicks){
                                                 itemConsumptionTicks = 0;
                                                 h.extractItem(i,1,false);
@@ -374,10 +342,10 @@ public class BedrociumPedestalTile extends BlockEntity {
     private boolean checkFinishTowers() {
         if (craftingItemConsumed+1 == craftingItemAmount){
             itemConsumptionTicks++;
-            spawnItemParticlesWithVelocity(getBlockPos(), itemHandler.getStackInSlot(0),1,3.35f,0,-0.2f,0.4f,0.4f);
-            spawnItemParticlesWithVelocity(getBlockPos(), itemHandler.getStackInSlot(0),-1,3.35f,0,1.2f,0.4f,0.4f);
-            spawnItemParticlesWithVelocity(getBlockPos(), itemHandler.getStackInSlot(0),0,3.35f,1,.4f,0.4f,-0.2f);
-            spawnItemParticlesWithVelocity(getBlockPos(), itemHandler.getStackInSlot(0),0,3.35f,-1,.4f,0.4f,1.0f);
+            spawnItemParticlesWithVelocity(getBlockPos(), itemHandler.getStackInSlot(0),1,3.35f,0,-0.2f,0.4f,0.4f,level);
+            spawnItemParticlesWithVelocity(getBlockPos(), itemHandler.getStackInSlot(0),-1,3.35f,0,1.2f,0.4f,0.4f,level);
+            spawnItemParticlesWithVelocity(getBlockPos(), itemHandler.getStackInSlot(0),0,3.35f,1,.4f,0.4f,-0.2f,level);
+            spawnItemParticlesWithVelocity(getBlockPos(), itemHandler.getStackInSlot(0),0,3.35f,-1,.4f,0.4f,1.0f,level);
             if (itemConsumptionTicks >= MaxItemConsumptionTicks){
                 itemHandler.extractItem(0,itemHandler.getStackInSlot(0).getCount(),false);
                 ItemEntity itementity = new ItemEntity(level, worldPosition.getX(), worldPosition.getY() + 1, worldPosition.getZ(), outPut);

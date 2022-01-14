@@ -8,6 +8,8 @@ import com.alexvr.bedres.blocks.bedrockiumTower.BedrockiumTowerTile;
 import com.alexvr.bedres.blocks.decayingfluxedblocks.*;
 import com.alexvr.bedres.blocks.enderianRitualPedestal.EnderianRitualPedestal;
 import com.alexvr.bedres.blocks.enderianRitualPedestal.EnderianRitualPedestalTile;
+import com.alexvr.bedres.blocks.eventAltar.EventAltar;
+import com.alexvr.bedres.blocks.eventAltar.EventAltarTile;
 import com.alexvr.bedres.blocks.gravityBubble.FluxedGravityBubble;
 import com.alexvr.bedres.blocks.gravityBubble.FluxedGravityBubbleTile;
 import com.alexvr.bedres.blocks.itemPlatform.ItemPlatform;
@@ -115,6 +117,7 @@ public class Registration {
 
     public static final RegistryObject<EventAltar> EVENT_ALTAR_BLOCK = BLOCKS.register(BedrockReferences.EVENT_ALTAR_REGNAME, () -> new EventAltar(METAL_BLOCK_PROPERTIES.noOcclusion()));
     public static final RegistryObject<Item> EVENT_ALTAR_ITEM = fromBlock(EVENT_ALTAR_BLOCK);
+    public static final RegistryObject<BlockEntityType<EventAltarTile>> EVENT_ALTAR_TILE = BLOCK_ENTITIES.register(BedrockReferences.EVENT_ALTAR_REGNAME, () -> BlockEntityType.Builder.of(EventAltarTile::new, EVENT_ALTAR_BLOCK.get()).build(null));
 
 
     public static final RegistryObject<DungeonDimensionPortalBlock> DUNGEON_DIMENSION_PORTAL = BLOCKS.register(BedrockReferences.DUNGEON_DIM_PORTAL_REGNAME, DungeonDimensionPortalBlock::new);

@@ -16,23 +16,46 @@ import net.minecraftforge.items.ItemHandlerHelper;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class EventRitualsRecipes implements Recipe<EventRitualsContext> {
 
     private final ResourceLocation id;
     private final ItemStack destination;
+    private final String event;
     private final List<ItemStack> ingredients;
     private final List<String> pattern; // w for wire, i for item
     public static int patternRadius = 2; // pattern size is (patternRadius*2) + 1
 
-    public EventRitualsRecipes(ItemStack destination, List<String> pattern, ItemStack... ingredients) {
+    public EventRitualsRecipes(ItemStack destination,String event, List<String> pattern, ItemStack... ingredients) {
         this.id = destination.getItem().getRegistryName();
+        this.event = event;
         this.destination = destination;
         this.ingredients = new ArrayList<>(ingredients.length);
         this.pattern = pattern;
         Collections.addAll(this.ingredients, ingredients);
     }
 
+    public static List<ItemStack> getItemsFromTiles(List<EnderianRitualPedestalTile> tiles){
+        List<ItemStack> items = new ArrayList<>();
+        for (EnderianRitualPedestalTile pedestalTile: tiles){
+            pedestalTile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY,null).ifPresent(h -> {
+                if (!h.getStackInSlot(0).isEmpty()){
+                    AtomicBoolean found = new AtomicBoolean(false);
+                    items.forEach(item -> {
+                        if (!found.get() && item.is(h.getStackInSlot(0).getItem())){
+                            item.grow(1);
+                            found.set(true);
+                        }
+                    });
+                    if (!found.get()){
+                        items.add(h.getStackInSlot(0).copy());
+                    }
+                }
+            });
+        }
+        return items;
+    }
 
     public static List<ItemStack> getItemsForRecipeFromWordl(Level level, BlockPos position, int xRadius, int zRadius){
         List<ItemStack> items = new ArrayList<>();
@@ -80,6 +103,18 @@ public class EventRitualsRecipes implements Recipe<EventRitualsContext> {
         return patter;
     }
 
+    public static List<EnderianRitualPedestalTile> getTilesForRecipeFromWorld(Level level, BlockPos position, int xRadius, int zRadius){
+        List<EnderianRitualPedestalTile> tiles = new ArrayList<>();
+        for (int z = position.getZ() - zRadius; z <= position.getZ() + zRadius; z++){
+            for (int x = position.getX() - xRadius; x <= position.getX() + xRadius; x++){
+                BlockPos newPosition = new BlockPos(x,position.getY(),z);
+                if (level.getBlockEntity(newPosition) instanceof EnderianRitualPedestalTile pedestalTile){
+                    tiles.add(pedestalTile);
+                }
+            }
+        }
+        return tiles;
+    }
     public static EventRitualsRecipes findRecipeFromOutput(ItemStack destination) {
         for (EventRitualsRecipes recipe : ModRecipeRegistry.getEventRitualRecipes()) {
             if (ItemHandlerHelper.canItemStacksStack(recipe.getDestination(), destination)) {
@@ -88,7 +123,8 @@ public class EventRitualsRecipes implements Recipe<EventRitualsContext> {
         }
         return null;
     }
-    public static EventRitualsRecipes findRecipeFromPattern(List<String> pat) {
+    public static List<EventRitualsRecipes> findRecipeFromPattern(List<String> pat) {
+        List<EventRitualsRecipes> validRecipes = new ArrayList<>();
         for (EventRitualsRecipes recipe : ModRecipeRegistry.getEventRitualRecipes()) {
             boolean validRec = true;
             List<String> ingCopy = new ArrayList<>(pat);
@@ -108,11 +144,11 @@ public class EventRitualsRecipes implements Recipe<EventRitualsContext> {
                 }
             }
             if (validRec && ingCopy.isEmpty()){
-                return recipe;
+                validRecipes.add(recipe);
             }
 
         }
-        return null;
+        return validRecipes;
     }
 
     public static EventRitualsRecipes findRecipeFromIngrent(List<ItemStack> ing) {
@@ -141,12 +177,26 @@ public class EventRitualsRecipes implements Recipe<EventRitualsContext> {
         }
         return null;
     }
+
+    public static EventRitualsRecipes findRecipeFromEvent(String event) {
+        for (EventRitualsRecipes recipe : ModRecipeRegistry.getEventRitualRecipes()) {
+            if (recipe.getEvent().equals(event)){
+                return recipe;
+            }
+        }
+        return null;
+    }
+
     public ItemStack getDestination() {
         return destination;
     }
 
     public List<ItemStack> getIngredientList() {
         return ingredients;
+    }
+
+    public String getEvent(){
+        return event;
     }
 
     @Override

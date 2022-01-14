@@ -23,6 +23,7 @@ public class EventRitualsRecipeSerializer extends ForgeRegistryEntry<RecipeSeria
         ItemStack output = new ItemStack(Optional.ofNullable(ForgeRegistries.ITEMS.getValue(resourcelocation)).orElseThrow(() -> new IllegalStateException("Item: " + GsonHelper.getAsString(json, "result") + " does not exist")));
         int outputAmount = GsonHelper.getAsInt(json, "count", 1);
         output.setCount(outputAmount);
+        String event = GsonHelper.getAsString(json, "event");
 
         JsonElement input = json.get("input");
         List<ItemStack> inputItems = new ArrayList<>();
@@ -33,7 +34,7 @@ public class EventRitualsRecipeSerializer extends ForgeRegistryEntry<RecipeSeria
                 if (object.has("item")) {
                     String inputStr = object.get("item").getAsString();
                     ResourceLocation in = new ResourceLocation(inputStr);
-                    item = new ItemStack(Optional.ofNullable(ForgeRegistries.ITEMS.getValue(resourcelocation)).orElseThrow(() -> new IllegalStateException("Item: " + inputStr + " does not exist")));
+                    item = new ItemStack(Optional.ofNullable(ForgeRegistries.ITEMS.getValue(in)).orElseThrow(() -> new IllegalStateException("Item: " + inputStr + " does not exist")));
                 }
                 if (object.has("count")) {
                     int count = object.get("count").getAsInt();
@@ -56,7 +57,7 @@ public class EventRitualsRecipeSerializer extends ForgeRegistryEntry<RecipeSeria
             throw new IllegalStateException("Recipe " + recipeId.toString() + ": pattern is in wrong format or missing!");
         }
 
-        return new EventRitualsRecipes(output,patterns, inputItems.toArray(new ItemStack[inputItems.size()]));
+        return new EventRitualsRecipes(output,event,patterns, inputItems.toArray(new ItemStack[inputItems.size()]));
     }
 
     @Nullable
@@ -66,7 +67,7 @@ public class EventRitualsRecipeSerializer extends ForgeRegistryEntry<RecipeSeria
         ItemStack output = new ItemStack(Optional.ofNullable(ForgeRegistries.ITEMS.getValue(resourcelocation)).orElseThrow(() -> new IllegalStateException("Item: " + resourcelocation.toString() + " does not exist")));
         int count = buffer.readInt();
         output.setCount(count);
-
+        String event = buffer.readUtf(32767);
         List<ItemStack> inputItems = new ArrayList<>();
         int size = buffer.readInt();
         for (int i = 0 ; i < size ; i++) {
@@ -82,13 +83,15 @@ public class EventRitualsRecipeSerializer extends ForgeRegistryEntry<RecipeSeria
         for (int i = 0 ; i < size ; i++) {
            inputPatterns.add(buffer.readUtf(32767));
         }
-        return new EventRitualsRecipes(output,inputPatterns, inputItems.toArray(new ItemStack[inputItems.size()]));
+        return new EventRitualsRecipes(output,event,inputPatterns, inputItems.toArray(new ItemStack[inputItems.size()]));
     }
 
     @Override
     public void toNetwork(FriendlyByteBuf buffer, EventRitualsRecipes recipe) {
         buffer.writeUtf(recipe.getResultItem().getItem().getRegistryName().toString());
         buffer.writeInt(recipe.getResultItem().getCount());
+        buffer.writeUtf(recipe.getEvent());
+
         List<ItemStack> list = recipe.getIngredientList();
         buffer.writeInt(list.size());
         for (ItemStack stack : list) {

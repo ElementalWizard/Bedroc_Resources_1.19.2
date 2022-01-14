@@ -118,4 +118,5 @@ public class RitualAltarRecipes implements Recipe<RitualAltarContext> {
     public RecipeType<?> getType() {
         return ModRecipeRegistry.ALTAR;
     }
+
 }
