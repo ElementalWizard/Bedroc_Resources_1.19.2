@@ -1,6 +1,7 @@
 package com.alexvr.bedres.setup;
 
 import com.alexvr.bedres.BedrockResources;
+import com.alexvr.bedres.capability.CapabilityHandler;
 import com.alexvr.bedres.world.ModWorldgen;
 import com.alexvr.bedres.world.dimension.ModDimensions;
 import com.alexvr.bedres.world.features.ModStructures;
@@ -43,6 +44,7 @@ public class ModSetup {
             ModStructures.setupStructures();
             ModStructures.registerConfiguredStructures();
             ModDimensions.register();
+            MinecraftForge.EVENT_BUS.register(new CapabilityHandler());
         });
     }
 

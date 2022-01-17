@@ -2,7 +2,7 @@ package com.alexvr.bedres;
 
 import com.alexvr.bedres.recipes.ModRecipeRegistry;
 import com.alexvr.bedres.setup.ClientSetup;
-import com.alexvr.bedres.setup.Config;
+import com.alexvr.bedres.setup.ModConfig;
 import com.alexvr.bedres.setup.ModSetup;
 import com.alexvr.bedres.setup.Registration;
 import com.alexvr.bedres.world.ModWorldgen;
@@ -14,6 +14,7 @@ import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.fml.loading.FMLPaths;
 import net.minecraftforge.network.NetworkEvent;
 import net.minecraftforge.network.NetworkRegistry;
 import net.minecraftforge.network.simple.SimpleChannel;
@@ -37,7 +38,7 @@ public class BedrockResources {
 
     public BedrockResources() {
         ModSetup.setup();
-        Config.register();
+        ModConfig.register();
         Registration.init();
         ModRecipeRegistry.register();
         IEventBus event = FMLJavaModLoadingContext.get().getModEventBus();
@@ -47,6 +48,8 @@ public class BedrockResources {
 
         IEventBus forgeBus = MinecraftForge.EVENT_BUS;
         forgeBus.register(new ModWorldgen());
+        ModConfig.loadConfig(ModConfig.CLIENT_CONFIG, FMLPaths.CONFIGDIR.get().resolve("bedres-client.toml"));
+        ModConfig.loadConfig(ModConfig.SERVER_CONFIG, FMLPaths.CONFIGDIR.get().resolve("bedres-common.toml"));
     }
 
 
