@@ -3,11 +3,13 @@ package com.alexvr.bedres.blocks.eventAltar;
 import com.alexvr.bedres.BedrockResources;
 import com.alexvr.bedres.blocks.enderianRitualPedestal.EnderianRitualPedestalTile;
 import com.alexvr.bedres.blocks.eventAltar.events.RainEvent;
+import com.alexvr.bedres.blocks.eventAltar.events.ToolUpgradeEvent;
 import com.alexvr.bedres.recipes.ModRecipeRegistry;
 import com.alexvr.bedres.recipes.eventRituals.EventRitualsRecipes;
 import com.alexvr.bedres.setup.Registration;
 import com.alexvr.bedres.utils.ParticleHelper;
 import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -29,12 +31,13 @@ public class EventAltarTile extends BlockEntity {
     EventRitualsRecipes recipe = null;
     int ticksPerItem = 40;
     int craftingTick = 0;
+    Player playerInside;
     public EventAltarTile(BlockPos pWorldPosition, BlockState pBlockState) {
         super(Registration.EVENT_ALTAR_TILE.get(), pWorldPosition, pBlockState);
 
     }
 
-    public void tickServer() {
+    public void tick() {
 
         if (getBlockState().getValue(CRAFTING)) {
             List<ItemStack> removed = new ArrayList<>();
@@ -121,6 +124,9 @@ public class EventAltarTile extends BlockEntity {
                 }else if (recipe.getResultItem().is(Items.BUCKET)) {
                     RainEvent.stop(level,getBlockPos());
                 }
+                break;
+            case "tool":
+                ToolUpgradeEvent.start(playerInside, recipe.getResultItem());
                 break;
         }
     }

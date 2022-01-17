@@ -1,6 +1,5 @@
 package com.alexvr.bedres.blocks.eventAltar;
 
-import com.alexvr.bedres.BedrockResources;
 import com.alexvr.bedres.blocks.enderianRitualPedestal.EnderianRitualPedestalTile;
 import com.alexvr.bedres.recipes.eventRituals.EventRitualsRecipes;
 import net.minecraft.core.BlockPos;
@@ -58,22 +57,14 @@ public class EventAltar extends Block implements EntityBlock {
                 if (!tile.getBlockState().getValue(VALIDRECIPE)){
                     List<EventRitualsRecipes> recipe = EventRitualsRecipes.findRecipeFromPattern(EventRitualsRecipes.getPatterForRecipeFromWorld(player.level,player.blockPosition(),EventRitualsRecipes.patternRadius,EventRitualsRecipes.patternRadius));
                     EventRitualsRecipes recipe2 = EventRitualsRecipes.findRecipeFromIngrent(EventRitualsRecipes.getItemsFromTiles(extensions));
-                    if (!recipe.isEmpty()){
-                        BedrockResources.LOGGER.info("Patterns found: " + recipe.get(0).getPattern() + " Amount: " + recipe.size());
-                    }
-                    if (recipe2 != null){
-                        BedrockResources.LOGGER.info("Items found: " + recipe2.getIngredientList());
-                    }
                     if (!recipe.isEmpty() && recipe2 != null && recipe.contains(recipe2)){
                         tile.tiles = extensions;
                         tile.recipe = recipe2;
                         tile.target = 0;
                         tile.updateValidRecipe(true);
-                        BedrockResources.LOGGER.info("Valid Recipe Found");
-                    }else{
-                        BedrockResources.LOGGER.info("Recipes dont match: ");
                     }
                 }else if (tile.getBlockState().getValue(VALIDRECIPE) && player.isShiftKeyDown()){
+                    tile.playerInside = player;
                     tile.updateCrafting(true);
                 }
 
@@ -136,7 +127,7 @@ public class EventAltar extends Block implements EntityBlock {
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
         return (level1, blockPos, blockState, t) -> {
             if (t instanceof EventAltarTile tile) {
-                tile.tickServer();
+                tile.tick();
             }
         };
     }

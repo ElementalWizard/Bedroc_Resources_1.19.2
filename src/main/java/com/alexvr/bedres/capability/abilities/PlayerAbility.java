@@ -2,7 +2,9 @@ package com.alexvr.bedres.capability.abilities;
 
 import com.alexvr.bedres.blocks.enderianRitualPedestal.EnderianRitualPedestalTile;
 import com.alexvr.bedres.setup.ModConfig;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.common.capabilities.Capability;
 
 import java.util.ArrayList;
 
@@ -15,6 +17,8 @@ public class PlayerAbility implements  IPlayerAbility{
     private ArrayList<EnderianRitualPedestalTile> pedestals;
     private double FOV;
     private Vec3 lookingAt;
+
+    public static Capability<IPlayerAbility> ABILITY_CAPABILITY = null;
 
     @Override
     public String getNAme() {
@@ -232,5 +236,49 @@ public class PlayerAbility implements  IPlayerAbility{
         jump=0;
         ritual = false;
         checking = false;
+    }
+
+    @Override
+    public CompoundTag serializeNBT() {
+        CompoundTag tag = new CompoundTag();
+        tag.putString("axe",getAxe());
+        tag.putString("pick",getPick());
+        tag.putString("shovel",getShovel());
+        tag.putString("sword",getSword());
+        tag.putString("hoe",getHoe());
+        tag.putString("result",getRitualCraftingResult());
+        tag.putDouble("speed",getMiningSpeedBoost());
+        tag.putInt("ritualTimer",getRitualTimer());
+        tag.putInt("totalRitual",getRitualTotalTimer());
+        tag.putDouble("gravilty",getGravityMultiplier());
+        tag.putDouble("jump",getJumpBoost());
+        tag.putBoolean("ritual",getInRitual());
+        tag.putBoolean("checking",getChecking());
+        tag.putDouble("FOV",getFOV());
+        if (getlookPos() != null) {
+            tag.putDouble("lookingAtX", getlookPos().x);
+            tag.putDouble("lookingAtY", getlookPos().y);
+            tag.putDouble("lookingAtZ", getlookPos().z);
+        }
+        return tag;
+    }
+
+    @Override
+    public void deserializeNBT(CompoundTag nbt) {
+        setAxe(nbt.getString("axe"));
+        setPick(nbt.getString("pick"));
+        setShovel(nbt.getString("shovel"));
+        setSword(nbt.getString("sword"));
+        setHoe(nbt.getString("hoe"));
+        setMiningSpeedBoost(nbt.getDouble("speed"));
+        setJumpBoost(nbt.getDouble("jump"));
+        setGRavityMultiplier(nbt.getDouble("gravilty"));
+        setRitualTimer(nbt.getInt("ritualTimer"));
+        setRitualTotalTimer(nbt.getInt("totalRitual"));
+        setRitualCraftingResult(nbt.getString("result"));
+        setFOV(nbt.getDouble("FOV"));
+        if (nbt.contains("lookingAtX")) {
+            setLookPos(new Vec3(( nbt).getDouble("lookingAtX"), ( nbt).getDouble("lookingAtY"), ( nbt).getDouble("lookingAtZ")));
+        }
     }
 }

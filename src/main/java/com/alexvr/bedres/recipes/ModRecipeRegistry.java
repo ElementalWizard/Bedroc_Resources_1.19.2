@@ -92,6 +92,26 @@ public class ModRecipeRegistry {
                 new ItemStack(Registration.DF_OAK_LEAVE_BLOCK.get(), 10)
         ));
 
+        eventRitualsRecipes.add(new EventRitualsRecipes(new ItemStack(Items.IRON_PICKAXE),"tool",
+                genPattern(
+                        "wiwiw",
+                                "iwwwi",
+                                "iw wi",
+                                "iwwwi",
+                                "wiwiw"),
+                new ItemStack(Items.IRON_BARS, 10)
+        ));
+
+        eventRitualsRecipes.add(new EventRitualsRecipes(new ItemStack(Items.WOODEN_PICKAXE),"tool",
+                genPattern(
+                        "wiwiw",
+                        "iwwwi",
+                        "iw wi",
+                        "iwwwi",
+                        "wiwiw"),
+                new ItemStack(Items.BOWL, 10)
+        ));
+
     }
 
     public static List<String> genPattern(String... patten){

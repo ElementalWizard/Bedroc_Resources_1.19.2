@@ -1,11 +1,14 @@
 package com.alexvr.bedres.capability.abilities;
 
 import com.alexvr.bedres.blocks.enderianRitualPedestal.EnderianRitualPedestalTile;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.common.util.INBTSerializable;
 
 import java.util.ArrayList;
 
-public interface IPlayerAbility {
+public interface IPlayerAbility extends INBTSerializable<CompoundTag>
+{
 
 
     String getNAme();
