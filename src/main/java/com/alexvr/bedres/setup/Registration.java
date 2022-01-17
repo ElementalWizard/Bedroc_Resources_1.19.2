@@ -208,12 +208,12 @@ public class Registration {
     public static final RegistryObject<Item> RAW_ENDERIAN_CHUNK = ITEMS.register(BedrockReferences.RAW_ENDERIAN_REGNAME, () -> new Item((new Item.Properties()).tab(ModSetup.GROUP)));
     public static final RegistryObject<ScraperMesh> SCRAPER_MESH_ITEM = ITEMS.register(BedrockReferences.SCRAPER_MESH_REGNAME, () -> new ScraperMesh((new Item.Properties()).tab(ModSetup.GROUP)));
     public static final RegistryObject<Staff> STAFF_ITEM = ITEMS.register(BedrockReferences.STAFF_REGNAME, () -> new Staff((new Item.Properties()).tab(ModSetup.GROUP).stacksTo(1)));
-    public static final RegistryObject<FluxOracle> FLUX_ORACLE_ITEM = ITEMS.register(BedrockReferences.FLUX_ORACLE_REGNAME, () -> new FluxOracle((new Item.Properties()).tab(ModSetup.GROUP).stacksTo(1)));
     public static final RegistryObject<Item> ENDERIAN_INGOT_ITEM = ITEMS.register(BedrockReferences.ENDERIAN_INGOT_REGNAME, () -> new Item((new Item.Properties()).tab(ModSetup.GROUP)));
     public static final RegistryObject<FluxedCupcake> FLUXED_CUPCAKE_ITEM = ITEMS.register(BedrockReferences.FLUXED_CUPCAKE_REGNAME, () -> new FluxedCupcake((new Item.Properties()).tab(ModSetup.GROUP)));
     public static final RegistryObject<Item> NEBULA_HEART_ITEM = ITEMS.register(BedrockReferences.NEBULA_HEART_REGNAME, () -> new Item((new Item.Properties()).tab(ModSetup.GROUP)));
     public static final RegistryObject<XPMedallion> XP_MEDALLION_ITEM = ITEMS.register(BedrockReferences.XP_MEDALLION_REGNAME, () -> new XPMedallion((new Item.Properties()).tab(ModSetup.GROUP)));
     public static final RegistryObject<MageStaff> MAGE_STAFF_ITEM = ITEMS.register(BedrockReferences.MAGE_STAFF_REGNAME, () -> new MageStaff((new Item.Properties().stacksTo(1)).tab(ModSetup.GROUP)));
+    public static final RegistryObject<FluxedOracle> FLUX_ORACLE_ITEM = ITEMS.register(BedrockReferences.FLUX_ORACLE_REGNAME, () -> new FluxedOracle((new Item.Properties().stacksTo(1)).tab(ModSetup.GROUP)));
 
     public  static final Tags.IOptionalNamedTag<Block> ENDERIAN_ORE = BlockTags.createOptional(new ResourceLocation(MODID,"enderian_ore"));
     public  static final Tags.IOptionalNamedTag<Block> DF_LOG = BlockTags.createOptional(new ResourceLocation(MODID,BedrockReferences.DF_OAK_LOG_REGNAME));

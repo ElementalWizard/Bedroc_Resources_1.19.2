@@ -20,7 +20,6 @@ public class PlayerAbilityProvider implements ICapabilitySerializable<CompoundTa
         return capability == PLAYER_ABILITY_CAPABILITY;
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side) {
         if (cap == PLAYER_ABILITY_CAPABILITY) {

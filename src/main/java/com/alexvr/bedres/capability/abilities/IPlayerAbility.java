@@ -25,10 +25,10 @@ public interface IPlayerAbility extends INBTSerializable<CompoundTag>
     String getRitualCraftingResult();
 
     double getJumpBoost();
-    double getGravityMultiplier();
 
     boolean getInRitual();
     boolean getChecking();
+    boolean takesFalldamage();
 
     double getFOV();
 
@@ -41,16 +41,16 @@ public interface IPlayerAbility extends INBTSerializable<CompoundTag>
     void setSword(String name);
     void setHoe(String name);
     void setname(String name);
+    void setTakesFallDamage(Boolean takesFallDamage);
 
     void setMiningSpeedBoost(double amount);
     void setJumpBoost(double amount);
-    void setGRavityMultiplier(double amount);
 
     void addMiningSpeed(double amount);
     void addJump(double amount);
-    void addGrav(double amount);
 
     void flipRitual();
+    void flipFallDamage();
 
     void setRitualTimer(int amount);
     void setRitualTotalTimer(int amount);

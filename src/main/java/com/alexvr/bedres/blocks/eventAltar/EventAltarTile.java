@@ -2,6 +2,7 @@ package com.alexvr.bedres.blocks.eventAltar;
 
 import com.alexvr.bedres.BedrockResources;
 import com.alexvr.bedres.blocks.enderianRitualPedestal.EnderianRitualPedestalTile;
+import com.alexvr.bedres.blocks.eventAltar.events.PlayerUpgradeEvent;
 import com.alexvr.bedres.blocks.eventAltar.events.RainEvent;
 import com.alexvr.bedres.blocks.eventAltar.events.ToolUpgradeEvent;
 import com.alexvr.bedres.recipes.ModRecipeRegistry;
@@ -127,6 +128,25 @@ public class EventAltarTile extends BlockEntity {
                 break;
             case "tool":
                 ToolUpgradeEvent.start(playerInside, recipe.getResultItem());
+                break;
+            case "player_upgrade":
+                if (recipe.getResultItem().is(Items.REDSTONE)) {
+                    PlayerUpgradeEvent.speed(playerInside,recipe.getResultItem());
+                }else if (recipe.getResultItem().is(Registration.BEDROCK_WIRE_ITEM.get())) {
+                    PlayerUpgradeEvent.speed(playerInside,recipe.getResultItem());
+                }else if (recipe.getResultItem().is(Registration.ROPE_ITEM.get())) {
+                    PlayerUpgradeEvent.speed(playerInside,recipe.getResultItem());
+                }else if (recipe.getResultItem().is(Items.RABBIT_FOOT)) {
+                    PlayerUpgradeEvent.jump(playerInside,recipe.getResultItem());
+                }else if (recipe.getResultItem().is(Items.RABBIT_HIDE)) {
+                    PlayerUpgradeEvent.jump(playerInside,recipe.getResultItem());
+                }else if (recipe.getResultItem().is(Items.CHAIN)) {
+                    PlayerUpgradeEvent.jump(playerInside,recipe.getResultItem());
+                }else if (recipe.getResultItem().is(Items.SLIME_BALL)) {
+                    PlayerUpgradeEvent.fallDamage(playerInside,recipe.getResultItem());
+                }else if (recipe.getResultItem().is(Items.HONEY_BLOCK)) {
+                    PlayerUpgradeEvent.fallDamage(playerInside,recipe.getResultItem());
+                }
                 break;
         }
     }

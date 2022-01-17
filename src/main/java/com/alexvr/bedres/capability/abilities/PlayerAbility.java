@@ -12,8 +12,11 @@ public class PlayerAbility implements  IPlayerAbility{
 
     private String axe = ModConfig.DEF_AXE.get(),pick= ModConfig.DEF_PICK.get(),shovel= ModConfig.DEF_SHOVEL.get(),sword= ModConfig.DEF_SWORD.get(),hoe= ModConfig.DEF_HOE.get(),name = "no",result="";
     private int ritualTimer =1,totalRitual=1;
-    private double gravilty = 0,jump= ModConfig.DEF_JUMP.get(),speed = ModConfig.DEF_SPEED.get();
-    private boolean ritual = false,checking = false;
+    private double jump= ModConfig.DEF_JUMP.get(),speed = ModConfig.DEF_SPEED.get();
+    private boolean ritual = false;
+    private boolean checking = false;
+
+    private boolean fall_damage = false;
     private ArrayList<EnderianRitualPedestalTile> pedestals;
     private double FOV;
     private Vec3 lookingAt;
@@ -81,11 +84,6 @@ public class PlayerAbility implements  IPlayerAbility{
     }
 
     @Override
-    public double getGravityMultiplier() {
-        return gravilty;
-    }
-
-    @Override
     public boolean getInRitual() {
         return ritual;
     }
@@ -93,6 +91,11 @@ public class PlayerAbility implements  IPlayerAbility{
     @Override
     public boolean getChecking() {
         return checking;
+    }
+
+    @Override
+    public boolean takesFalldamage() {
+        return fall_damage;
     }
 
     @Override
@@ -140,6 +143,11 @@ public class PlayerAbility implements  IPlayerAbility{
     }
 
     @Override
+    public void setTakesFallDamage(Boolean takesFallDamage) {
+        fall_damage = takesFallDamage;
+    }
+
+    @Override
     public void setMiningSpeedBoost(double amount) {
         speed=amount;
 
@@ -151,10 +159,6 @@ public class PlayerAbility implements  IPlayerAbility{
 
     }
 
-    @Override
-    public void setGRavityMultiplier(double amount) {
-        gravilty=amount;
-    }
 
     @Override
     public void addMiningSpeed(double amount) {
@@ -167,13 +171,13 @@ public class PlayerAbility implements  IPlayerAbility{
     }
 
     @Override
-    public void addGrav(double amount) {
-        gravilty+=amount;
+    public void flipRitual() {
+        ritual=!ritual;
     }
 
     @Override
-    public void flipRitual() {
-        ritual=!ritual;
+    public void flipFallDamage() {
+        fall_damage = !fall_damage;
     }
 
     @Override
@@ -232,7 +236,6 @@ public class PlayerAbility implements  IPlayerAbility{
         speed =0;
         ritualTimer =1;
         totalRitual=1;
-        gravilty = 0;
         jump=0;
         ritual = false;
         checking = false;
@@ -250,7 +253,6 @@ public class PlayerAbility implements  IPlayerAbility{
         tag.putDouble("speed",getMiningSpeedBoost());
         tag.putInt("ritualTimer",getRitualTimer());
         tag.putInt("totalRitual",getRitualTotalTimer());
-        tag.putDouble("gravilty",getGravityMultiplier());
         tag.putDouble("jump",getJumpBoost());
         tag.putBoolean("ritual",getInRitual());
         tag.putBoolean("checking",getChecking());
@@ -272,7 +274,6 @@ public class PlayerAbility implements  IPlayerAbility{
         setHoe(nbt.getString("hoe"));
         setMiningSpeedBoost(nbt.getDouble("speed"));
         setJumpBoost(nbt.getDouble("jump"));
-        setGRavityMultiplier(nbt.getDouble("gravilty"));
         setRitualTimer(nbt.getInt("ritualTimer"));
         setRitualTotalTimer(nbt.getInt("totalRitual"));
         setRitualCraftingResult(nbt.getString("result"));

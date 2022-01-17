@@ -40,7 +40,7 @@ public class WorldEventHandler {
             LazyOptional<IPlayerAbility> oldplayerAbility =  event.getOriginal().getCapability(PlayerAbilityProvider.PLAYER_ABILITY_CAPABILITY, null);
             playerAbility.ifPresent(h -> oldplayerAbility.ifPresent(o -> {
                 h.setJumpBoost(o.getJumpBoost());
-                h.setGRavityMultiplier(o.getGravityMultiplier());
+                h.setTakesFallDamage(o.takesFalldamage());
                 h.setMiningSpeedBoost(o.getMiningSpeedBoost());
                 h.setHoe(o.getHoe());
                 h.setSword(o.getSword());

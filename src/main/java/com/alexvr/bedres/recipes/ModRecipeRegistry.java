@@ -92,26 +92,291 @@ public class ModRecipeRegistry {
                 new ItemStack(Registration.DF_OAK_LEAVE_BLOCK.get(), 10)
         ));
 
-        eventRitualsRecipes.add(new EventRitualsRecipes(new ItemStack(Items.IRON_PICKAXE),"tool",
-                genPattern(
-                        "wiwiw",
-                                "iwwwi",
-                                "iw wi",
-                                "iwwwi",
-                                "wiwiw"),
-                new ItemStack(Items.IRON_BARS, 10)
-        ));
+        setUpEventRitualToolRecipes();
 
-        eventRitualsRecipes.add(new EventRitualsRecipes(new ItemStack(Items.WOODEN_PICKAXE),"tool",
+
+
+    }
+
+    public static void setUpEventRitualToolRecipes(){
+
+        //PICKAXE
+        {
+            eventRitualsRecipes.add(new EventRitualsRecipes(new ItemStack(Items.WOODEN_PICKAXE),"tool",
+                    genPattern(
+                            "wiwiw",
+                            "iwwwi",
+                            "iw wi",
+                            "iwwwi",
+                            "wiwiw"),
+                    new ItemStack(Items.WOODEN_PICKAXE, 10)
+            ));
+
+            eventRitualsRecipes.add(new EventRitualsRecipes(new ItemStack(Items.IRON_PICKAXE),"tool",
+                    genPattern(
+                            "wiwiw",
+                            "iwwwi",
+                            "iw wi",
+                            "iwwwi",
+                            "wiwiw"),
+                    new ItemStack(Items.IRON_PICKAXE, 10)
+            ));
+            eventRitualsRecipes.add(new EventRitualsRecipes(new ItemStack(Items.GOLDEN_PICKAXE),"tool",
+                    genPattern(
+                            "wiwiw",
+                            "iwwwi",
+                            "iw wi",
+                            "iwwwi",
+                            "wiwiw"),
+                    new ItemStack(Items.GOLDEN_PICKAXE, 10)
+            ));
+            eventRitualsRecipes.add(new EventRitualsRecipes(new ItemStack(Items.DIAMOND_PICKAXE),"tool",
+                    genPattern(
+                            "wiwiw",
+                            "iwwwi",
+                            "iw wi",
+                            "iwwwi",
+                            "wiwiw"),
+                    new ItemStack(Items.DIAMOND_PICKAXE, 10)
+            ));
+        }
+
+        //AXE
+        {
+            eventRitualsRecipes.add(new EventRitualsRecipes(new ItemStack(Items.WOODEN_AXE),"tool",
+                    genPattern(
+                            "wiwiw",
+                            "iwwwi",
+                            "iw wi",
+                            "iwwwi",
+                            "wiwiw"),
+                    new ItemStack(Items.WOODEN_AXE, 10)
+            ));
+
+            eventRitualsRecipes.add(new EventRitualsRecipes(new ItemStack(Items.IRON_AXE),"tool",
+                    genPattern(
+                            "wiwiw",
+                            "iwwwi",
+                            "iw wi",
+                            "iwwwi",
+                            "wiwiw"),
+                    new ItemStack(Items.IRON_AXE, 10)
+            ));
+            eventRitualsRecipes.add(new EventRitualsRecipes(new ItemStack(Items.GOLDEN_AXE),"tool",
+                    genPattern(
+                            "wiwiw",
+                            "iwwwi",
+                            "iw wi",
+                            "iwwwi",
+                            "wiwiw"),
+                    new ItemStack(Items.GOLDEN_AXE, 10)
+            ));
+            eventRitualsRecipes.add(new EventRitualsRecipes(new ItemStack(Items.DIAMOND_AXE),"tool",
+                    genPattern(
+                            "wiwiw",
+                            "iwwwi",
+                            "iw wi",
+                            "iwwwi",
+                            "wiwiw"),
+                    new ItemStack(Items.DIAMOND_AXE, 10)
+            ));
+        }
+
+        //SWORD
+        {
+            eventRitualsRecipes.add(new EventRitualsRecipes(new ItemStack(Items.WOODEN_SWORD),"tool",
+                    genPattern(
+                            "wiwiw",
+                            "iwwwi",
+                            "iw wi",
+                            "iwwwi",
+                            "wiwiw"),
+                    new ItemStack(Items.WOODEN_SWORD, 10)
+            ));
+
+            eventRitualsRecipes.add(new EventRitualsRecipes(new ItemStack(Items.IRON_SWORD),"tool",
+                    genPattern(
+                            "wiwiw",
+                            "iwwwi",
+                            "iw wi",
+                            "iwwwi",
+                            "wiwiw"),
+                    new ItemStack(Items.IRON_SWORD, 10)
+            ));
+
+            eventRitualsRecipes.add(new EventRitualsRecipes(new ItemStack(Items.DIAMOND_SWORD),"tool",
+                    genPattern(
+                            "wiwiw",
+                            "iwwwi",
+                            "iw wi",
+                            "iwwwi",
+                            "wiwiw"),
+                    new ItemStack(Items.DIAMOND_SWORD, 10)
+            ));
+        }
+
+        //HOE
+        {
+            eventRitualsRecipes.add(new EventRitualsRecipes(new ItemStack(Items.WOODEN_HOE),"tool",
+                    genPattern(
+                            "wiwiw",
+                            "iwwwi",
+                            "iw wi",
+                            "iwwwi",
+                            "wiwiw"),
+                    new ItemStack(Items.WOODEN_HOE, 10)
+            ));
+
+            eventRitualsRecipes.add(new EventRitualsRecipes(new ItemStack(Items.IRON_HOE),"tool",
+                    genPattern(
+                            "wiwiw",
+                            "iwwwi",
+                            "iw wi",
+                            "iwwwi",
+                            "wiwiw"),
+                    new ItemStack(Items.IRON_HOE, 10)
+            ));
+
+            eventRitualsRecipes.add(new EventRitualsRecipes(new ItemStack(Items.DIAMOND_HOE),"tool",
+                    genPattern(
+                            "wiwiw",
+                            "iwwwi",
+                            "iw wi",
+                            "iwwwi",
+                            "wiwiw"),
+                    new ItemStack(Items.DIAMOND_HOE, 10)
+            ));
+        }
+
+        //SHOVEL
+        {
+            eventRitualsRecipes.add(new EventRitualsRecipes(new ItemStack(Items.WOODEN_SHOVEL),"tool",
+                    genPattern(
+                            "wiwiw",
+                            "iwwwi",
+                            "iw wi",
+                            "iwwwi",
+                            "wiwiw"),
+                    new ItemStack(Items.WOODEN_SHOVEL, 10)
+            ));
+
+            eventRitualsRecipes.add(new EventRitualsRecipes(new ItemStack(Items.IRON_SHOVEL),"tool",
+                    genPattern(
+                            "wiwiw",
+                            "iwwwi",
+                            "iw wi",
+                            "iwwwi",
+                            "wiwiw"),
+                    new ItemStack(Items.IRON_SHOVEL, 10)
+            ));
+            eventRitualsRecipes.add(new EventRitualsRecipes(new ItemStack(Items.GOLDEN_SHOVEL),"tool",
+                    genPattern(
+                            "wiwiw",
+                            "iwwwi",
+                            "iw wi",
+                            "iwwwi",
+                            "wiwiw"),
+                    new ItemStack(Items.GOLDEN_SHOVEL, 10)
+            ));
+            eventRitualsRecipes.add(new EventRitualsRecipes(new ItemStack(Items.DIAMOND_SHOVEL),"tool",
+                    genPattern(
+                            "wiwiw",
+                            "iwwwi",
+                            "iw wi",
+                            "iwwwi",
+                            "wiwiw"),
+                    new ItemStack(Items.DIAMOND_SHOVEL, 10)
+            ));
+        }
+
+        //SPEED
+        {
+            eventRitualsRecipes.add(new EventRitualsRecipes(new ItemStack(Items.REDSTONE),"player_upgrade",
+                    genPattern(
+                            "wiwiw",
+                            "iwwwi",
+                            "iw wi",
+                            "iwwwi",
+                            "wiwiw"),
+                    new ItemStack(Items.REDSTONE, 10)
+            ));
+
+            eventRitualsRecipes.add(new EventRitualsRecipes(new ItemStack(Registration.BEDROCK_WIRE_ITEM.get()),"player_upgrade",
+                    genPattern(
+                            "wiwiw",
+                            "iwwwi",
+                            "iw wi",
+                            "iwwwi",
+                            "wiwiw"),
+                    new ItemStack(Registration.BEDROCK_WIRE_ITEM.get(), 10)
+            ));
+
+            eventRitualsRecipes.add(new EventRitualsRecipes(new ItemStack(Registration.ROPE_ITEM.get()),"player_upgrade",
+                    genPattern(
+                            "wiwiw",
+                            "iwwwi",
+                            "iw wi",
+                            "iwwwi",
+                            "wiwiw"),
+                    new ItemStack(Registration.ROPE_ITEM.get(), 10)
+            ));
+
+        }
+
+        //JUMP
+        {
+            eventRitualsRecipes.add(new EventRitualsRecipes(new ItemStack(Items.RABBIT_FOOT),"player_upgrade",
                 genPattern(
                         "wiwiw",
                         "iwwwi",
                         "iw wi",
                         "iwwwi",
                         "wiwiw"),
-                new ItemStack(Items.BOWL, 10)
+                new ItemStack(Items.RABBIT_FOOT, 10)
         ));
 
+            eventRitualsRecipes.add(new EventRitualsRecipes(new ItemStack(Items.RABBIT_HIDE),"player_upgrade",
+                    genPattern(
+                            "wiwiw",
+                            "iwwwi",
+                            "iw wi",
+                            "iwwwi",
+                            "wiwiw"),
+                    new ItemStack(Items.RABBIT_HIDE, 10)
+            ));
+
+            eventRitualsRecipes.add(new EventRitualsRecipes(new ItemStack(Items.CHAIN),"player_upgrade",
+                    genPattern(
+                            "wiwiw",
+                            "iwwwi",
+                            "iw wi",
+                            "iwwwi",
+                            "wiwiw"),
+                    new ItemStack(Items.CHAIN, 10)
+            ));}
+
+        //FALL_DAMAGE
+        {
+            eventRitualsRecipes.add(new EventRitualsRecipes(new ItemStack(Items.SLIME_BALL),"player_upgrade",
+                    genPattern(
+                            "wiwiw",
+                            "iwwwi",
+                            "iw wi",
+                            "iwwwi",
+                            "wiwiw"),
+                    new ItemStack(Items.SLIME_BALL, 10)
+            ));
+
+            eventRitualsRecipes.add(new EventRitualsRecipes(new ItemStack(Items.HONEY_BLOCK),"player_upgrade",
+                    genPattern(
+                            "wiwiw",
+                            "iwwwi",
+                            "iw wi",
+                            "iwwwi",
+                            "wiwiw"),
+                    new ItemStack(Items.HONEY_BLOCK, 10)
+            ));
+        }
     }
 
     public static List<String> genPattern(String... patten){

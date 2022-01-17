@@ -1,8 +1,10 @@
 package com.alexvr.bedres.recipes.ritualAltar;
 
 import com.alexvr.bedres.recipes.ModRecipeRegistry;
+import net.minecraft.core.NonNullList;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
@@ -82,6 +84,16 @@ public class RitualAltarRecipes implements Recipe<RitualAltarContext> {
 
     public List<ItemStack> getIngredientList() {
         return ingredients;
+    }
+
+    @Override
+    public NonNullList<Ingredient> getIngredients() {
+        NonNullList<Ingredient> nonnulllist = NonNullList.create();
+        getIngredientList().forEach(ing -> {
+            nonnulllist.add(Ingredient.of(ing));
+        });
+
+        return nonnulllist;
     }
 
     @Override

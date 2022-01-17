@@ -2,9 +2,10 @@ buildscript {
     repositories {
         // These repositories are only for Gradle plugins, put any other repositories in the repository block further below
         maven { url = 'https://maven.minecraftforge.net' }
-        maven { url = 'https://maven.parchmentmc.org' }
-
+        maven {url 'https://plugins.gradle.org/m2/'}
+        maven { url 'https://maven.parchmentmc.org' }
         mavenCentral()
+        maven {url 'https://repo.spongepowered.org/repository/maven-public/'}
     }
     dependencies {
         classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.1.+', changing: true
@@ -24,7 +25,7 @@ archivesBaseName = 'bedres'
 // Mojang ships Java 17 to end users in 1.18+, so your mod should target Java 17.
 java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 
-println('Java: ' + System.getProperty('java.version') + ' JVM: ' + System.getProperty('java.vm.version') + '(' + System.getProperty('java.vendor') + ') Arch: ' + System.getProperty('os.arch'))
+
 minecraft {
     // The mappings can be changed at any time and must be in the following format.
     // Channel:   Version:
@@ -57,7 +58,8 @@ minecraft {
             // You can set various levels here.
             // Please read: https://stackoverflow.com/questions/2031163/when-to-use-the-different-log-levels
             property 'forge.logging.console.level', 'debug'
-
+            property 'mixin.env.remapRefMap', 'true'
+            property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
             mods {
                 bedres {
                     source sourceSets.main
@@ -124,8 +126,27 @@ repositories {
     maven{
         url "https://dvs1.progwml6.com/files/maven"
     }
+
+    maven { // JEI & Tinkers
+        name 'DVS1 Maven FS'
+        url 'https://dvs1.progwml6.com/files/maven'
+    }
+    maven {
+        // location of a maven mirror for JEI files, as a fallback
+        name = "ModMaven"
+        url = "https://modmaven.dev"
+    }
     maven{
         url "https://cursemaven.com"
+    }
+    maven {//Curse maven, in case some other maven goes offline and for mods that don't have a maven
+        url "https://cursemaven.com"
+        content {
+            includeGroup "curse.maven"
+        }
+    }
+    maven {
+        url 'https://maven.blamejared.com'
     }
     // If you have mod jar dependencies in ./libs, you can declare them as a repository like so:
     // flatDir {
@@ -142,7 +163,6 @@ dependencies {
     compileOnly fg.deobf("mezz.jei:jei-1.18.1:9.1.1.48:api") // Adds JEI API as a compile dependency
     implementation fg.deobf("mezz.jei:jei-1.18.1:9.1.1.48") // Adds registrate as a dependency
     implementation fg.deobf("curse.maven:the-one-probe-245211:3550084") // Adds registrate as a dependency
-
 }
 
 // Example for how to get properties into the manifest for reading at runtime.

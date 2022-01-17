@@ -65,6 +65,45 @@ public class ModLanguageProvider extends LanguageProvider {
 
         add(BedrockReferences.SCRAPE_TANK_TOOLTIP, "Bedrock Scrape Tank, can hold up to 256" );
         add(BedrockReferences.ITEM_PLATFORM_TOOLTIP, "Can hold up to a stack of an item and display it." );
+        add("jei.category.bedres.pedestal", "Item Infusions" );
+        add("jei.category.bedres.event_ritual", "Event Rituals" );
+
+        add("container.event.rain.water_bucket", "Rain Ritual" );
+        add("container.event.rain.bucket", "Rain Clear Ritual" );
+
+        add("container.event.tool.wooden_pickaxe", "Wooden Pickaxe Infusion" );
+        add("container.event.tool.iron_pickaxe", "Iron Pickaxe Infusion" );
+        add("container.event.tool.golden_pickaxe", "Gold Pickaxe Infusion" );
+        add("container.event.tool.diamond_pickaxe", "Diamond Pickaxe Infusion" );
+
+        add("container.event.tool.wooden_axe", "Wooden Axe Infusion" );
+        add("container.event.tool.iron_axe", "Iron Axe Infusion" );
+        add("container.event.tool.golden_axe", "Gold Axe Infusion" );
+        add("container.event.tool.diamond_axe", "Diamond Axe Infusion" );
+
+        add("container.event.tool.wooden_sword", "Wooden Sword Infusion" );
+        add("container.event.tool.iron_sword", "Iron Sword Infusion" );
+        add("container.event.tool.diamond_sword", "Diamond Sword Infusion" );
+
+        add("container.event.tool.wooden_hoe", "Wooden Hoe Infusion" );
+        add("container.event.tool.iron_hoe", "Iron Hoe Infusion" );
+        add("container.event.tool.diamond_hoe", "Diamond Hoe Infusion" );
+
+        add("container.event.tool.wooden_shovel", "Wooden Shovel Infusion" );
+        add("container.event.tool.iron_shovel", "Iron Shovel Infusion" );
+        add("container.event.tool.golden_shovel", "Gold Shovel Infusion" );
+        add("container.event.tool.diamond_shovel", "Diamond Shovel Infusion" );
+
+        add("container.event.player_upgrade.redstone", "Mining Speed Upgrade" );
+        add("container.event.player_upgrade.bedrock_wire", "Mining Speed Decrease" );
+        add("container.event.player_upgrade.rope", "Mining Speed Reset" );
+
+        add("container.event.player_upgrade.rabbit_foot", "Jump Upgrade" );
+        add("container.event.player_upgrade.rabbit_hide", "Jump Decrease" );
+        add("container.event.player_upgrade.chain", "Jump Reset" );
+
+        add("container.event.player_upgrade.slime_ball", "Fall Damage Upgrade" );
+        add("container.event.player_upgrade.honey_block", "Fall Damage Reset" );
 
         add(BedrockReferences.CREATIVE_TAB_NAME, "Bedrock Resources Tab" );
         add(BedrockReferences.SCREEN_SCRAPE_TANK, "Scrape Tank" );

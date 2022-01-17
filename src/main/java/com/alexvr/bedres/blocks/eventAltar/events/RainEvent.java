@@ -3,16 +3,12 @@ package com.alexvr.bedres.blocks.eventAltar.events;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LightningBolt;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 
 public class RainEvent implements IEvent{
-
-    String name;
-
-    public RainEvent(){
-        name = "rain";
-    }
 
     public static void start(Level level, BlockPos pos) {
         level.getLevelData().setRaining(true);
@@ -35,11 +31,14 @@ public class RainEvent implements IEvent{
 
     @Override
     public String getName() {
-        return name;
+        return "rain";
     }
 
-    @Override
-    public void getSetName(String name) {
-        this.name = name;
+    public static String getDescriptions(ItemStack stack) {
+        if (stack.is(Items.WATER_BUCKET)){
+            return "Starts Rain";
+        }else{
+            return "Stops Rain";
+        }
     }
 }
