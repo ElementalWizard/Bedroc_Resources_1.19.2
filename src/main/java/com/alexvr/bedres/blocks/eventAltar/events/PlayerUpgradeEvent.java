@@ -3,6 +3,7 @@ package com.alexvr.bedres.blocks.eventAltar.events;
 import com.alexvr.bedres.capability.abilities.IPlayerAbility;
 import com.alexvr.bedres.capability.abilities.PlayerAbilityProvider;
 import com.alexvr.bedres.setup.Registration;
+import net.minecraft.network.chat.TextComponent;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -16,16 +17,17 @@ public class PlayerUpgradeEvent implements IEvent{
         LazyOptional<IPlayerAbility> abilities = player.getCapability(PlayerAbilityProvider.PLAYER_ABILITY_CAPABILITY, null);
         abilities.ifPresent(iPlayerAbility -> {
             if (stack.is(Items.RABBIT_FOOT)){
-                if (iPlayerAbility.getJumpBoost() < 2.0f){
-                    iPlayerAbility.addJump(0.25f);
+                if (iPlayerAbility.getJumpBoost()<=2) {
+                    iPlayerAbility.addJump(0.5);
                 }
             }else if (stack.is(Items.RABBIT_HIDE)){
-                if (iPlayerAbility.getJumpBoost() > 0.25f){
-                    iPlayerAbility.addJump(-0.25f);
+                if (iPlayerAbility.getJumpBoost()>=0.5f) {
+                    iPlayerAbility.addJump(-0.5);
                 }
             }else{
                 iPlayerAbility.setJumpBoost(0f);
             }
+            player.sendMessage(new TextComponent("New jump boost is: "+iPlayerAbility.getJumpBoost()),player.getUUID());
         });
         player.invalidateCaps();
 
@@ -37,12 +39,12 @@ public class PlayerUpgradeEvent implements IEvent{
         LazyOptional<IPlayerAbility> abilities = player.getCapability(PlayerAbilityProvider.PLAYER_ABILITY_CAPABILITY, null);
         abilities.ifPresent(iPlayerAbility -> {
             if (stack.is(Items.REDSTONE)){
-                if (iPlayerAbility.getMiningSpeedBoost() < 2.0f){
-                    iPlayerAbility.addMiningSpeed(0.25f);
+                if (iPlayerAbility.getMiningSpeedBoost() < 1.35f){
+                    iPlayerAbility.addMiningSpeed(0.3f);
                 }
             }else if (stack.is(Registration.BEDROCK_WIRE_ITEM.get())){
-                if (iPlayerAbility.getMiningSpeedBoost() > 0.25f){
-                    iPlayerAbility.addMiningSpeed(-0.25f);
+                if (iPlayerAbility.getMiningSpeedBoost() > 0.3f){
+                    iPlayerAbility.addMiningSpeed(-0.3f);
                 }
             }else{
                 iPlayerAbility.setMiningSpeedBoost(0f);
@@ -58,10 +60,10 @@ public class PlayerUpgradeEvent implements IEvent{
         LazyOptional<IPlayerAbility> abilities = player.getCapability(PlayerAbilityProvider.PLAYER_ABILITY_CAPABILITY, null);
         abilities.ifPresent(iPlayerAbility -> {
             if (stack.is(Items.SLIME_BALL)){
-                iPlayerAbility.setTakesFallDamage(true);
+                iPlayerAbility.setTakesFallDamage(false);
 
             }else{
-                iPlayerAbility.setTakesFallDamage(false);
+                iPlayerAbility.setTakesFallDamage(true);
             }
         });
         player.invalidateCaps();

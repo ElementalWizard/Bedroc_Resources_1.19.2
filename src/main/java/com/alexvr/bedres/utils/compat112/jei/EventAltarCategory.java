@@ -2,8 +2,8 @@ package com.alexvr.bedres.utils.compat112.jei;
 
 import com.alexvr.bedres.BedrockResources;
 import com.alexvr.bedres.blocks.eventAltar.events.PlayerUpgradeEvent;
-import com.alexvr.bedres.blocks.eventAltar.events.RainEvent;
 import com.alexvr.bedres.blocks.eventAltar.events.ToolUpgradeEvent;
+import com.alexvr.bedres.blocks.eventAltar.events.WorldEvent;
 import com.alexvr.bedres.recipes.eventRituals.EventRitualsRecipes;
 import com.alexvr.bedres.setup.Registration;
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -137,8 +137,8 @@ public class EventAltarCategory implements IRecipeCategory<EventRitualsRecipes> 
         minecraft.font.draw(poseStack,new TranslatableComponent("container.event." + event + "." + output.getItem().getRegistryName().getPath()), x, y, mainColor);
         String des = "";
         switch (event){
-            case "rain":
-                des = RainEvent.getDescriptions(output);
+            case "world":
+                des = WorldEvent.getDescriptions(output);
                 break;
             case "player_upgrade":
                 des = PlayerUpgradeEvent.getDescriptions(output);

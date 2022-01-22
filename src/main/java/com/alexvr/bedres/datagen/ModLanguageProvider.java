@@ -68,8 +68,10 @@ public class ModLanguageProvider extends LanguageProvider {
         add("jei.category.bedres.pedestal", "Item Infusions" );
         add("jei.category.bedres.event_ritual", "Event Rituals" );
 
-        add("container.event.rain.water_bucket", "Rain Ritual" );
-        add("container.event.rain.bucket", "Rain Clear Ritual" );
+        add("container.event.world.water_bucket", "Cloud Shift" );
+        add("container.event.world.bucket", "Cloud Shift" );
+        add("container.event.world.sunflower", "Celestial Shift" );
+        add("container.event.world.clock", "Celestial Shift" );
 
         add("container.event.tool.wooden_pickaxe", "Wooden Pickaxe Infusion" );
         add("container.event.tool.iron_pickaxe", "Iron Pickaxe Infusion" );
@@ -109,9 +111,11 @@ public class ModLanguageProvider extends LanguageProvider {
         add(BedrockReferences.SCREEN_SCRAPE_TANK, "Scrape Tank" );
         add(Registration.SPORE_DEITY_EGG_ITEM.get(), "Spore Deity Spawn Egg");
         add(Registration.FLUXED_CREEP_EGG_ITEM.get(), "Fluxed Creep Spawn Egg");
+        add(Registration.CHAINED_BLAZE_EGG_ITEM.get(), "Chained Blaze Spawn Egg");
 
         add(Registration.FLUXED_CREEP.get(), "Fluxed Creep");
         add(Registration.SPORE_DEITY.get(), "Spore Deity");
+        add(Registration.CHAINED_BLAZE.get(), "Chained Blaze");
     }
 
 

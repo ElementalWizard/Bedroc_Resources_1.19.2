@@ -1,21 +1,34 @@
 package com.alexvr.bedres.utils;
 
+import com.alexvr.bedres.BedrockResources;
+import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.math.Matrix4f;
 import com.mojang.math.Quaternion;
 import com.mojang.math.Vector3f;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.client.renderer.texture.OverlayTexture;
+import net.minecraft.client.renderer.texture.TextureAtlas;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.core.BlockPos;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.client.model.data.EmptyModelData;
 
 public class RenderHelper {
+
+    public static final ResourceLocation ZETARUNE = new ResourceLocation(BedrockResources.MODID, "effect/zeta_rune");
 
     public static void renderTransparentBlock(PoseStack matrix, MultiBufferSource buffer , BlockPos pos, BlockState state, Level level, float xTranslate, float yTranslate, float zTranslate, float xScale, float yScale, float zScale){
         var builder = buffer.getBuffer(ModRenderTypes.GHOST);
@@ -76,6 +89,39 @@ public class RenderHelper {
         }
         Minecraft.getInstance().getBlockRenderer().renderSingleBlock(block.defaultBlockState(), poseStack,bufferSource, combinedLight, combinedOverlay);
         poseStack.popPose();
+    }
+
+    public static void renderRune(PoseStack poseStack, Player player, float ticks, String runeType) {
+
+        int brightness = LightTexture.FULL_SKY;
+        float scale2 = (float)player.getUseItem().getUseDuration() + 1;
+        float scale3 = player.getTicksUsingItem() + 1;
+        float scale = Math.min(2,(scale3*1500)/scale2);
+
+        TextureAtlasSprite sprite = Minecraft.getInstance().getTextureAtlas(TextureAtlas.LOCATION_BLOCKS).apply(ZETARUNE);
+        Vec3 from = player.getViewVector(ticks).multiply(4,4,4);
+        MultiBufferSource.BufferSource bufferSource = Minecraft.getInstance().renderBuffers().bufferSource();
+        // Always remember to push the current transformation so that you can restore it later
+        poseStack.pushPose();
+
+        // Translate to the middle of the block and 1 unit higher
+        poseStack.translate(from.x, from.y, from.z);
+
+        // Use the orientation of the main camera to make sure the single quad that we are going to render always faces the camera
+        Quaternion rotation = Minecraft.getInstance().gameRenderer.getMainCamera().rotation();
+        poseStack.mulPose(rotation);
+
+        // Actually render the quad in our own custom render type
+        VertexConsumer buffer = bufferSource.getBuffer(RenderType.translucent());
+        Matrix4f matrix = poseStack.last().pose();
+        // Vertex data has to appear in a specific order:
+        buffer.vertex(matrix, -scale, -scale, 0.0f).color(1.0f, 1.0f, 1.0f, 1f).uv(sprite.getU0(), sprite.getV0()).uv2(brightness).normal(0,0,1).endVertex();
+        buffer.vertex(matrix, -scale, scale, 0.0f).color(1.0f, 1.0f, 1.0f, 1f).uv(sprite.getU0(), sprite.getV1()).uv2(brightness).normal(0,0,1).endVertex();
+        buffer.vertex(matrix, scale, scale, 0.0f).color(1.0f, 1.0f, 1.0f, 1f).uv(sprite.getU1(), sprite.getV1()).uv2(brightness).normal(0,0,1).endVertex();
+        buffer.vertex(matrix, scale, -scale, 0.0f).color(1.0f, 1.0f, 1.0f, 1f).uv(sprite.getU1(), sprite.getV0()).uv2(brightness).normal(0,0,1).endVertex();
+
+        poseStack.popPose();
+        RenderSystem.disableDepthTest();
     }
 
 }

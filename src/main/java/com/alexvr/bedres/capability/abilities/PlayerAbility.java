@@ -16,7 +16,7 @@ public class PlayerAbility implements  IPlayerAbility{
     private boolean ritual = false;
     private boolean checking = false;
 
-    private boolean fall_damage = false;
+    private boolean fall_damage = true;
     private ArrayList<EnderianRitualPedestalTile> pedestals;
     private double FOV;
     private Vec3 lookingAt;

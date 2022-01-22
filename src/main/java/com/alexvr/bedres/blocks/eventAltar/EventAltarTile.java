@@ -3,8 +3,8 @@ package com.alexvr.bedres.blocks.eventAltar;
 import com.alexvr.bedres.BedrockResources;
 import com.alexvr.bedres.blocks.enderianRitualPedestal.EnderianRitualPedestalTile;
 import com.alexvr.bedres.blocks.eventAltar.events.PlayerUpgradeEvent;
-import com.alexvr.bedres.blocks.eventAltar.events.RainEvent;
 import com.alexvr.bedres.blocks.eventAltar.events.ToolUpgradeEvent;
+import com.alexvr.bedres.blocks.eventAltar.events.WorldEvent;
 import com.alexvr.bedres.recipes.ModRecipeRegistry;
 import com.alexvr.bedres.recipes.eventRituals.EventRitualsRecipes;
 import com.alexvr.bedres.setup.Registration;
@@ -119,32 +119,22 @@ public class EventAltarTile extends BlockEntity {
 
     private void runEvent() {
         switch (recipe.getEvent()){
-            case "rain":
-                if (recipe.getResultItem().is(Items.WATER_BUCKET)) {
-                    RainEvent.start(level,getBlockPos());
-                }else if (recipe.getResultItem().is(Items.BUCKET)) {
-                    RainEvent.stop(level,getBlockPos());
+            case "world":
+                if (recipe.getResultItem().is(Items.WATER_BUCKET) || recipe.getResultItem().is(Items.BUCKET)) {
+                    WorldEvent.rain(level,getBlockPos(),recipe.getResultItem());
+                }else if (recipe.getResultItem().is(Items.SUNFLOWER) || recipe.getResultItem().is(Items.CLOCK)) {
+                    WorldEvent.timeSkip(level,getBlockPos(),recipe.getResultItem());
                 }
                 break;
             case "tool":
                 ToolUpgradeEvent.start(playerInside, recipe.getResultItem());
                 break;
             case "player_upgrade":
-                if (recipe.getResultItem().is(Items.REDSTONE)) {
+                if (recipe.getResultItem().is(Items.REDSTONE) || recipe.getResultItem().is(Registration.BEDROCK_WIRE_ITEM.get()) || recipe.getResultItem().is(Registration.ROPE_ITEM.get())) {
                     PlayerUpgradeEvent.speed(playerInside,recipe.getResultItem());
-                }else if (recipe.getResultItem().is(Registration.BEDROCK_WIRE_ITEM.get())) {
-                    PlayerUpgradeEvent.speed(playerInside,recipe.getResultItem());
-                }else if (recipe.getResultItem().is(Registration.ROPE_ITEM.get())) {
-                    PlayerUpgradeEvent.speed(playerInside,recipe.getResultItem());
-                }else if (recipe.getResultItem().is(Items.RABBIT_FOOT)) {
+                }else if (recipe.getResultItem().is(Items.RABBIT_FOOT) || recipe.getResultItem().is(Items.RABBIT_HIDE) || recipe.getResultItem().is(Items.CHAIN)) {
                     PlayerUpgradeEvent.jump(playerInside,recipe.getResultItem());
-                }else if (recipe.getResultItem().is(Items.RABBIT_HIDE)) {
-                    PlayerUpgradeEvent.jump(playerInside,recipe.getResultItem());
-                }else if (recipe.getResultItem().is(Items.CHAIN)) {
-                    PlayerUpgradeEvent.jump(playerInside,recipe.getResultItem());
-                }else if (recipe.getResultItem().is(Items.SLIME_BALL)) {
-                    PlayerUpgradeEvent.fallDamage(playerInside,recipe.getResultItem());
-                }else if (recipe.getResultItem().is(Items.HONEY_BLOCK)) {
+                }else if (recipe.getResultItem().is(Items.SLIME_BALL) || recipe.getResultItem().is(Items.HONEY_BLOCK)) {
                     PlayerUpgradeEvent.fallDamage(playerInside,recipe.getResultItem());
                 }
                 break;

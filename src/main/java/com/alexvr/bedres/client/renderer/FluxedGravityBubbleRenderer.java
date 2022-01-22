@@ -11,7 +11,6 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import static com.alexvr.bedres.blocks.gravityBubble.FluxedGravityBubble.ENABLED;
 
 public class FluxedGravityBubbleRenderer implements BlockEntityRenderer<FluxedGravityBubbleTile> {
-
     public FluxedGravityBubbleRenderer(BlockEntityRendererProvider.Context context) {}
 
     @Override

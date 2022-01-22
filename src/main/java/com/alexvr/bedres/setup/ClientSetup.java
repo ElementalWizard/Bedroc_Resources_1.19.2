@@ -3,6 +3,8 @@ package com.alexvr.bedres.setup;
 import com.alexvr.bedres.BedrockResources;
 import com.alexvr.bedres.client.renderer.*;
 import com.alexvr.bedres.client.screen.ScrapeTankScreen;
+import com.alexvr.bedres.entities.chainedblaze.ChainedBlazeModel;
+import com.alexvr.bedres.entities.chainedblaze.ChainedBlazeRenderer;
 import com.alexvr.bedres.entities.fluxedcreep.FluxedCreepModel;
 import com.alexvr.bedres.entities.fluxedcreep.FluxedCreepRenderer;
 import com.alexvr.bedres.entities.sporedeity.SporeDeityRenderer;
@@ -10,16 +12,23 @@ import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
+import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.EntityRenderersEvent;
+import net.minecraftforge.client.event.TextureStitchEvent;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 
+import static com.alexvr.bedres.utils.RenderHelper.ZETARUNE;
+
 @Mod.EventBusSubscriber(modid = BedrockResources.MODID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class ClientSetup {
 
+
     public static void init(FMLClientSetupEvent event){
+
         event.enqueueWork( () -> {
             MenuScreens.register(Registration.SCRAPE_TANK_CONTAINER.get(), ScrapeTankScreen::new);
             ItemBlockRenderTypes.setRenderLayer(Registration.PEDESTAL_BLOCK.get(), RenderType.cutout());
@@ -47,18 +56,28 @@ public class ClientSetup {
             BlockEntityRenderers.register(Registration.ENDERIAN_RITUAL_PEDESTAL_TILE.get(), EnderianRitualPedestalRenderer::new);
             BlockEntityRenderers.register(Registration.FLUXED_GRAVITY_BUBBLE_TILE.get(), FluxedGravityBubbleRenderer::new);
         });
-
+        MinecraftForge.EVENT_BUS.register(ClientEvents.class);
     }
 
     @SubscribeEvent
     public static void onRegisterLayers(EntityRenderersEvent.RegisterLayerDefinitions event) {
         event.registerLayerDefinition(FluxedCreepModel.LAYER_LOCATION, FluxedCreepModel::createBodyLayer);
+        event.registerLayerDefinition(ChainedBlazeModel.LAYER_LOCATION,ChainedBlazeModel::createBodyLayer);
     }
 
     @SubscribeEvent
     public static void onRegisterRenderer(EntityRenderersEvent.RegisterRenderers event) {
         event.registerEntityRenderer(Registration.SPORE_DEITY.get(), SporeDeityRenderer::new);
         event.registerEntityRenderer(Registration.FLUXED_CREEP.get(), FluxedCreepRenderer::new);
+        event.registerEntityRenderer(Registration.CHAINED_BLAZE.get(), ChainedBlazeRenderer::new);
     }
 
+
+    @SubscribeEvent
+    public static void onTextureStitch(TextureStitchEvent.Pre event) {
+        if (!event.getAtlas().location().equals(TextureAtlas.LOCATION_BLOCKS)) {
+            return;
+        }
+        event.addSprite(ZETARUNE);
+    }
 }

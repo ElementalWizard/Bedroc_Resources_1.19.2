@@ -10,6 +10,7 @@ public class BedrockReferences {
 
     public static final String BEDROCK_DUST_PARTICLE_RESOURCE = "bedres:textures/particles/bedrock_dust.png";
     public static final String SCRAPE_TANK_GUI_TEXTURE_RESOURCE = "textures/gui/scrape_tank.png";
+    public static final String ZETA_RUNE_TEXTURE_RESOURCE = "textures/effect/zeta_rune.png";
     public static final String SCRAPE_TANK_GUI_BACK_TEXTURE_RESOURCE = "textures/gui/flux_oracle_book_gui_back.png";
     public static final String FLUX_GUI_TITLE_RESOURCE = "flux_Gui";
     public static final String FLUX_CAPABILITY_NAME_RESOURCE = "bedrock_flux";
@@ -17,6 +18,7 @@ public class BedrockReferences {
 
     public static final String RAW_ENDERIAN_REGNAME = "raw_enderian";
     public static final String FLUXED_CREEP_REGNAME = "fluxed_creep";
+    public static final String CHAINED_BLAZE_REGNAME = "chained_blaze";
     public static final String FLUXED_CREEP_EGG_REGNAME = "fluxed_creep_egg";
     public static final String SPORE_DEITY_REGNAME = "spore_deity";
     public static final String SPORE_DEITY_EGG_REGNAME = "spore_deity_egg";
@@ -40,6 +42,7 @@ public class BedrockReferences {
     public static final String SCRAPE_TANK_TOOLTIP = "message.scrapetank";
     public static final String ITEM_PLATFORM_TOOLTIP = "message.itemplatform";
 
+    public static final String MAGE_STAFF_SCREEN_REGNAME = "mage_staff_screen";
     public static final String DUNGEON_DIM_PORTAL_REGNAME = "dungeon_dimension_portal";
     public static final String EVENT_ALTAR_REGNAME = "event_altar";
     public static final String BLAZIUM_REGNAME = "blazium";

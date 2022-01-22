@@ -65,6 +65,18 @@ public class ModRecipeRegistry {
             return;
         }
         initialized = true;
+
+
+        setUpAltarRitualRecipes();
+
+        setUpEventRitualToolRecipes();
+        setUpEventRitualPlayerRecipes();
+        setUpEventRitualWorldRecipes();
+
+    }
+
+    public static void setUpAltarRitualRecipes(){
+
         //pedestal item must be first in index
         ritualAltarRecipes.add(new RitualAltarRecipes(new ItemStack(Registration.STAFF_ITEM.get()),
                 new ItemStack(Registration.VOID_TEAR_ITEM.get(), 1),
@@ -72,30 +84,54 @@ public class ModRecipeRegistry {
                 new ItemStack(Registration.ENDERIAN_INGOT_ITEM.get(), 4)
         ));
 
-        eventRitualsRecipes.add(new EventRitualsRecipes(new ItemStack(Items.WATER_BUCKET),"rain",
+    }
+
+    public static void setUpEventRitualWorldRecipes(){
+       //RAIN
+        {
+            eventRitualsRecipes.add(new EventRitualsRecipes(new ItemStack(Items.WATER_BUCKET),"world",
                 genPattern(
                         "wiwiw",
-                                "iwwwi",
-                                "iw wi",
-                                "iwwwi",
-                                "wiwiw"),
+                        "iwwwi",
+                        "iw wi",
+                        "iwwwi",
+                        "wiwiw"),
                 new ItemStack(Registration.ENDERIAN_INGOT_ITEM.get(), 10)
         ));
 
-        eventRitualsRecipes.add(new EventRitualsRecipes(new ItemStack(Items.BUCKET),"rain",
-                genPattern(
-                        "wiwiw",
-                                "iwwwi",
-                                "iw wi",
-                                "iwwwi",
-                                "wiwiw"),
-                new ItemStack(Registration.DF_OAK_LEAVE_BLOCK.get(), 10)
-        ));
+            eventRitualsRecipes.add(new EventRitualsRecipes(new ItemStack(Items.BUCKET),"world",
+                    genPattern(
+                            "wiwiw",
+                            "iwwwi",
+                            "iw wi",
+                            "iwwwi",
+                            "wiwiw"),
+                    new ItemStack(Registration.DF_OAK_LEAVE_BLOCK.get(), 10)
+            ));
+        }
 
-        setUpEventRitualToolRecipes();
+        //TIME_SKIP
+        {
+            eventRitualsRecipes.add(new EventRitualsRecipes(new ItemStack(Items.SUNFLOWER),"world",
+                    genPattern(
+                            "wiwiw",
+                            "iwwwi",
+                            "iw wi",
+                            "iwwwi",
+                            "wiwiw"),
+                    new ItemStack(Items.SUNFLOWER, 10)
+            ));
 
-
-
+            eventRitualsRecipes.add(new EventRitualsRecipes(new ItemStack(Items.CLOCK),"world",
+                    genPattern(
+                            "wiwiw",
+                            "iwwwi",
+                            "iw wi",
+                            "iwwwi",
+                            "wiwiw"),
+                    new ItemStack(Items.CLOCK, 10)
+            ));
+        }
     }
 
     public static void setUpEventRitualToolRecipes(){
@@ -289,7 +325,10 @@ public class ModRecipeRegistry {
             ));
         }
 
-        //SPEED
+    }
+
+    public static void setUpEventRitualPlayerRecipes(){
+        //MINING SPEED
         {
             eventRitualsRecipes.add(new EventRitualsRecipes(new ItemStack(Items.REDSTONE),"player_upgrade",
                     genPattern(
@@ -326,14 +365,14 @@ public class ModRecipeRegistry {
         //JUMP
         {
             eventRitualsRecipes.add(new EventRitualsRecipes(new ItemStack(Items.RABBIT_FOOT),"player_upgrade",
-                genPattern(
-                        "wiwiw",
-                        "iwwwi",
-                        "iw wi",
-                        "iwwwi",
-                        "wiwiw"),
-                new ItemStack(Items.RABBIT_FOOT, 10)
-        ));
+                    genPattern(
+                            "wiwiw",
+                            "iwwwi",
+                            "iw wi",
+                            "iwwwi",
+                            "wiwiw"),
+                    new ItemStack(Items.RABBIT_FOOT, 10)
+            ));
 
             eventRitualsRecipes.add(new EventRitualsRecipes(new ItemStack(Items.RABBIT_HIDE),"player_upgrade",
                     genPattern(
@@ -384,6 +423,7 @@ public class ModRecipeRegistry {
         Collections.addAll(pattern, patten);
         return pattern;
     }
+
     public static List<RitualAltarRecipes> getRitualAltarRecipes() {
         init();
         return ritualAltarRecipes;

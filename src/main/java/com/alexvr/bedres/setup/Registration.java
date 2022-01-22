@@ -17,6 +17,7 @@ import com.alexvr.bedres.blocks.itemPlatform.ItemPlatformTile;
 import com.alexvr.bedres.blocks.scrapeTank.ScrapeTank;
 import com.alexvr.bedres.blocks.scrapeTank.ScrapeTankMenu;
 import com.alexvr.bedres.blocks.scrapeTank.ScrapeTankTile;
+import com.alexvr.bedres.entities.chainedblaze.ChainedBlazeEntity;
 import com.alexvr.bedres.entities.fluxedcreep.FluxedCreepEntity;
 import com.alexvr.bedres.entities.sporedeity.SporeDeityEntity;
 import com.alexvr.bedres.items.*;
@@ -94,6 +95,14 @@ public class Registration {
             .setShouldReceiveVelocityUpdates(false)
             .build(BedrockReferences.FLUXED_CREEP_REGNAME));
     public static final RegistryObject<Item> FLUXED_CREEP_EGG_ITEM = ITEMS.register(BedrockReferences.FLUXED_CREEP_REGNAME, () -> new ForgeSpawnEggItem(FLUXED_CREEP, 0xff0000, 0x00ff00, new Item.Properties().tab(ModSetup.GROUP)));
+
+    public static final RegistryObject<EntityType<ChainedBlazeEntity>> CHAINED_BLAZE = ENTITIES.register(BedrockReferences.CHAINED_BLAZE_REGNAME, () -> EntityType.Builder.of(ChainedBlazeEntity::new, MobCategory.MONSTER)
+            .sized(0.8f, 1.95f)
+            .clientTrackingRange(8)
+            .setShouldReceiveVelocityUpdates(false)
+            .build(BedrockReferences.CHAINED_BLAZE_REGNAME));
+    public static final RegistryObject<Item> CHAINED_BLAZE_EGG_ITEM = ITEMS.register(BedrockReferences.CHAINED_BLAZE_REGNAME, () -> new ForgeSpawnEggItem(CHAINED_BLAZE, 0xff0000, 0x00ff00, new Item.Properties().tab(ModSetup.GROUP)));
+
 
     private static final BlockBehaviour.Properties ORE_PROPERTIES = BlockBehaviour.Properties.of(Material.STONE).strength(2f);
     private static final BlockBehaviour.Properties BLOCK_PROPERTIES = BlockBehaviour.Properties.of(Material.STONE).strength(2f);
