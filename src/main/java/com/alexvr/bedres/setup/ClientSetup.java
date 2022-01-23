@@ -8,12 +8,15 @@ import com.alexvr.bedres.entities.chainedblaze.ChainedBlazeRenderer;
 import com.alexvr.bedres.entities.fluxedcreep.FluxedCreepModel;
 import com.alexvr.bedres.entities.fluxedcreep.FluxedCreepRenderer;
 import com.alexvr.bedres.entities.sporedeity.SporeDeityRenderer;
+import com.alexvr.bedres.items.MageStaff;
+import com.alexvr.bedres.utils.KeyBindings;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
 import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.client.event.ColorHandlerEvent;
 import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.common.MinecraftForge;
@@ -21,14 +24,18 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 
-import static com.alexvr.bedres.utils.RenderHelper.ZETARUNE;
+import static com.alexvr.bedres.utils.RenderHelper.*;
 
 @Mod.EventBusSubscriber(modid = BedrockResources.MODID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class ClientSetup {
 
+    @SubscribeEvent
+    public static void onItemColor(ColorHandlerEvent.Item event) {
+        event.getItemColors().register((stack, i) -> ((MageStaff)stack.getItem()).getColor(stack), Registration.MAGE_STAFF_ITEM.get());
+    }
 
     public static void init(FMLClientSetupEvent event){
-
+        KeyBindings.init();
         event.enqueueWork( () -> {
             MenuScreens.register(Registration.SCRAPE_TANK_CONTAINER.get(), ScrapeTankScreen::new);
             ItemBlockRenderTypes.setRenderLayer(Registration.PEDESTAL_BLOCK.get(), RenderType.cutout());
@@ -79,5 +86,12 @@ public class ClientSetup {
             return;
         }
         event.addSprite(ZETARUNE);
+        event.addSprite(ALPHARUNE);
+        event.addSprite(BETARUNE);
+        event.addSprite(DELTARUNE);
+        event.addSprite(EPSILONRUNE);
+        event.addSprite(ETARUNE);
+        event.addSprite(GAMARUNE);
+        event.addSprite(THETARUNE);
     }
 }

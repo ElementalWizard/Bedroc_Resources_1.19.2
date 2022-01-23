@@ -3,21 +3,21 @@ package com.alexvr.bedres.utils;
 import com.alexvr.bedres.BedrockResources;
 import com.alexvr.bedres.capability.abilities.IPlayerAbility;
 import com.alexvr.bedres.capability.abilities.PlayerAbilityProvider;
+import com.alexvr.bedres.items.MageStaff;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
+import net.minecraft.client.KeyMapping;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.Items;
-import net.minecraft.world.item.SwordItem;
-import net.minecraft.world.item.TieredItem;
-import net.minecraft.world.item.Tiers;
+import net.minecraft.world.item.*;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Material;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraftforge.common.util.LazyOptional;
+import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.living.LivingDamageEvent;
 import net.minecraftforge.event.entity.living.LivingFallEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
@@ -31,6 +31,22 @@ import java.util.Map;
 
 @Mod.EventBusSubscriber(modid = BedrockResources.MODID)
 public class WorldEventHandler {
+
+    @SubscribeEvent
+    public static void onPlayerTick(TickEvent.PlayerTickEvent event) {
+        Player player = event.player;
+        if (!player.level.isClientSide()) return;
+        ItemStack wand = player.getMainHandItem();
+
+        if (!(wand.getItem() instanceof MageStaff))
+            return;
+        KeyMapping toggleWand = KeyBindings.toggleWang;
+        if (toggleWand.consumeClick() ) {
+            System.out.println("Old Rune: " + ((MageStaff) wand.getItem()).type);
+            ((MageStaff)wand.getItem()).cycleRune(wand, player);
+            System.out.println("New Rune: " + ((MageStaff) wand.getItem()).type);
+        }
+    }
 
     @SubscribeEvent
     public static void onDamage(LivingDamageEvent event){

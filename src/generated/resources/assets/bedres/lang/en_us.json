@@ -1,4 +1,6 @@
 {
+  "bedres.key.category": "Bedrock Resources Keybindings",
+  "bedres.key.toggle_wand": "Toggle Mage Staff Ability",
   "block.bedres.base_spike": "Bedrockium Tower",
   "block.bedres.bedrock_compressed_wire": "Bedrock Compressed Wire",
   "block.bedres.bedrock_stairs": "Bedrockium Stairs",
@@ -81,6 +83,14 @@
   "itemGroup.bedres": "Bedrock Resources Tab",
   "jei.category.bedres.event_ritual": "Event Rituals",
   "jei.category.bedres.pedestal": "Item Infusions",
+  "mage_staff.rune.type.alpha": "Alpha",
+  "mage_staff.rune.type.beta": "Beta",
+  "mage_staff.rune.type.delta": "Delta",
+  "mage_staff.rune.type.epsilon": "Epsilon",
+  "mage_staff.rune.type.eta": "Eta",
+  "mage_staff.rune.type.gama": "Gamma",
+  "mage_staff.rune.type.theta": "Theta",
+  "mage_staff.rune.type.zeta": "Zeta",
   "message.itemplatform": "Can hold up to a stack of an item and display it.",
   "message.scrapetank": "Bedrock Scrape Tank, can hold up to 256",
   "screen.bedres.scrape_tank": "Scrape Tank"

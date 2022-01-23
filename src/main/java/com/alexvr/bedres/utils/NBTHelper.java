@@ -14,7 +14,15 @@ public class NBTHelper {
         CompoundTag nbt = stack.getOrCreateTag();
         return nbt.getInt(key);
     }
+    public static void setString(ItemStack stack,String key, String string) {
+        CompoundTag nbt = stack.getOrCreateTag();
+        nbt.putString(key,string);
+    }
 
+    public static String getStirng(ItemStack stack,String key) {
+        CompoundTag nbt = stack.getOrCreateTag();
+        return nbt.getString(key);
+    }
     public static boolean getBoolean(ItemStack stack,String key) {
         CompoundTag nbt = stack.getOrCreateTag();
         return nbt.getBoolean(key);

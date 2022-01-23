@@ -29,6 +29,13 @@ import net.minecraftforge.client.model.data.EmptyModelData;
 public class RenderHelper {
 
     public static final ResourceLocation ZETARUNE = new ResourceLocation(BedrockResources.MODID, "effect/zeta_rune");
+    public static final ResourceLocation ALPHARUNE = new ResourceLocation(BedrockResources.MODID, "effect/alpha_rune");
+    public static final ResourceLocation BETARUNE = new ResourceLocation(BedrockResources.MODID, "effect/beta_rune");
+    public static final ResourceLocation DELTARUNE = new ResourceLocation(BedrockResources.MODID, "effect/delta_rune");
+    public static final ResourceLocation EPSILONRUNE = new ResourceLocation(BedrockResources.MODID, "effect/epsilon_rune");
+    public static final ResourceLocation ETARUNE = new ResourceLocation(BedrockResources.MODID, "effect/eta_rune");
+    public static final ResourceLocation GAMARUNE = new ResourceLocation(BedrockResources.MODID, "effect/gama_rune");
+    public static final ResourceLocation THETARUNE = new ResourceLocation(BedrockResources.MODID, "effect/theta_rune");
 
     public static void renderTransparentBlock(PoseStack matrix, MultiBufferSource buffer , BlockPos pos, BlockState state, Level level, float xTranslate, float yTranslate, float zTranslate, float xScale, float yScale, float zScale){
         var builder = buffer.getBuffer(ModRenderTypes.GHOST);
@@ -97,8 +104,33 @@ public class RenderHelper {
         float scale2 = (float)player.getUseItem().getUseDuration() + 1;
         float scale3 = player.getTicksUsingItem() + 1;
         float scale = Math.min(2,(scale3*1500)/scale2);
-
-        TextureAtlasSprite sprite = Minecraft.getInstance().getTextureAtlas(TextureAtlas.LOCATION_BLOCKS).apply(ZETARUNE);
+        TextureAtlasSprite sprite;
+        switch (runeType){
+            case "zeta":
+                sprite = Minecraft.getInstance().getTextureAtlas(TextureAtlas.LOCATION_BLOCKS).apply(ZETARUNE);
+                break;
+            case "alpha":
+                sprite = Minecraft.getInstance().getTextureAtlas(TextureAtlas.LOCATION_BLOCKS).apply(ALPHARUNE);
+                break;
+            case "beta":
+                sprite = Minecraft.getInstance().getTextureAtlas(TextureAtlas.LOCATION_BLOCKS).apply(BETARUNE);
+                break;
+            case "delta":
+                sprite = Minecraft.getInstance().getTextureAtlas(TextureAtlas.LOCATION_BLOCKS).apply(DELTARUNE);
+                break;
+            case "epsilon":
+                sprite = Minecraft.getInstance().getTextureAtlas(TextureAtlas.LOCATION_BLOCKS).apply(EPSILONRUNE);
+                break;
+            case "eta":
+                sprite = Minecraft.getInstance().getTextureAtlas(TextureAtlas.LOCATION_BLOCKS).apply(ETARUNE);
+                break;
+            case "gama":
+                sprite = Minecraft.getInstance().getTextureAtlas(TextureAtlas.LOCATION_BLOCKS).apply(GAMARUNE);
+                break;
+            default:
+                sprite = Minecraft.getInstance().getTextureAtlas(TextureAtlas.LOCATION_BLOCKS).apply(THETARUNE);
+                break;
+        }
         Vec3 from = player.getViewVector(ticks).multiply(4,4,4);
         MultiBufferSource.BufferSource bufferSource = Minecraft.getInstance().renderBuffers().bufferSource();
         // Always remember to push the current transformation so that you can restore it later

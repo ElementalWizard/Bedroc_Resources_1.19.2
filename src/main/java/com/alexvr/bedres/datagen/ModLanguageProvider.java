@@ -106,6 +106,17 @@ public class ModLanguageProvider extends LanguageProvider {
 
         add("container.event.player_upgrade.slime_ball", "Fall Damage Upgrade" );
         add("container.event.player_upgrade.honey_block", "Fall Damage Reset" );
+        add("mage_staff.rune.type.alpha", "Alpha" );
+        add("mage_staff.rune.type.beta", "Beta" );
+        add("mage_staff.rune.type.delta", "Delta" );
+        add("mage_staff.rune.type.epsilon", "Epsilon" );
+        add("mage_staff.rune.type.eta", "Eta" );
+        add("mage_staff.rune.type.gama", "Gamma" );
+        add("mage_staff.rune.type.theta", "Theta" );
+        add("mage_staff.rune.type.zeta", "Zeta" );
+
+        add("bedres.key.category", "Bedrock Resources Keybindings" );
+        add("bedres.key.toggle_wand", "Toggle Mage Staff Ability" );
 
         add(BedrockReferences.CREATIVE_TAB_NAME, "Bedrock Resources Tab" );
         add(BedrockReferences.SCREEN_SCRAPE_TANK, "Scrape Tank" );

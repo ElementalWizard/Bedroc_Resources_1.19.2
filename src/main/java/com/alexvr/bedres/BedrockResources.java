@@ -50,6 +50,7 @@ public class BedrockResources {
         forgeBus.register(new ModWorldgen());
         ModConfig.loadConfig(ModConfig.CLIENT_CONFIG, FMLPaths.CONFIGDIR.get().resolve("bedres-client.toml"));
         ModConfig.loadConfig(ModConfig.SERVER_CONFIG, FMLPaths.CONFIGDIR.get().resolve("bedres-common.toml"));
+
     }
 
 
