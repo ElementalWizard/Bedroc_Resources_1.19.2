@@ -19,6 +19,7 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.living.LivingDamageEvent;
+import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.event.entity.living.LivingFallEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
@@ -42,9 +43,7 @@ public class WorldEventHandler {
             return;
         KeyMapping toggleWand = KeyBindings.toggleWang;
         if (toggleWand.consumeClick() ) {
-            System.out.println("Old Rune: " + ((MageStaff) wand.getItem()).type);
             ((MageStaff)wand.getItem()).cycleRune(wand, player);
-            System.out.println("New Rune: " + ((MageStaff) wand.getItem()).type);
         }
     }
 
@@ -109,11 +108,11 @@ public class WorldEventHandler {
     }
 
     @SubscribeEvent
-    public static void PlayerJumpEvent( PlayerEvent.LivingJumpEvent event) {
+    public static void PlayerJumpEvent(LivingEvent.LivingJumpEvent event) {
         LazyOptional<IPlayerAbility> abilities = event.getEntityLiving().getCapability(PlayerAbilityProvider.PLAYER_ABILITY_CAPABILITY, null);
         abilities.ifPresent(h -> {
             if (h.getJumpBoost()>0) {
-                event.getEntityLiving().push(0, h.getJumpBoost()*2, 0f);
+                event.getEntityLiving().setDeltaMovement(event.getEntityLiving().getDeltaMovement().add(0, h.getJumpBoost(), 0));
             }
         });
     }

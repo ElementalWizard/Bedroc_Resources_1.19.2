@@ -1,5 +1,6 @@
 package com.alexvr.bedres.setup;
 
+import com.alexvr.bedres.blocks.LightBlock;
 import com.alexvr.bedres.blocks.*;
 import com.alexvr.bedres.blocks.bedrockiumPedestal.BedrociumPedestal;
 import com.alexvr.bedres.blocks.bedrockiumPedestal.BedrociumPedestalTile;
@@ -17,6 +18,8 @@ import com.alexvr.bedres.blocks.itemPlatform.ItemPlatformTile;
 import com.alexvr.bedres.blocks.scrapeTank.ScrapeTank;
 import com.alexvr.bedres.blocks.scrapeTank.ScrapeTankMenu;
 import com.alexvr.bedres.blocks.scrapeTank.ScrapeTankTile;
+import com.alexvr.bedres.client.particles.lightParticle.LightParticleType;
+import com.alexvr.bedres.entities.LightProjectileEntity;
 import com.alexvr.bedres.entities.chainedblaze.ChainedBlazeEntity;
 import com.alexvr.bedres.entities.fluxedcreep.FluxedCreepEntity;
 import com.alexvr.bedres.entities.sporedeity.SporeDeityEntity;
@@ -25,6 +28,7 @@ import com.alexvr.bedres.utils.BedrockReferences;
 import com.alexvr.bedres.world.features.AltarStructure;
 import com.alexvr.bedres.world.features.DungeonStructure;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.ParticleType;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.tags.BlockTags;
@@ -60,6 +64,7 @@ public class Registration {
     private static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITIES = DeferredRegister.create(ForgeRegistries.BLOCK_ENTITIES, MODID);
     public static final DeferredRegister<MenuType<?>> CONTAINERS = DeferredRegister.create(ForgeRegistries.CONTAINERS, MODID);
     public static final DeferredRegister<EntityType<?>> ENTITIES = DeferredRegister.create(ForgeRegistries.ENTITIES, MODID);
+    public static final DeferredRegister<ParticleType<?>> PARTICLES = DeferredRegister.create(ForgeRegistries.PARTICLE_TYPES, MODID);
     private static final DeferredRegister<StructureFeature<?>> STRUCTURES = DeferredRegister.create(ForgeRegistries.STRUCTURE_FEATURES, MODID);
     private static final DeferredRegister<SoundEvent> SOUND_EVENTS = DeferredRegister.create(ForgeRegistries.SOUND_EVENTS, MODID);
 
@@ -72,6 +77,7 @@ public class Registration {
         CONTAINERS.register(bus);
         STRUCTURES.register(bus);
         ENTITIES.register(bus);
+        PARTICLES.register(bus);
         SOUND_EVENTS.register(bus);
     }
 
@@ -81,6 +87,13 @@ public class Registration {
             () -> new SoundEvent(new ResourceLocation(MODID, "fluxed_creep_roar")));
     public static final SoundType FLUXED_CREEP_TYPE = new ForgeSoundType(1.0F, 1.0F, FLUXED_CREEP_IDLE, FLUXED_CREEP_IDLE, FLUXED_CREEP_IDLE, FLUXED_CREEP_ROAR, FLUXED_CREEP_ROAR);
 
+    public static final RegistryObject<LightParticleType> LIGHT_PARTICLE_TYPE = PARTICLES.register(BedrockReferences.LIGHT_PARTICLE_REGNAME,() -> new LightParticleType());
+
+    public static final RegistryObject<EntityType<LightProjectileEntity>> LIGHT_PROJ_ENTITY = ENTITIES.register(BedrockReferences.LIGHT_PROJ_REGNAME, () -> EntityType.Builder.<LightProjectileEntity>of(LightProjectileEntity::new, MobCategory.MISC)
+            .sized(1f,1f)
+            .setTrackingRange(64).setUpdateInterval(3).fireImmune()
+            .setShouldReceiveVelocityUpdates(true)
+            .build(BedrockReferences.LIGHT_PROJ_REGNAME));
 
     public static final RegistryObject<EntityType<SporeDeityEntity>> SPORE_DEITY = ENTITIES.register(BedrockReferences.SPORE_DEITY_REGNAME, () -> EntityType.Builder.of(SporeDeityEntity::new, MobCategory.MONSTER)
             .sized(0.8f, 1.95f)
@@ -179,6 +192,8 @@ public class Registration {
     public static final RegistryObject<Item> SUN_DAIZE_ITEM = fromBlock(SUN_DAIZE_BLOCK);
     public static final RegistryObject<FluxedSpores> FLUXED_SPORES_BLOCK = BLOCKS.register(BedrockReferences.FLUXED_SPORES_REGNAME, () -> new FluxedSpores(PLANT_BLOCK_PROPERTIES.lightLevel(value -> 0)));
     public static final RegistryObject<Item> FLUXED_SPORES_ITEM = fromBlock(FLUXED_SPORES_BLOCK);
+
+    public static final RegistryObject<LightBlock> LIGHT_BLOCK = BLOCKS.register(BedrockReferences.LIGHT_BLOCK_REGNAME, () -> new LightBlock(BLOCK_PROPERTIES));
 
     public static final RegistryObject<DFBase> DF_COOBLE_BLOCK = BLOCKS.register(BedrockReferences.DF_COBBLE_REGNAME, () -> new DFBase(BLOCK_PROPERTIES.requiresCorrectToolForDrops()));
     public static final RegistryObject<Item> DF_COOBLE_ITEM = fromBlock(DF_COOBLE_BLOCK);

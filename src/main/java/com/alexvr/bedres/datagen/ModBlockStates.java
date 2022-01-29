@@ -18,6 +18,7 @@ public class ModBlockStates extends BlockStateProvider {
         simpleBlock(Registration.ENDERIAN_ORE_END.get());
         simpleBlock(Registration.ENDERIAN_ORE_DEEPSLATE.get());
         simpleBlock(Registration.BEDROCK_COMPRESSED_WIRE_BLOCK.get());
+        simpleBlock(Registration.LIGHT_BLOCK.get(),models().withExistingParent("light_block",mcLoc("block/air")).texture("particle","block/light_block"));
 
     }
 

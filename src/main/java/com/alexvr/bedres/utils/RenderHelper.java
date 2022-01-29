@@ -100,7 +100,7 @@ public class RenderHelper {
 
     public static void renderRune(PoseStack poseStack, Player player, float ticks, String runeType) {
 
-        int brightness = LightTexture.FULL_SKY;
+        int brightness = LightTexture.FULL_BRIGHT;
         float scale2 = (float)player.getUseItem().getUseDuration() + 1;
         float scale3 = player.getTicksUsingItem() + 1;
         float scale = Math.min(2,(scale3*1500)/scale2);

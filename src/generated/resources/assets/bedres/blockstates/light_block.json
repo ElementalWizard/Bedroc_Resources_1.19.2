@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "": {
+      "model": "bedres:block/light_block"
+    }
+  }
+}

@@ -16,6 +16,9 @@ public class BedrockReferences {
     public static final String FLUX_CAPABILITY_NAME_RESOURCE = "bedrock_flux";
     public static final String PLAYER_ABILITY_CAP_NAME_RESOURCE = "player_ability";
 
+    public static final String LIGHT_PARTICLE_REGNAME = "light_particle";
+
+    public static final String LIGHT_PROJ_REGNAME = "light_projectile";
     public static final String RAW_ENDERIAN_REGNAME = "raw_enderian";
     public static final String FLUXED_CREEP_REGNAME = "fluxed_creep";
     public static final String CHAINED_BLAZE_REGNAME = "chained_blaze";
@@ -71,5 +74,6 @@ public class BedrockReferences {
     public static final String RANGE_VIEW_REGNAME = "range_view";
     public static final String BEDROCK_COMPRESSED_WIRE_REGNAME = "bedrock_compressed_wire";
     public static final String VOID_TEAR_REGNAME = "void_tears";
+    public static final String LIGHT_BLOCK_REGNAME = "light_block";
 
 }

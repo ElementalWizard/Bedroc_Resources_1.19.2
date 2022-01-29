@@ -283,9 +283,7 @@ public class BedrociumPedestalTile extends BlockEntity {
             }
             sendUpdates();
         }
-//        if (getBlockState().getValue(TRIGGERED) && !getBlockState().getValue(CRAFTING)){
-//            updateCrafting(true);
-//        }
+
         if (getBlockState().getValue(CRAFTING)){
             if (!checkFinishTowers()){
                 if (target != null){

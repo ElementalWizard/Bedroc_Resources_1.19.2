@@ -56,6 +56,7 @@ public class ClientSetup {
             ItemBlockRenderTypes.setRenderLayer(Registration.EVENT_ALTAR_BLOCK.get(), RenderType.cutoutMipped());
             ItemBlockRenderTypes.setRenderLayer(Registration.RANGE_VIEW_BLOCK.get(), RenderType.translucent());
             ItemBlockRenderTypes.setRenderLayer(Registration.ROPE_BLOCK.get(), RenderType.cutoutMipped());
+            ItemBlockRenderTypes.setRenderLayer(Registration.LIGHT_BLOCK.get(), RenderType.cutoutMipped());
 
             BlockEntityRenderers.register(Registration.ITEM_PLATFORM_TILE.get(), ItemPlatformRenderer::new);
             BlockEntityRenderers.register(Registration.BASE_SPIKE_TILE.get(), BedrockiumTowerRenderer::new);
@@ -77,6 +78,7 @@ public class ClientSetup {
         event.registerEntityRenderer(Registration.SPORE_DEITY.get(), SporeDeityRenderer::new);
         event.registerEntityRenderer(Registration.FLUXED_CREEP.get(), FluxedCreepRenderer::new);
         event.registerEntityRenderer(Registration.CHAINED_BLAZE.get(), ChainedBlazeRenderer::new);
+        event.registerEntityRenderer(Registration.LIGHT_PROJ_ENTITY.get(), RenderStub::new);
     }
 
 
@@ -94,4 +96,5 @@ public class ClientSetup {
         event.addSprite(GAMARUNE);
         event.addSprite(THETARUNE);
     }
+
 }

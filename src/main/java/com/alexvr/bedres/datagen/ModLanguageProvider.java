@@ -35,6 +35,7 @@ public class ModLanguageProvider extends LanguageProvider {
         add(Registration.SCRAPER_MOTOR_BLOCK.get(),"Scraper Motor" );
         add(Registration.ROPE_BLOCK.get(),"Rope" );
         add(Registration.EVENT_ALTAR_BLOCK.get(),"Event Ritual Altar" );
+        add(Registration.LIGHT_BLOCK.get(),"Light Block" );
 
         add(Registration.DF_OAK_LEAVE_BLOCK.get(),"Decaying Fluxed Leaves" );
         add(Registration.DF_SAPPLING_BLOCK.get(),"Decaying Fluxed Sappling" );
@@ -106,17 +107,21 @@ public class ModLanguageProvider extends LanguageProvider {
 
         add("container.event.player_upgrade.slime_ball", "Fall Damage Upgrade" );
         add("container.event.player_upgrade.honey_block", "Fall Damage Reset" );
-        add("mage_staff.rune.type.alpha", "Alpha" );
-        add("mage_staff.rune.type.beta", "Beta" );
-        add("mage_staff.rune.type.delta", "Delta" );
-        add("mage_staff.rune.type.epsilon", "Epsilon" );
-        add("mage_staff.rune.type.eta", "Eta" );
-        add("mage_staff.rune.type.gama", "Gamma" );
-        add("mage_staff.rune.type.theta", "Theta" );
-        add("mage_staff.rune.type.zeta", "Zeta" );
+
+        add("mage_staff.rune.type.alpha", "Slingshot" );
+        add("mage_staff.rune.type.beta", "Heaven Smite" );
+        add("mage_staff.rune.type.delta", "Clear Effects/Regen" );
+        add("mage_staff.rune.type.epsilon", "Life Steal" );
+        add("mage_staff.rune.type.eta", "TBD" );
+        add("mage_staff.rune.type.gama", "Poison" );
+        add("mage_staff.rune.type.theta", "Green Thumb" );
+        add("mage_staff.rune.type.zeta", "Light Projectile" );
 
         add("bedres.key.category", "Bedrock Resources Keybindings" );
         add("bedres.key.toggle_wand", "Toggle Mage Staff Ability" );
+
+        add("bedres.mage_staff.green_thumb.fail", "Block cant be bonemealed" );
+        add("bedres.mage_staff.lightning.fail", "Target entity or block not air" );
 
         add(BedrockReferences.CREATIVE_TAB_NAME, "Bedrock Resources Tab" );
         add(BedrockReferences.SCREEN_SCRAPE_TANK, "Scrape Tank" );
@@ -127,6 +132,7 @@ public class ModLanguageProvider extends LanguageProvider {
         add(Registration.FLUXED_CREEP.get(), "Fluxed Creep");
         add(Registration.SPORE_DEITY.get(), "Spore Deity");
         add(Registration.CHAINED_BLAZE.get(), "Chained Blaze");
+        add(Registration.LIGHT_PROJ_ENTITY.get(), "Light Projectile");
     }
 
 
