@@ -1,12 +1,10 @@
 package com.alexvr.bedres.datagen;
 
 import com.alexvr.bedres.setup.Registration;
-import mezz.jei.ingredients.RegisteredIngredient;
 import net.minecraft.core.Registry;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.recipes.*;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.Tag;
 import net.minecraft.world.item.Item;
@@ -43,9 +41,6 @@ public class ModRecipes extends RecipeProvider {
         ShapedRecipeBuilder.shaped(Registration.FLUX_ORACLE_ITEM.get())
                 .define('S', Items.ENDER_EYE).define('I', Registration.ENDERIAN_INGOT_ITEM.get()).define('E', Registration.BEDROCK_WIRE_ITEM.get())
                 .pattern("IEI").pattern("ESE").pattern("IEI").unlockedBy("has_item", has(Registration.ENDERIAN_INGOT_ITEM.get())).save(p_176532_);
-        ShapedRecipeBuilder.shaped(Registration.FLUXED_CUPCAKE_ITEM.get(),3)
-                .define('A', Items.MILK_BUCKET).define('B', Items.SUGAR).define('C', Registration.FLUXED_SPORES_ITEM.get()).define('E', Items.EGG).define('W', Items.BOWL)
-                .pattern("ACA").pattern("BEB").pattern("CWC").unlockedBy("has_item", has(Registration.FLUXED_SPORES_ITEM.get())).save(p_176532_);
         ShapedRecipeBuilder.shaped(Registration.ENDERIAN_RITUAL_PEDESTAL_ITEM.get(), 2)
                 .define('G', Tags.Items.INGOTS_GOLD).define('B', Registration.ENDERIAN_BRICK_ITEM.get()).define('S', Registration.ENDERIAN_STAIRS_ITEM.get()).define('P', Registration.ITEM_PLATFORM_ITEM.get())
                 .pattern(" P ").pattern("SGS").pattern("SBS").unlockedBy("has_item", has(Registration.ITEM_PLATFORM_ITEM.get())).save(p_176532_);
@@ -63,15 +58,15 @@ public class ModRecipes extends RecipeProvider {
                 .define('I', Registration.ENDERIAN_INGOT_ITEM.get()).define('B', ItemTags.STONE_BRICKS)
                 .pattern("BIB").pattern("IBI").pattern("BIB").unlockedBy("has_brick", has(Items.BRICK)).save(p_176532_);
         stairBuilder(Registration.ENDERIAN_STAIRS_ITEM.get(), Ingredient.of(Registration.ENDERIAN_BRICK_ITEM.get())).unlockedBy("has_block", has(Registration.ENDERIAN_BRICK_BLOCK.get())).save(p_176532_);
-        ShapedRecipeBuilder.shaped(Registration.FLUXED_GRAVITY_BUBBLE_ITEM.get())
-                .define('P', Tags.Items.GLASS_PANES_PURPLE).define('V', Registration.VOID_TEAR_ITEM.get()).define('O', Tags.Items.OBSIDIAN)
-                .pattern("POP").pattern("OVO").pattern("POP").unlockedBy("has_block", has(Registration.VOID_TEAR_BLOCK.get())).save(p_176532_);
         ShapedRecipeBuilder.shaped(Registration.ITEM_PLATFORM_ITEM.get())
                 .define('I', Tags.Items.INGOTS_GOLD).define('L', Tags.Items.STORAGE_BLOCKS_GOLD)
                 .pattern(" I ").pattern("ILI").unlockedBy("has_block", has(Registration.VOID_TEAR_BLOCK.get())).save(p_176532_);
-        ShapedRecipeBuilder.shaped(Registration.STAFF_ITEM.get())
-                .define('B', Registration.BLAZIUM_ITEM.get()).define('O', Tags.Items.OBSIDIAN).define('S', Tags.Items.STORAGE_BLOCKS_GOLD).define('D', Registration.DF_OAK_PLANKS_ITEM.get()).define('G', Registration.FLUXED_GRAVITY_BUBBLE_BLOCK.get())
-                .pattern(" B ").pattern("OSO").pattern("DGD").unlockedBy("has_block", has(Registration.FLUXED_GRAVITY_BUBBLE_BLOCK.get())).save(p_176532_);
+        ShapedRecipeBuilder.shaped(Registration.XP_MEDALLION_ITEM.get())
+                .define('I', Registration.ENDERIAN_INGOT_ITEM.get()).define('H', Registration.ENDER_HUSH_ITEM.get()).define('E', Items.ENDER_EYE)
+                .pattern("IHI").pattern("HEH").pattern("IHI").unlockedBy("has_item", has(Items.ENDER_EYE)).save(p_176532_);
+        ShapedRecipeBuilder.shaped(Registration.ROPE_ITEM.get())
+                .define('B', Registration.SUN_DAIZE_ITEM.get()).define('S', Tags.Items.STRING)
+                .pattern("S").pattern("B").pattern("S").unlockedBy("has_item", has(Registration.SUN_DAIZE_ITEM.get())).save(p_176532_);
         //ShapelessRecipeBuilder.shapeless(Items.COPPER_INGOT, 9).requires(Blocks.WAXED_COPPER_BLOCK).group(getItemName(Items.COPPER_INGOT)).unlockedBy(getHasName(Blocks.WAXED_COPPER_BLOCK), has(Blocks.WAXED_COPPER_BLOCK)).save(p_176532_, getConversionRecipeName(Items.COPPER_INGOT, Blocks.WAXED_COPPER_BLOCK));
         //ShapedRecipeBuilder.shaped(Blocks.DARK_PRISMARINE).define('S', Items.PRISMARINE_SHARD).define('I', Items.BLACK_DYE).pattern("SSS").pattern("SIS").pattern("SSS").unlockedBy("has_prismarine_shard", has(Items.PRISMARINE_SHARD)).save(p_176532_);
         //nineBlockStorageRecipes(p_176532_, Items.DIAMOND, Items.DIAMOND_BLOCK);

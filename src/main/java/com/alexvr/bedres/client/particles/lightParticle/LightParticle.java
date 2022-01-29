@@ -11,14 +11,17 @@ import java.util.Random;
 @OnlyIn(Dist.CLIENT)
 public class LightParticle extends TextureSheetParticle {
     //From Direwolf's Mining Lights
-    public LightParticle(ClientLevel worldIn, double xCoordIn, double yCoordIn, double zCoordIn, double xSpeedIn, double ySpeedIn, double speedIn) {
+    public LightParticle(ClientLevel worldIn, double xCoordIn, double yCoordIn, double zCoordIn, double xSpeedIn, double ySpeedIn, double speedIn, int color) {
         super(worldIn, xCoordIn, yCoordIn, zCoordIn, xSpeedIn, ySpeedIn, speedIn);
-        float f = this.random.nextFloat() * 0.4F + 0.8F;
-        int color = 0x6a0dad;
-        var r = (color >> 16 & 255) / 255F * (1F - this.random.nextFloat() * 0.25F);
-        var g = (color >> 8 & 255) / 255F * (1F - this.random.nextFloat() * 0.25F);
-        var b = (color & 255) / 255F * (1F - this.random.nextFloat() * 0.25F);
-        this.setColor(new Random().nextFloat(), new Random().nextFloat(), new Random().nextFloat());
+
+        if (color == -1){
+            this.setColor(new Random().nextFloat(), new Random().nextFloat(), new Random().nextFloat());
+        }else{
+            var r = (color >> 16 & 255) / 255F * (1F - this.random.nextFloat() * 0.25F);
+            var g = (color >> 8 & 255) / 255F * (1F - this.random.nextFloat() * 0.25F);
+            var b = (color & 255) / 255F * (1F - this.random.nextFloat() * 0.25F);
+            this.setColor(r, g, b);
+        }
         this.setSize(0.1F, 0.1F);
         this.quadSize *= this.random.nextFloat() * 0.8F + 0.5F;
         this.xd *= (double) 0.02F;

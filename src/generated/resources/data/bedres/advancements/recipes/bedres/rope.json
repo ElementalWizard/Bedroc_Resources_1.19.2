@@ -2,7 +2,7 @@
   "parent": "minecraft:recipes/root",
   "rewards": {
     "recipes": [
-      "bedres:fluxed_cupcake"
+      "bedres:rope"
     ]
   },
   "criteria": {
@@ -12,7 +12,7 @@
         "items": [
           {
             "items": [
-              "bedres:fluxed_spores"
+              "bedres:sun_daize"
             ]
           }
         ]
@@ -21,7 +21,7 @@
     "has_the_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "bedres:fluxed_cupcake"
+        "recipe": "bedres:rope"
       }
     }
   },

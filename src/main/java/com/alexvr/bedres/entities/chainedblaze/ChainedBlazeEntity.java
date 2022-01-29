@@ -1,13 +1,17 @@
 package com.alexvr.bedres.entities.chainedblaze;
 
+import com.alexvr.bedres.setup.Registration;
 import net.minecraft.world.Difficulty;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityDimensions;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.monster.Blaze;
 import net.minecraft.world.entity.monster.Monster;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 
 public class ChainedBlazeEntity extends Blaze {
@@ -39,5 +43,10 @@ public class ChainedBlazeEntity extends Blaze {
         return 0.75f;
     }
 
-
+    @Override
+    protected void dropCustomDeathLoot(DamageSource pSource, int pLooting, boolean pRecentlyHit) {
+        super.dropCustomDeathLoot(pSource, pLooting, pRecentlyHit);
+        ItemEntity drop = new ItemEntity(level, getX(),getY(),getZ(),new ItemStack(Registration.NEBULA_HEART_ITEM.get(),1));
+        level.addFreshEntity(drop);
+    }
 }

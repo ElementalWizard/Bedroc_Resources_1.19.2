@@ -259,24 +259,26 @@ public class WorldEventHandler {
                         toolRequired = true;
                         if (event.getState().getBlock().getTags().contains(BlockTags.MINEABLE_WITH_PICKAXE.getName()) && !h.getPick().equals("no")){
                             speed+=getSpeed(h.getPick());
-                        }else if (event.getState().getBlock().getTags().contains(BlockTags.MINEABLE_WITH_AXE.getName())){
+                        }else if (event.getState().getBlock().getTags().contains(BlockTags.MINEABLE_WITH_AXE.getName()) && !h.getAxe().equals("no")){
                             speed+=getSpeed(h.getAxe());
-                        }else if (event.getState().getBlock().getTags().contains(BlockTags.MINEABLE_WITH_SHOVEL.getName())){
+                        }else if (event.getState().getBlock().getTags().contains(BlockTags.MINEABLE_WITH_SHOVEL.getName()) && !h.getShovel().equals("no")){
                             speed+=getSpeed(h.getShovel());
-                        }else if (event.getState().getBlock().getTags().contains(BlockTags.MINEABLE_WITH_HOE.getName())){
+                        }else if (event.getState().getBlock().getTags().contains(BlockTags.MINEABLE_WITH_HOE.getName()) && !h.getHoe().equals("no")){
                             speed+=getSpeed(h.getHoe());
                         }
-
                     }else{
-                        if (event.getState().getMaterial().toString().equals(Material.WOOD.toString())) {
+                        if (event.getState().getMaterial().toString().equals(Material.WOOD.toString()) && !h.getAxe().equals("no")) {
                             speed+=getSpeed(h.getAxe());
-                        } else if ((event.getState().getMaterial() == Material.STONE || event.getState().getMaterial() == Material.METAL || event.getState().getMaterial() == Material.HEAVY_METAL)) {
+                        } else if (  (!h.getPick().equals("no"))&&(event.getState().getMaterial() == Material.STONE || event.getState().getMaterial() == Material.METAL || event.getState().getMaterial() == Material.HEAVY_METAL)) {
                             speed += getSpeed(h.getPick());
-                        } else if ((event.getState().getMaterial() == Material.DIRT || event.getState().getMaterial() == Material.SAND || event.getState().getMaterial() == Material.SNOW || event.getState().getMaterial() == Material.CLAY || event.getState().getMaterial() == Material.PLANT)) {
+                        } else if ((!h.getShovel().equals("no"))&&(event.getState().getMaterial() == Material.DIRT || event.getState().getMaterial() == Material.SAND || event.getState().getMaterial() == Material.SNOW || event.getState().getMaterial() == Material.CLAY || event.getState().getMaterial() == Material.PLANT)) {
                             speed += getSpeed(h.getShovel());
-                        } else if ((event.getState().getMaterial() == Material.WEB || event.getState().getMaterial() == Material.LEAVES || event.getState().getMaterial() == Material.WOOL)) {
+                        } else if ((!h.getHoe().equals("no"))&&(event.getState().getMaterial() == Material.WEB || event.getState().getMaterial() == Material.LEAVES || event.getState().getMaterial() == Material.WOOL)) {
                             speed += getSpeed(h.getHoe());
                         }
+                    }
+                    if (speed == 0 && h.getMiningSpeedBoost() == 0){
+                        return;
                     }
                     speed += 1;
                     speed *= 1.55;
@@ -299,26 +301,19 @@ public class WorldEventHandler {
     }
 
     private static float getSpeed(String material) {
-        switch (material) {
-            case "wood":
-                return 0;
-            case "stone":
-                return  Tiers.STONE.getSpeed();
-            case "iron":
-                return Tiers.IRON.getSpeed();
-            case "golden":
-                return Tiers.GOLD.getSpeed();
-            case "diamond":
-                return  Tiers.DIAMOND.getSpeed();
-        }
-        return 0;
+        return switch (material) {
+            case "stone" -> Tiers.STONE.getSpeed();
+            case "iron" -> Tiers.IRON.getSpeed();
+            case "golden" -> Tiers.GOLD.getSpeed();
+            case "diamond" -> Tiers.DIAMOND.getSpeed();
+            default -> 0;
+        };
     }
 
     @SubscribeEvent
     public static void onPlayerClone(PlayerEvent.Clone event) {
         Player player = event.getPlayer();
         if (event.isWasDeath()){
-            System.out.println("clonning");
             event.getOriginal().reviveCaps();
             LazyOptional<IPlayerAbility> playerAbility = player.getCapability(PlayerAbilityProvider.PLAYER_ABILITY_CAPABILITY, null);
             LazyOptional<IPlayerAbility> oldplayerAbility =  event.getOriginal().getCapability(PlayerAbilityProvider.PLAYER_ABILITY_CAPABILITY, null);

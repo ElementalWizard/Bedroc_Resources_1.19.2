@@ -45,6 +45,7 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.levelgen.feature.StructureFeature;
 import net.minecraft.world.level.levelgen.feature.configurations.JigsawConfiguration;
 import net.minecraft.world.level.material.Material;
+import net.minecraft.world.level.material.MaterialColor;
 import net.minecraftforge.common.ForgeSpawnEggItem;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.extensions.IForgeMenuType;
@@ -87,7 +88,7 @@ public class Registration {
             () -> new SoundEvent(new ResourceLocation(MODID, "fluxed_creep_roar")));
     public static final SoundType FLUXED_CREEP_TYPE = new ForgeSoundType(1.0F, 1.0F, FLUXED_CREEP_IDLE, FLUXED_CREEP_IDLE, FLUXED_CREEP_IDLE, FLUXED_CREEP_ROAR, FLUXED_CREEP_ROAR);
 
-    public static final RegistryObject<LightParticleType> LIGHT_PARTICLE_TYPE = PARTICLES.register(BedrockReferences.LIGHT_PARTICLE_REGNAME,() -> new LightParticleType());
+    public static final RegistryObject<LightParticleType> LIGHT_PARTICLE_TYPE = PARTICLES.register(BedrockReferences.LIGHT_PARTICLE_REGNAME, LightParticleType::new);
 
     public static final RegistryObject<EntityType<LightProjectileEntity>> LIGHT_PROJ_ENTITY = ENTITIES.register(BedrockReferences.LIGHT_PROJ_REGNAME, () -> EntityType.Builder.<LightProjectileEntity>of(LightProjectileEntity::new, MobCategory.MISC)
             .sized(1f,1f)
@@ -134,7 +135,7 @@ public class Registration {
     public static final RegistryObject<Block> ENDERIAN_ORE_DEEPSLATE = BLOCKS.register(BedrockReferences.ENDERIAN_ORE_REGNAME + "_deepslate", () -> new OreBlock(ORE_PROPERTIES));
     public static final RegistryObject<Item> ENDERIAN_ORE_DEEPSLATE_ITEM = fromBlock(ENDERIAN_ORE_DEEPSLATE);
 
-    public static final RegistryObject<Block> ENDERIAN_BLOCK_BLOCK = BLOCKS.register(BedrockReferences.ENDERIAN_BLOCK_REGNAME, () -> new Block(METAL_BLOCK_PROPERTIES));
+    public static final RegistryObject<Block> ENDERIAN_BLOCK_BLOCK = BLOCKS.register(BedrockReferences.ENDERIAN_BLOCK_REGNAME, () ->new Block(BlockBehaviour.Properties.of(Material.METAL, MaterialColor.METAL).requiresCorrectToolForDrops().strength(5.0F, 6.0F).sound(SoundType.METAL)));
     public static final RegistryObject<Item> ENDERIAN_BLOCK_ITEM = fromBlock(ENDERIAN_BLOCK_BLOCK);
 
     public static final RegistryObject<EventAltar> EVENT_ALTAR_BLOCK = BLOCKS.register(BedrockReferences.EVENT_ALTAR_REGNAME, () -> new EventAltar(METAL_BLOCK_PROPERTIES.noOcclusion()));
@@ -159,9 +160,9 @@ public class Registration {
     public static final RegistryObject<Rope> ROPE_BLOCK = BLOCKS.register(BedrockReferences.ROPE_REGNAME, () -> new Rope(BLOCK_PROPERTIES.noOcclusion().instabreak().noCollission().friction(3)));
     public static final RegistryObject<Item> ROPE_ITEM = fromBlock(ROPE_BLOCK);
 
-    public static final RegistryObject<Block> ENDERIAN_BRICK_BLOCK = BLOCKS.register(BedrockReferences.ENDERIAN_BRICK_REGNAME, () -> new Block(BLOCK_PROPERTIES.requiresCorrectToolForDrops()));
+    public static final RegistryObject<Block> ENDERIAN_BRICK_BLOCK = BLOCKS.register(BedrockReferences.ENDERIAN_BRICK_REGNAME, () ->new Block(BlockBehaviour.Properties.of(Material.STONE, MaterialColor.COLOR_BLUE).requiresCorrectToolForDrops().strength(2.0F, 6.0F)));
     public static final RegistryObject<Item> ENDERIAN_BRICK_ITEM = fromBlock(ENDERIAN_BRICK_BLOCK);
-    public static final RegistryObject<StairBlock> ENDERIAN_STAIRS_BLOCK = BLOCKS.register(BedrockReferences.ENDERIAN_STAIRS_REGNAME, () -> new StairBlock(ENDERIAN_BRICK_BLOCK.get().defaultBlockState() ,BlockBehaviour.Properties.copy(ENDERIAN_BRICK_BLOCK.get())));
+    public static final RegistryObject<StairBlock> ENDERIAN_STAIRS_BLOCK = BLOCKS.register(BedrockReferences.ENDERIAN_STAIRS_REGNAME, () ->  new StairBlock(ENDERIAN_BRICK_BLOCK.get().defaultBlockState(), BlockBehaviour.Properties.copy(ENDERIAN_BRICK_BLOCK.get())));
     public static final RegistryObject<Item> ENDERIAN_STAIRS_ITEM = fromBlock(ENDERIAN_STAIRS_BLOCK);
 
     public static final RegistryObject<EnderianRitualPedestal> ENDERIAN_RITUAL_PEDESTAL_BLOCK = BLOCKS.register(BedrockReferences.ENDERIAN_RITUAL_PEDESTAL_REGNAME, () -> new EnderianRitualPedestal(METAL_BLOCK_PROPERTIES));

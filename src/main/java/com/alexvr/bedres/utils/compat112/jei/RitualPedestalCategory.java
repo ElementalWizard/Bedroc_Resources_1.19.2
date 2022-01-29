@@ -74,7 +74,7 @@ public class RitualPedestalCategory implements IRecipeCategory<RitualAltarRecipe
         var inputs = ingredients.getInputs(VanillaTypes.ITEM);
         var outputs = ingredients.getOutputs(VanillaTypes.ITEM);
         List<ItemStack> inputStacks = new ArrayList<>();
-        for (int i =0; i<inputs.size();i++){
+        for (int i =1; i<inputs.size();i++){
             for (int k =0; k<inputs.get(i).get(0).getCount();k++){
                 inputStacks.add(new ItemStack(inputs.get(i).get(0).getItem(),1));
             }
@@ -84,86 +84,55 @@ public class RitualPedestalCategory implements IRecipeCategory<RitualAltarRecipe
         {
             int x = 0;
             int y= 0;
+            int moduleIndex= 0;
+            int moduleX= 1;
+            int moduleY= 0;
+            boolean nextModule = false;
+            stacks.init(0, true, 48,47);
+            stacks.set(0, inputs.get(0).get(0));
 
             for (int i =0; i<inputStacks.size();i++){
-                switch (i) {
+                switch (i % 4) {
                     case 0 -> {
-                        x = 46;
-                        y = 43;
+                        x = (moduleX * 36);
+                        y =(moduleY * 35);
+                        nextModule = false;
                     }
                     case 1 -> {
-                        x = 36;
-                        y = 0;
+                        x = 19 + (moduleX * 36);
+                        y =(moduleY * 35);
                     }
                     case 2 -> {
-                        x = 55;
-                        y = 0;
+                        x =(moduleX * 36);
+                        y = 18 + (moduleY * 35);
                     }
                     case 3 -> {
-                        x = 36;
-                        y = 18;
-                    }
-                    case 4 -> {
-                        x = 55;
-                        y = 18;
-                    }
-                    case 5 -> {
-                        x = 72;
-                        y = 35;
-                    }
-                    case 6 -> {
-                        x = 91;
-                        y = 35;
-                    }
-                    case 7 -> {
-                        x = 72;
-                        y = 41;
-                    }
-                    case 8 -> {
-                        x = 91;
-                        y = 41;
-                    }
-                    case 9 -> {
-                        x = 0;
-                        y = 35;
-                    }
-                    case 10 -> {
-                        x = 19;
-                        y = 35;
-                    }
-                    case 11 -> {
-                        x = 0;
-                        y = 53;
-                    }
-                    case 12 -> {
-                        x = 19;
-                        y = 53;
-                    }
-                    case 13 -> {
-                        x = 36;
-                        y = 70;
-                    }
-                    case 14 -> {
-                        x = 55;
-                        y = 70;
-                    }
-                    case 15 -> {
-                        x = 36;
-                        y = 88;
-                    }
-                    case 16 -> {
-                        x = 55;
-                        y = 88;
+                        x = 19 + (moduleX * 36);
+                        y = 18 + (moduleY * 35);
+                        nextModule = true;
                     }
                 }
-                stacks.init(i, true, x  , y);
-                stacks.set(i, inputStacks.get(i));
+                if (nextModule){
+                    moduleIndex++;
+                    switch (moduleIndex){
+                        case 1 -> {moduleX = 0;moduleY = 1;}
+                        case 2 -> {moduleX = 2;moduleY = 1;}
+                        case 3 -> {moduleX = 1;moduleY = 2;}
+                        case 4 -> {moduleX = 0;moduleY = 0;}
+                        case 5 -> {moduleX = 2;moduleY = 0;}
+                        case 6 -> {moduleX = 0;moduleY = 2;}
+                        case 7 -> {moduleX = 2;moduleY = 2;}
+                    }
+                }
+
+                stacks.init(i+1, true, x  , y);
+                stacks.set(i+1, inputStacks.get(i));
             }
 
         }
 
-        stacks.init(inputStacks.size(), false, 146, 46);
-        stacks.set(inputStacks.size(), outputs.get(0));
+        stacks.init(inputStacks.size()+1, false, 146, 46);
+        stacks.set(inputStacks.size()+1, outputs.get(0));
     }
     @Override
     public boolean isHandled(RitualAltarRecipes recipe) {

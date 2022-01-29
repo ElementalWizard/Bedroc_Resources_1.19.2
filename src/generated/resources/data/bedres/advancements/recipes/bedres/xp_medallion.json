@@ -2,17 +2,17 @@
   "parent": "minecraft:recipes/root",
   "rewards": {
     "recipes": [
-      "bedres:fire_staff"
+      "bedres:xp_medallion"
     ]
   },
   "criteria": {
-    "has_block": {
+    "has_item": {
       "trigger": "minecraft:inventory_changed",
       "conditions": {
         "items": [
           {
             "items": [
-              "bedres:fluxed_gravity_bubble"
+              "minecraft:ender_eye"
             ]
           }
         ]
@@ -21,13 +21,13 @@
     "has_the_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "bedres:fire_staff"
+        "recipe": "bedres:xp_medallion"
       }
     }
   },
   "requirements": [
     [
-      "has_block",
+      "has_item",
       "has_the_recipe"
     ]
   ]

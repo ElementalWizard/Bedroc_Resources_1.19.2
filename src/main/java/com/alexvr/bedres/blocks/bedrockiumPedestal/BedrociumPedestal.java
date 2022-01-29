@@ -95,7 +95,6 @@ public class BedrociumPedestal extends Block implements EntityBlock {
         return new BedrociumPedestalTile(pPos, pState);
     }
 
-
     @Override
     public VoxelShape getShape(BlockState pState, BlockGetter pLevel, BlockPos pPos, CollisionContext pContext) {
         return Base;

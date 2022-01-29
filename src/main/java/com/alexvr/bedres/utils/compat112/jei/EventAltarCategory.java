@@ -82,6 +82,32 @@ public class EventAltarCategory implements IRecipeCategory<EventRitualsRecipes> 
     }
 
     @Override
+    public List<Component> getTooltipStrings(EventRitualsRecipes recipe, double mouseX, double mouseY) {
+        List<Component> list = new ArrayList<>();
+        if ((mouseX>0 &&mouseX <128) && (mouseY>-22 &&mouseY <6) ){
+            String des = "";
+            switch (recipe.getEvent()){
+                case "world":
+                    des = WorldEvent.getDescriptions(recipe.getResultItem());
+                    break;
+                case "player_upgrade":
+                    des = PlayerUpgradeEvent.getDescriptions(recipe.getResultItem());
+                    break;
+                case "tool":
+                    des = ToolUpgradeEvent.getDescriptions(recipe.getResultItem());
+                    break;
+            }
+            list.add(new TextComponent(des));
+            return list;
+        }else if ((mouseX>142 &&mouseX <157) && (mouseY>-87 &&mouseY <99) ){
+            list.add(new TextComponent("Wire and item pillars are direction sensitive, this diagram is looking north"));
+            return list;
+        }
+
+            return IRecipeCategory.super.getTooltipStrings(recipe, mouseX, mouseY);
+    }
+
+    @Override
     public void setRecipe(IRecipeLayout recipeLayout, EventRitualsRecipes recipe, IIngredients ingredients) {
         var stacks = recipeLayout.getItemStacks();
         var inputs = ingredients.getInputs(VanillaTypes.ITEM);
@@ -89,7 +115,7 @@ public class EventAltarCategory implements IRecipeCategory<EventRitualsRecipes> 
         var pattern = recipe.getPattern();
         List<ItemStack> inputStacks = new ArrayList<>();
         for (int i =0; i<inputs.size();i++){
-            for (int k =0; k<=inputs.get(i).get(0).getCount();k++){
+            for (int k =0; k<inputs.get(i).get(0).getCount();k++){
                 inputStacks.add(new ItemStack(inputs.get(i).get(0).getItem(),1));
             }
         }
@@ -132,24 +158,8 @@ public class EventAltarCategory implements IRecipeCategory<EventRitualsRecipes> 
     }
 
     private void drawEventString(Minecraft minecraft, PoseStack poseStack, String event, int mainColor, ItemStack output) {
-        int x = 2;
-        int y = -2;
-        minecraft.font.draw(poseStack,new TranslatableComponent("container.event." + event + "." + output.getItem().getRegistryName().getPath()), x, y, mainColor);
-        String des = "";
-        switch (event){
-            case "world":
-                des = WorldEvent.getDescriptions(output);
-                break;
-            case "player_upgrade":
-                des = PlayerUpgradeEvent.getDescriptions(output);
-                break;
-            case "tool":
-                des = ToolUpgradeEvent.getDescriptions(output);
-                break;
-        }
-        x = (width) + 99;
-        y = height + 4;
-        minecraft.font.drawWordWrap(new TextComponent(des), x,y ,49, mainColor);
+
+        minecraft.font.draw(poseStack,new TranslatableComponent("container.event." + event + "." + output.getItem().getRegistryName().getPath()), 2, -2, mainColor);
     }
 
 }
