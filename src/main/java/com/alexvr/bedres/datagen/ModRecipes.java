@@ -60,7 +60,7 @@ public class ModRecipes extends RecipeProvider {
         stairBuilder(Registration.ENDERIAN_STAIRS_ITEM.get(), Ingredient.of(Registration.ENDERIAN_BRICK_ITEM.get())).unlockedBy("has_block", has(Registration.ENDERIAN_BRICK_BLOCK.get())).save(p_176532_);
         ShapedRecipeBuilder.shaped(Registration.ITEM_PLATFORM_ITEM.get())
                 .define('I', Tags.Items.INGOTS_GOLD).define('L', Tags.Items.STORAGE_BLOCKS_GOLD)
-                .pattern(" I ").pattern("ILI").unlockedBy("has_block", has(Registration.VOID_TEAR_BLOCK.get())).save(p_176532_);
+                .pattern(" I ").pattern("ILI").pattern(" I ").unlockedBy("has_block", has(Tags.Items.STORAGE_BLOCKS_GOLD)).save(p_176532_);
         ShapedRecipeBuilder.shaped(Registration.XP_MEDALLION_ITEM.get())
                 .define('I', Registration.ENDERIAN_INGOT_ITEM.get()).define('H', Registration.ENDER_HUSH_ITEM.get()).define('E', Items.ENDER_EYE)
                 .pattern("IHI").pattern("HEH").pattern("IHI").unlockedBy("has_item", has(Items.ENDER_EYE)).save(p_176532_);

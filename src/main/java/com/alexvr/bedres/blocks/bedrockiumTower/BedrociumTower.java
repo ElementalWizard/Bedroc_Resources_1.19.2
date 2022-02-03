@@ -46,34 +46,19 @@ public class BedrociumTower extends Block implements EntityBlock {
                         slotToInteract = 1;
                     }
                     ItemStack itemInHand = player.getItemInHand(hand);
-                    if ((itemInHand.isEmpty() || player.isShiftKeyDown()) && !h.getStackInSlot(slotToInteract).isEmpty()) {
+                    if ((itemInHand.isEmpty() || player.isShiftKeyDown())) {
                         boolean extracted = player.addItem(h.getStackInSlot(slotToInteract));
                         if (extracted) {
                             h.insertItem(slotToInteract, ItemStack.EMPTY, false);
                         }
                     } else {
                         if (!h.getStackInSlot(slotToInteract).isEmpty()) {
-                            boolean end = h.getStackInSlot(slotToInteract).is(itemInHand.getItem());
-                            boolean extracted = player.addItem(h.getStackInSlot(slotToInteract));
-                            if (extracted) {
-                                h.insertItem(slotToInteract, ItemStack.EMPTY, false);
-                                if (end) {
-                                    bedrockiumTowerTile.sendUpdates();
-                                    state.updateNeighbourShapes(world, pos, 32);
-                                    return;
-                                }
-                            }
-
+                            ItemHandlerHelper.giveItemToPlayer(player, h.getStackInSlot(slotToInteract));
+                            h.insertItem(slotToInteract, ItemStack.EMPTY, false);
                         }
-                        ItemStack remainder = ItemHandlerHelper.insertItem(h, itemInHand, true);
                         h.insertItem(slotToInteract, itemInHand, false);
-                        if (remainder.isEmpty()) {
-                            player.setItemInHand(hand, ItemStack.EMPTY);
-                        } else {
-                            player.getItemInHand(hand).shrink(1);
-                        }
+                        player.getItemInHand(hand).shrink(1);
                     }
-
                     bedrockiumTowerTile.sendUpdates();
                     state.updateNeighbourShapes(world, pos, 32);
                     updatePedestal(world, bedrockiumTowerTile);

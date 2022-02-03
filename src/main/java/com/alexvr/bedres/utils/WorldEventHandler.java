@@ -3,6 +3,8 @@ package com.alexvr.bedres.utils;
 import com.alexvr.bedres.BedrockResources;
 import com.alexvr.bedres.capability.abilities.IPlayerAbility;
 import com.alexvr.bedres.capability.abilities.PlayerAbilityProvider;
+import com.alexvr.bedres.client.screen.FluxOverlay;
+import com.alexvr.bedres.items.FluxedOracle;
 import com.alexvr.bedres.items.MageStaff;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
@@ -24,6 +26,7 @@ import net.minecraftforge.event.entity.living.LivingFallEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
+import net.minecraftforge.event.entity.player.PlayerWakeUpEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
@@ -36,7 +39,10 @@ public class WorldEventHandler {
     @SubscribeEvent
     public static void onPlayerTick(TickEvent.PlayerTickEvent event) {
         Player player = event.player;
-        if (!player.level.isClientSide()) return;
+        if (!player.level.isClientSide()) {
+            return;
+        }
+
         ItemStack wand = player.getMainHandItem();
 
         if (!(wand.getItem() instanceof MageStaff))
@@ -44,19 +50,41 @@ public class WorldEventHandler {
         KeyMapping toggleWand = KeyBindings.toggleWang;
         if (toggleWand.consumeClick() ) {
             ((MageStaff)wand.getItem()).cycleRune(wand, player);
+            return;
         }
-    }
 
+    }
+    @SubscribeEvent
+    public static void onWakeUp(PlayerWakeUpEvent event){
+        event.getPlayer().reviveCaps();
+        LazyOptional<IPlayerAbility> playerflux = event.getPlayer().getCapability(PlayerAbilityProvider.PLAYER_ABILITY_CAPABILITY, null);
+        playerflux.ifPresent(h -> h.setFlux(h.getFlux() + (h.getMaxFlux()/2)));
+        event.getPlayer().invalidateCaps();
+    }
     @SubscribeEvent
     public static void onDamage(LivingDamageEvent event){
 
     }
 
     @SubscribeEvent
+    public static void onPlayerCraft(PlayerEvent.ItemCraftedEvent event){
+        if (event.getCrafting().getItem() instanceof FluxedOracle && event.getPlayer().level.isClientSide){
+            Player player = event.getPlayer();
+            player.reviveCaps();
+            LazyOptional<IPlayerAbility> playerflux = player.getCapability(PlayerAbilityProvider.PLAYER_ABILITY_CAPABILITY, null);
+            playerflux.ifPresent(h -> {
+                h.setOracleCrafted(true);
+                h.setFluxOverlayScreen(new FluxOverlay(new TextComponent("Flux Overlay"),h));
+                h.getScreen().playerAbilty = h;
+            });
+            player.invalidateCaps();
+        }
+    }
+
+    @SubscribeEvent
     public static void onPlayerLogIn(PlayerEvent.PlayerLoggedInEvent event) {
         Player player = event.getPlayer();
-        LazyOptional<IPlayerAbility> playerAbility = player.getCapability(PlayerAbilityProvider.PLAYER_ABILITY_CAPABILITY, null);
-        playerAbility.ifPresent(h -> {
+        player.getCapability(PlayerAbilityProvider.PLAYER_ABILITY_CAPABILITY, null).ifPresent(h -> {
             player.sendMessage(new TextComponent("Sword Level: " + h.getSword()),player.getUUID());
             player.sendMessage(new TextComponent("Pick Level: " + h.getPick()),player.getUUID());
             player.sendMessage(new TextComponent("Hoe Level: " + h.getHoe()),player.getUUID());
@@ -65,19 +93,31 @@ public class WorldEventHandler {
             player.sendMessage(new TextComponent("Mining Speed Level: " + h.getMiningSpeedBoost()),player.getUUID());
             player.sendMessage(new TextComponent("Jump Level: " + h.getJumpBoost()),player.getUUID());
             player.sendMessage(new TextComponent("Fall damage Status: " + h.takesFalldamage()),player.getUUID());
+            player.sendMessage(new TextComponent("Flux Level: " + h.getFlux() + "/" + h.getMaxFlux()),player.getUUID());
+            player.sendMessage(new TextComponent("Flux GUI: " + h.getCraftedOracle()),player.getUUID());
+            if (h.getCraftedOracle()){
+                h.setFluxOverlayScreen(new FluxOverlay(new TextComponent("Flux Overlay"),h));
+                h.getScreen().playerAbilty = h;
+            }
+
         });
+
     }
 
     @SubscribeEvent
     public static void PlayerAttackEvent( LivingHurtEvent event) {
-
         if (event.getSource().getDirectEntity() instanceof Player diPlayer) {
+            diPlayer.reviveCaps();
             LazyOptional<IPlayerAbility> abilities = diPlayer.getCapability(PlayerAbilityProvider.PLAYER_ABILITY_CAPABILITY, null);
             abilities.ifPresent(h -> {
                 if (!h.getSword().equals("no")) {
-                    event.setAmount(event.getAmount() + getAttackBoost(h.getSword()));
+                    if (h.getFlux() > 0.5){
+                        h.removeFlux(.5);
+                        event.setAmount(event.getAmount() + getAttackBoost(h.getSword()));
+                    }
                 }
             });
+            diPlayer.invalidateCaps();
         }
     }
 
@@ -96,14 +136,19 @@ public class WorldEventHandler {
     @SubscribeEvent
     public static void PlayerFallEvent( LivingFallEvent event) {
        if (event.getEntity() instanceof Player player){
+           player.reviveCaps();
            LazyOptional<IPlayerAbility> playerAbility = player.getCapability(PlayerAbilityProvider.PLAYER_ABILITY_CAPABILITY, null);
            playerAbility.ifPresent(h -> {
                if (!h.takesFalldamage()){
-                   event.setDistance(0);
-                   event.setDamageMultiplier(0);
-                   event.setCanceled(true);
+                   if (h.getFlux() > 0.5){
+                       h.removeFlux(.5);
+                       event.setDistance(0);
+                       event.setDamageMultiplier(0);
+                       event.setCanceled(true);
+                   }
                }
            });
+           player.invalidateCaps();
        }
     }
 
@@ -119,6 +164,7 @@ public class WorldEventHandler {
     @SubscribeEvent
     public static void PlayerBreakBlockEvent(PlayerInteractEvent.HarvestCheck event) {
         Player player = event.getPlayer();
+        player.reviveCaps();
         if (!(player.getMainHandItem().getItem() instanceof TieredItem) &&
                 (event.getTargetBlock().getBlock().getTags().contains(BlockTags.MINEABLE_WITH_PICKAXE.getName()) || event.getTargetBlock().getBlock().getTags().contains(BlockTags.MINEABLE_WITH_AXE.getName()) ||
             event.getTargetBlock().getBlock().getTags().contains(BlockTags.MINEABLE_WITH_HOE.getName()) || event.getTargetBlock().getBlock().getTags().contains(BlockTags.MINEABLE_WITH_SHOVEL.getName()) )) {
@@ -137,90 +183,99 @@ public class WorldEventHandler {
                 }else if (checkDiamond){
                     blockTier = "diamond";
                 }
-
+                boolean harvestEvent = false;
                 if (block.getTags().contains(BlockTags.MINEABLE_WITH_PICKAXE.getName()) &&  (!h.getPick().equals("no"))) {
                     switch (blockTier){
                         case "stone":
                             if (blockTier.equals(h.getPick())|| h.getPick().equals("iron")|| h.getPick().equals("diamond")){
-                                event.setCanHarvest(true);
+                                harvestEvent = true;
                             }
                             break;
                         case "iron":
                             if (blockTier.equals(h.getPick()) || h.getPick().equals("diamond")){
-                                event.setCanHarvest(true);
+                                harvestEvent = true;
                             }
                             break;
                         case "diamond":
                             if (blockTier.equals(h.getPick())){
-                                event.setCanHarvest(true);
+                                harvestEvent = true;
                             }
                             break;
                         default:
-                            event.setCanHarvest(true);
+                            harvestEvent = true;
                     }
                 }else if (block.getTags().contains(BlockTags.MINEABLE_WITH_SHOVEL.getName()) &&  (!h.getShovel().equals("no"))) {
                     switch (blockTier){
                         case "stone":
                             if (blockTier.equals(h.getShovel())|| h.getShovel().equals("iron")|| h.getShovel().equals("diamond")){
-                                event.setCanHarvest(true);
+                                harvestEvent = true;
                             }
                             break;
                         case "iron":
                             if (blockTier.equals(h.getShovel()) || h.getShovel().equals("diamond")){
-                                event.setCanHarvest(true);
+                                harvestEvent = true;
                             }
                             break;
                         case "diamond":
                             if (blockTier.equals(h.getShovel())){
-                                event.setCanHarvest(true);
+                                harvestEvent = true;
                             }
                             break;
                         default:
-                            event.setCanHarvest(true);
+                            harvestEvent = true;
                     }
                 }else if (block.getTags().contains(BlockTags.MINEABLE_WITH_AXE.getName()) &&  (!h.getAxe().equals("no"))) {
                     switch (blockTier){
                         case "stone":
                             if (blockTier.equals(h.getAxe())|| h.getAxe().equals("iron")|| h.getAxe().equals("diamond")){
-                                event.setCanHarvest(true);
+                                harvestEvent = true;
                             }
                             break;
                         case "iron":
                             if (blockTier.equals(h.getAxe()) || h.getAxe().equals("diamond")){
-                                event.setCanHarvest(true);
+                                harvestEvent = true;
                             }
                             break;
                         case "diamond":
                             if (blockTier.equals(h.getAxe())){
-                                event.setCanHarvest(true);
+                                harvestEvent = true;
                             }
                             break;
                         default:
-                            event.setCanHarvest(true);
+                            harvestEvent = true;
                     }
                 }else if (block.getTags().contains(BlockTags.MINEABLE_WITH_HOE.getName()) &&  (!h.getHoe().equals("no"))) {
                     switch (blockTier){
                         case "stone":
                             if (blockTier.equals(h.getHoe())|| h.getHoe().equals("iron")|| h.getHoe().equals("diamond")){
-                                event.setCanHarvest(true);
+                                harvestEvent = true;
                             }
                             break;
                         case "iron":
                             if (blockTier.equals(h.getHoe()) || h.getHoe().equals("diamond")){
-                                event.setCanHarvest(true);
+                                harvestEvent = true;
                             }
                             break;
                         case "diamond":
                             if (blockTier.equals(h.getHoe())){
-                                event.setCanHarvest(true);
+                                harvestEvent = true;
                             }
                             break;
                         default:
-                            event.setCanHarvest(true);
+                            harvestEvent = true;
                     }
+                }
+                if (harvestEvent){
+
+                    if (h.getFlux() > 0.5){
+                        h.removeFlux(.5);
+                        event.setCanHarvest(true);
+                    }
+
                 }
             });
         }
+        player.invalidateCaps();
     }
 
 
@@ -247,6 +302,7 @@ public class WorldEventHandler {
     @SubscribeEvent
     public static void PlayerBreakSpeedEvent(PlayerEvent.BreakSpeed event) {
         Player player = event.getPlayer();
+        player.reviveCaps();
         if (!player.isShiftKeyDown()) {
             LazyOptional<IPlayerAbility> abilities = player.getCapability(PlayerAbilityProvider.PLAYER_ABILITY_CAPABILITY, null);
             abilities.ifPresent(h -> {
@@ -285,19 +341,29 @@ public class WorldEventHandler {
                     if (event.getState().getBlock() == Blocks.STONE) {
                         speed += 5.5;
                     }
+                    float finalSpeed = speed;
                     if ((!toolRequired || event.getState().getBlock() == Blocks.STONE) && speed > 0) {
-                        event.setNewSpeed((float) (event.getOriginalSpeed() + h.getMiningSpeedBoost() + speed));
-
+                        if (h.getFlux() > 0.5){
+                            h.removeFlux(.5);
+                            event.setNewSpeed((float) (event.getOriginalSpeed() + h.getMiningSpeedBoost() + finalSpeed));
+                        }
                     } else if (speed > 0) {
-                        event.setNewSpeed((float) ((event.getOriginalSpeed() + h.getMiningSpeedBoost() + speed) * (100.0 / 30.0)));
+                        if (h.getFlux() > 0.5){
+                            h.removeFlux(.5);
+                            event.setNewSpeed((float) ((event.getOriginalSpeed() + h.getMiningSpeedBoost() + finalSpeed) * (100.0 / 30.0)));
+                        }
 
                     }
                 } else if (h.getMiningSpeedBoost() > 0) {
-                    event.setNewSpeed((float) (event.getOriginalSpeed() + h.getMiningSpeedBoost()));
+                    if (h.getFlux() > 0.5){
+                        h.removeFlux(.5);
+                        event.setNewSpeed((float) (event.getOriginalSpeed() + h.getMiningSpeedBoost()));
+                    }
                 }
             });
 
         }
+        player.invalidateCaps();
     }
 
     private static float getSpeed(String material) {
@@ -332,6 +398,10 @@ public class WorldEventHandler {
                 h.setFOV(o.getFOV());
                 h.setLookPos(o.getlookPos());
                 h.setname(o.getNAme());
+                h.setFluxCooldown(o.getFluxCooldown());
+                h.setFlux(o.getFlux());
+                h.setMaxFlux(o.getMaxFlux());
+                h.setOracleCrafted(o.getCraftedOracle());
             }));
             event.getOriginal().invalidateCaps();
         }

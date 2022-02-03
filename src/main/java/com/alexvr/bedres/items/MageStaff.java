@@ -1,5 +1,7 @@
 package com.alexvr.bedres.items;
 
+import com.alexvr.bedres.capability.abilities.IPlayerAbility;
+import com.alexvr.bedres.capability.abilities.PlayerAbilityProvider;
 import com.alexvr.bedres.entities.LightProjectileEntity;
 import com.alexvr.bedres.setup.Registration;
 import com.alexvr.bedres.utils.NBTHelper;
@@ -33,6 +35,7 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.IPlantable;
+import net.minecraftforge.common.util.LazyOptional;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Random;
@@ -66,8 +69,15 @@ public class MageStaff extends Item {
     @Override
     public InteractionResultHolder<ItemStack> use(Level pLevel, Player pPlayer, InteractionHand pUsedHand) {
         ItemStack itemstack = pPlayer.getItemInHand(pUsedHand);
+        LazyOptional<IPlayerAbility> playerFlux = pPlayer.getCapability(PlayerAbilityProvider.PLAYER_ABILITY_CAPABILITY, null);
         if (type.equals("zeta") && !pLevel.isClientSide()){
-            getZetaEffect(pPlayer,pLevel);
+            playerFlux.ifPresent(k -> {
+                if (k.getFlux() > 2){
+                    k.removeFlux(2D);
+                    getZetaEffect(pPlayer,pLevel);
+                }
+            });
+
             return new InteractionResultHolder<>(InteractionResult.SUCCESS, itemstack);
         }
         pPlayer.startUsingItem(pUsedHand);
@@ -80,18 +90,21 @@ public class MageStaff extends Item {
             return;
         }
         Player player = (Player) pLivingEntity;
-
-        if (type.equals("alpha")){
-            getAlphaEffect(player,getForce(pStack, pTimeCharged) / 3F,player.getLookAngle());
-        }else if (type.equals("beta")){
-            getBetaEffect(player,getLightningForce(pStack,pTimeCharged));
-        }else if (type.equals("delta")){
-            getDeltaEffect(player, getTieredForce(pStack,pTimeCharged));
-        }
+        LazyOptional<IPlayerAbility> playerFlux = player.getCapability(PlayerAbilityProvider.PLAYER_ABILITY_CAPABILITY, null);
+        playerFlux.ifPresent(k -> {
+            if (type.equals("alpha")){
+                getAlphaEffect(player,getForce(pStack, pTimeCharged) / 3F,player.getLookAngle(),k);
+            }else if (type.equals("beta")){
+                getBetaEffect(player,getLightningForce(pStack,pTimeCharged),k);
+            }else if (type.equals("delta")){
+                getDeltaEffect(player, getTieredForce(pStack,pTimeCharged),k);
+            }
+        });
 
         if (pLevel.isClientSide()) {
             player.getCooldowns().addCooldown(pStack.getItem(), 10);
         }
+
         super.releaseUsing(pStack, pLevel, pLivingEntity, pTimeCharged);
     }
 
@@ -101,9 +114,15 @@ public class MageStaff extends Item {
             if (player.getCooldowns().isOnCooldown(pStack.getItem()) || !player.isUsingItem()){
                 return;
             }
+            LazyOptional<IPlayerAbility> playerFlux = player.getCapability(PlayerAbilityProvider.PLAYER_ABILITY_CAPABILITY, null);
+
             if (type.equals("epsilon")){
                 if (lifeStealCounter <= 0){
-                    getEpsilonEffect(player);
+                    playerFlux.ifPresent(k -> {
+                        if (k.getFlux() > 2){
+                            getEpsilonEffect(player,k);
+                        }
+                    });
                     lifeStealCounter = LIFESTEALCOUNTERMAX;
                 }else{
                     lifeStealCounter --;
@@ -112,16 +131,25 @@ public class MageStaff extends Item {
 
             if (type.equals("gama")){
                 if (poisonCounter <= 0){
-                    getGamaEffect(player);
+                    playerFlux.ifPresent(k -> {
+                        if (k.getFlux() > 2){
+                            getGamaEffect(player,k);
+
+                        }
+                    });
+
                     poisonCounter = POISONCOUNTERMAX;
                 }else{
                     poisonCounter --;
                 }
             }
+
             if (pLevel instanceof ServerLevel serverLevel){
                 if (type.equals("theta")){
                     if (greenTickCounter <= 0){
-                        getThetaGreenTickEffect(player, serverLevel, player.isShiftKeyDown());
+                        playerFlux.ifPresent(k -> getThetaGreenTickEffect(player, serverLevel, player.isShiftKeyDown(),k));
+                        player.causeFoodExhaustion(0.2F);
+
                         if (player.isShiftKeyDown()){
                             greenTickCounter = BONEMEALCOUNTERMAX;
                         }else{
@@ -144,29 +172,31 @@ public class MageStaff extends Item {
 
     }
 
-    private void getThetaGreenTickEffect(Player pPlayer, ServerLevel level, boolean isShiftDown) {
+    private void getThetaGreenTickEffect(Player pPlayer, ServerLevel level, boolean isShiftDown, IPlayerAbility flux) {
         BlockHitResult lookingAt = getLookingAt(pPlayer, ClipContext.Fluid.NONE);
-        if (isShiftDown){
+        if (isShiftDown && flux.getFlux()>2){
             if (pPlayer.level.getBlockState(lookingAt.getBlockPos()).getBlock() instanceof BonemealableBlock bonemealableBlock){
                 bonemealableBlock.performBonemeal(level, new Random(),lookingAt.getBlockPos(),pPlayer.level.getBlockState(lookingAt.getBlockPos()));
                 pPlayer.getCooldowns().addCooldown(pPlayer.getUseItem().getItem(), 10);
+                flux.removeFlux(2D);
             }else{
                 pPlayer.sendMessage(new TranslatableComponent("bedres.mage_staff.green_thumb.fail"),pPlayer.getUUID());
             }
-        }else{
+        } else{
             BlockPos sourcePos = lookingAt.getBlockPos();
             for (int x = - 4; x<= 4;x++){
                 for (int z = - 4; z<=4;z++){
                     BlockPos newPos = sourcePos.offset(x,0,z);
-                    if (level.getBlockState(newPos).getBlock() instanceof IPlantable plantable){
+                    if (level.getBlockState(newPos).getBlock() instanceof IPlantable plantable && flux.getFlux()>0.25){
                         plantable.getPlant(level,newPos).randomTick(level,newPos, new Random());
+                        flux.removeFlux(0.25);
                     }
                 }
             }
         }
     }
 
-    private void getGamaEffect(Player player) {
+    private void getGamaEffect(Player player, IPlayerAbility flux) {
         Level world = player.level;
         LivingEntity mob = world.getNearestEntity(LivingEntity.class, TargetingConditions.forCombat().range(8.0D),player,player.getX(),player.getY(),player.getZ(),player.getBoundingBox().inflate(8.0D, 8.0D, 8.0D));
         if (mob != null){
@@ -176,7 +206,9 @@ public class MageStaff extends Item {
                 amp = Math.min(mob.getEffect(MobEffects.POISON).getAmplifier() + 1,5);
                 mob.removeEffect(MobEffects.POISON);
             }
+            player.causeFoodExhaustion(0.2F);
             mob.addEffect(new MobEffectInstance(MobEffects.POISON,duration,amp,false, true));
+            flux.removeFlux(2D);
         }
     }
 
@@ -184,37 +216,46 @@ public class MageStaff extends Item {
 
     }
 
-    private void getEpsilonEffect(Player player) {
+    private void getEpsilonEffect(Player player, IPlayerAbility flux) {
         Level world = player.level;
         LivingEntity mob = world.getNearestEntity(LivingEntity.class, TargetingConditions.forCombat().range(8.0D),player,player.getX(),player.getY(),player.getZ(),player.getBoundingBox().inflate(8.0D, 8.0D, 8.0D));
         if (mob != null){
             mob.hurt(DamageSource.MAGIC,1.5f);
             player.heal(0.75f);
             player.getFoodData().setSaturation(player.getFoodData().getSaturationLevel()+0.25f);
+            flux.removeFlux(2D);
         }
     }
 
-    private void getDeltaEffect(Player player, int power) {
+    private void getDeltaEffect(Player player, int power, IPlayerAbility flux) {
         float effectsRemoved = 0;
+        if (flux.getFlux() < 8){
+            return;
+        }
         for (MobEffectInstance effect: player.getActiveEffects()){
-            if (!effect.getEffect().isBeneficial()){
+            if (!effect.getEffect().isBeneficial() && flux.getFlux() > 8){
                 player.curePotionEffects(effect.getCurativeItems().get(0));
                 effectsRemoved++;
+                flux.removeFlux(8D);
                 if ((power == 1 && effectsRemoved >= 2) || (power == 2 && effectsRemoved >= 4) ||
                         (power == 3 && effectsRemoved >= 6)){
                     break;
                 }
             }
         }
+        if (flux.getFlux() < power * 4){
+            return;
+        }
         if (player.hasEffect(MobEffects.REGENERATION)){
             player.addEffect(new MobEffectInstance(MobEffects.REGENERATION,20 * (power * 4),power,false,false));
+            flux.removeFlux(power * 4D);
         }
     }
 
-    private void getBetaEffect(Player player, float power) {
+    private void getBetaEffect(Player player, float power, IPlayerAbility flux) {
         Level world = player.level;
         BlockHitResult lookingAt = getLookingAt(player, ClipContext.Fluid.ANY);
-        if (world.isEmptyBlock(lookingAt.getBlockPos())){
+        if (world.isEmptyBlock(lookingAt.getBlockPos()) || flux.getFlux() < power*power){
             player.sendMessage(new TranslatableComponent("bedres.mage_staff.lightning.fail"),player.getUUID());
             return;
         }
@@ -223,11 +264,12 @@ public class MageStaff extends Item {
         lightningbolt.setVisualOnly(false);
         lightningbolt.setDamage(power);
         world.addFreshEntity(lightningbolt);
+        flux.removeFlux((double) (power*power));
     }
 
-    public void getAlphaEffect(Player player, float speed, Vec3 playerLook){
+    public void getAlphaEffect(Player player, float speed, Vec3 playerLook, IPlayerAbility flux){
         // don't allow free flight when using an elytra, should use fireworks
-        if (player.isFallFlying()) {
+        if (player.isFallFlying() || flux.getFlux() < speed*2) {
             return;
         }
         player.causeFoodExhaustion(0.2F);
@@ -236,6 +278,7 @@ public class MageStaff extends Item {
                 (playerLook.x * speed),
                 (1 + playerLook.y) * speed / 2f,
                 (playerLook.z * speed));
+        flux.removeFlux(speed*2D);
     }
 
     public static BlockHitResult getLookingAt(Player player, ClipContext.Fluid rayTraceFluid) {

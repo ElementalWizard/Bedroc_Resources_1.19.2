@@ -1,6 +1,9 @@
 package com.alexvr.bedres.items;
 
+import com.alexvr.bedres.capability.abilities.IPlayerAbility;
+import com.alexvr.bedres.capability.abilities.PlayerAbilityProvider;
 import com.alexvr.bedres.setup.Registration;
+import net.minecraft.network.chat.TextComponent;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.Item;
@@ -10,6 +13,7 @@ import net.minecraft.world.item.Tiers;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraftforge.common.util.LazyOptional;
 
 public class ScrapeKnife extends SwordItem {
 
@@ -22,22 +26,22 @@ public class ScrapeKnife extends SwordItem {
     @Override
     public InteractionResult useOn(UseOnContext pContext) {
         Level level = pContext.getLevel();
-        if (!level.isClientSide) {
-            if(pContext.getPlayer().isShiftKeyDown()){
-                if(level.getBlockState(pContext.getClickedPos()).getBlock().getName().equals(Blocks.BEDROCK.getName())){
-                    ItemStack itemstack = new ItemStack(Registration.BEDROCK_WIRE_ITEM.get(), 1);
-                    level.addFreshEntity(new ItemEntity(level,pContext.getClickedPos().getX() + 0.5f,pContext.getClickedPos().getY() + 1,pContext.getClickedPos().getZ()+ 0.5f,itemstack));
-
+        LazyOptional<IPlayerAbility> playerFlux = pContext.getPlayer().getCapability(PlayerAbilityProvider.PLAYER_ABILITY_CAPABILITY, null);
+        playerFlux.ifPresent(k -> {
+            if (k.getFlux() > 0.25){
+                k.removeFlux(.25);
+                if(pContext.getPlayer().isShiftKeyDown()){
+                    if(level.getBlockState(pContext.getClickedPos()).getBlock().getName().equals(Blocks.BEDROCK.getName())){
+                        ItemStack itemstack = new ItemStack(Registration.BEDROCK_WIRE_ITEM.get(), 1);
+                        level.addFreshEntity(new ItemEntity(level,pContext.getClickedPos().getX() + 0.5f,pContext.getClickedPos().getY() + 1,pContext.getClickedPos().getZ()+ 0.5f,itemstack));
+                    }
+                }
+            }else{
+                if (!level.isClientSide){
+                    pContext.getPlayer().sendMessage(new TextComponent("Flux Levels too weak, get at least 0.25 flux points"),pContext.getPlayer().getUUID());
                 }
             }
-        }else{
-            if(pContext.getPlayer().isShiftKeyDown()){
-                if(level.getBlockState(pContext.getClickedPos()).getBlock().getName().equals(Blocks.BEDROCK.getName())){
-                    level.addParticle(Registration.LIGHT_PARTICLE_TYPE.get(),pContext.getClickedPos().getX()+ 0.5f,pContext.getClickedPos().getY() + 0.5,pContext.getClickedPos().getZ()+ 0.5f, 0, 0.0D, 0.0D);
-
-                }
-            }
-        }
+        });
         return super.useOn(pContext);
     }
 

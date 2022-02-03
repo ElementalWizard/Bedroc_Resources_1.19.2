@@ -28,6 +28,7 @@ import net.minecraftforge.client.model.data.EmptyModelData;
 
 public class RenderHelper {
 
+    public static final ResourceLocation FLUXBAR = new ResourceLocation(BedrockResources.MODID, "gui/flux_bar");
     public static final ResourceLocation ZETARUNE = new ResourceLocation(BedrockResources.MODID, "effect/zeta_rune");
     public static final ResourceLocation ALPHARUNE = new ResourceLocation(BedrockResources.MODID, "effect/alpha_rune");
     public static final ResourceLocation BETARUNE = new ResourceLocation(BedrockResources.MODID, "effect/beta_rune");
@@ -36,7 +37,6 @@ public class RenderHelper {
     public static final ResourceLocation ETARUNE = new ResourceLocation(BedrockResources.MODID, "effect/eta_rune");
     public static final ResourceLocation GAMARUNE = new ResourceLocation(BedrockResources.MODID, "effect/gama_rune");
     public static final ResourceLocation THETARUNE = new ResourceLocation(BedrockResources.MODID, "effect/theta_rune");
-
     public static void renderTransparentBlock(PoseStack matrix, MultiBufferSource buffer , BlockPos pos, BlockState state, Level level, float xTranslate, float yTranslate, float zTranslate, float xScale, float yScale, float zScale){
         var builder = buffer.getBuffer(ModRenderTypes.GHOST);
         matrix.pushPose();
@@ -136,7 +136,6 @@ public class RenderHelper {
         // Always remember to push the current transformation so that you can restore it later
         poseStack.pushPose();
 
-        // Translate to the middle of the block and 1 unit higher
         poseStack.translate(from.x, from.y, from.z);
 
         // Use the orientation of the main camera to make sure the single quad that we are going to render always faces the camera

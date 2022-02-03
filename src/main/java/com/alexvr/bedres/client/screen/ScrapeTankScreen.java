@@ -6,22 +6,17 @@ import com.alexvr.bedres.utils.BedrockReferences;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
-import net.minecraft.client.gui.screens.inventory.MenuAccess;
 import net.minecraft.client.renderer.GameRenderer;
-import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.items.CapabilityItemHandler;
 
 @OnlyIn(Dist.CLIENT)
 public class ScrapeTankScreen extends AbstractContainerScreen<ScrapeTankMenu> {
     /** The ResourceLocation containing the chest GUI texture. */
-    private static final ResourceLocation CONTAINER_BACKGROUND = new ResourceLocation(BedrockResources.MODID, BedrockReferences.SCRAPE_TANK_GUI_TEXTURE_RESOURCE);
+    public static final ResourceLocation CONTAINER_BACKGROUND = new ResourceLocation(BedrockResources.MODID, BedrockReferences.SCRAPE_TANK_GUI_TEXTURE_RESOURCE);
     /** Window height is calculated with these values" the more rows, the higher */
     private final ScrapeTankMenu container;
 

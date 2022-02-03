@@ -67,6 +67,7 @@ public class ClientSetup {
         MinecraftForge.EVENT_BUS.register(ClientEvents.class);
     }
 
+
     @SubscribeEvent
     public static void onRegisterLayers(EntityRenderersEvent.RegisterLayerDefinitions event) {
         event.registerLayerDefinition(FluxedCreepModel.LAYER_LOCATION, FluxedCreepModel::createBodyLayer);
@@ -95,6 +96,7 @@ public class ClientSetup {
         event.addSprite(ETARUNE);
         event.addSprite(GAMARUNE);
         event.addSprite(THETARUNE);
+        event.addSprite(FLUXBAR);
     }
 
 }

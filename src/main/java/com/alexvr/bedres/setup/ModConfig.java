@@ -34,6 +34,9 @@ public class ModConfig {
     public static ForgeConfigSpec.ConfigValue<String> DEF_HOE;
     public static ForgeConfigSpec.DoubleValue DEF_JUMP;
     public static ForgeConfigSpec.DoubleValue DEF_SPEED;
+    public static ForgeConfigSpec.DoubleValue DEF_FLUX;
+    public static ForgeConfigSpec.DoubleValue DEF_MAXFLUX;
+    public static ForgeConfigSpec.DoubleValue DEF_FLUXCOOLDOWN;
 
     public static final ForgeConfigSpec.Builder SERVER_BUILDER = new ForgeConfigSpec.Builder();
     public static final ForgeConfigSpec.Builder CLIENT_BUILDER = new ForgeConfigSpec.Builder();
@@ -123,20 +126,16 @@ public class ModConfig {
         SERVER_BUILDER.pop();
     }
 
+
     private static void setupFluxConfig() {
-//        SERVER_BUILDER.comment("Bedrock-Flux Capabilities settings").push(FLUX_CAPABILITY);
-//
-//        DEF_MAX_FLUX = SERVER_BUILDER.comment("Max Bedrock-Flux a player can have")
-//                .defineInRange("max_flu", 2500.0, 1, Double.MAX_VALUE);
-//
-//        DEF_MAX_TIMER = SERVER_BUILDER.comment("Ticks per check for negative effect (20 ticks = 1 second, 1200 ticks = 1 minute)")
-//                .defineInRange("max_timer_for_check", 6000, 1, Integer.MAX_VALUE);
-//
-//        NEG_EFFECTS_ACTIVE = SERVER_BUILDER.comment("Should bedrockFlux give debufs and negative effects")
-//                .define("neg_effects", true);
-//
-//
-//        SERVER_BUILDER.pop();
+        SERVER_BUILDER.comment("Bedrock Flux settings").push(PLAYER_ABILITY);
+        DEF_FLUX = SERVER_BUILDER.comment("Default Bedrock Flux value")
+                .defineInRange("flux", 100, 0, Double.MAX_VALUE);
+        DEF_MAXFLUX = SERVER_BUILDER.comment("Default Max Bedrock Flux value")
+                .defineInRange("maxflux", 1000, 0, Double.MAX_VALUE);
+        DEF_FLUXCOOLDOWN = SERVER_BUILDER.comment("Default Bedrock Flux regen cooldown in ticks")
+                .defineInRange("fluxcooldown", 20, 0, Double.MAX_VALUE);
+        SERVER_BUILDER.pop();
     }
 
     @SubscribeEvent

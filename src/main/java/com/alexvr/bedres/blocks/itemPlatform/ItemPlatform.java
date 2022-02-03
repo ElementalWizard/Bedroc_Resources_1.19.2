@@ -49,9 +49,7 @@ public class ItemPlatform extends FaceAttachedHorizontalDirectionalBlock impleme
 
     @Override
     public InteractionResult use(BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult trace) {
-
-        BlockEntity tileEntity = world.getBlockEntity(pos);
-        if (tileEntity instanceof ItemPlatformTile itemPlatformTile) {
+        if (world.getBlockEntity(pos) instanceof ItemPlatformTile itemPlatformTile) {
             itemPlatformTile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).ifPresent(h -> {
                 ItemStack itemInHand = player.getItemInHand(hand);
 

@@ -168,6 +168,11 @@ public class BedrociumPedestalTile extends BlockEntity {
                 sendUpdates();
             }
 
+            @Override
+            public int getSlotLimit(int slot) {
+                return 1;
+            }
+
         };
     }
 

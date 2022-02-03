@@ -1,6 +1,7 @@
 package com.alexvr.bedres.capability.abilities;
 
 import com.alexvr.bedres.blocks.enderianRitualPedestal.EnderianRitualPedestalTile;
+import com.alexvr.bedres.client.screen.FluxOverlay;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.util.INBTSerializable;
@@ -17,6 +18,20 @@ public interface IPlayerAbility extends INBTSerializable<CompoundTag>
     String getShovel();
     String getSword();
     String getHoe();
+    FluxOverlay getScreen();
+
+    Boolean getCraftedOracle();
+    Double getFlux();
+    Double getMaxFlux();
+    Double getFluxCooldown();
+    void setFluxOverlayScreen(FluxOverlay screen);
+    void setMaxFlux(Double amount);
+    void setFlux(Double amount);
+    void addFlux(Double amount);
+    void setOracleCrafted(Boolean crafted);
+    void removeFlux(Double amount);
+    void setFluxCooldown(Double amount);
+    void removeFluxCooldown(Double amount);
 
     double getMiningSpeedBoost();
     int getRitualTimer();

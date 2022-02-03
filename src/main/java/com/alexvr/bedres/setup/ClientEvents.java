@@ -4,11 +4,18 @@ import com.alexvr.bedres.items.MageStaff;
 import com.alexvr.bedres.utils.RenderHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.entity.player.Player;
+import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderLevelLastEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 
 public class ClientEvents {
+
+    @SubscribeEvent
+    static void renderWorldLastEvent(RenderGameOverlayEvent.Pre evt) {
+       Player player = Minecraft.getInstance().player;
+
+    }
 
     @SubscribeEvent
     static void renderWorldLastEvent(RenderLevelLastEvent evt) {

@@ -82,8 +82,7 @@ public class ModRecipeRegistry {
                 new ItemStack(Items.CREEPER_HEAD, 1),
                 new ItemStack(Registration.VOID_TEAR_ITEM.get(), 1),
                 new ItemStack(Registration.BLAZIUM_ITEM.get(), 1),
-                new ItemStack(Registration.DF_OAK_LOG_BLOCK.get(), 4),
-                new ItemStack(Registration.DF_OAK_PLANKS_BLOCK.get(), 2),
+                new ItemStack(Items.CUT_COPPER_SLAB, 6),
                 new ItemStack(Registration.BEDROCK_COMPRESSED_WIRE_BLOCK.get(), 2),
                 new ItemStack(Items.GOLD_BLOCK, 2),
                 new ItemStack(Registration.ENDERIAN_INGOT_ITEM.get(), 4)
@@ -93,6 +92,7 @@ public class ModRecipeRegistry {
                 new ItemStack(Items.MILK_BUCKET, 4),
                 new ItemStack(Items.SUGAR, 1),
                 new ItemStack(Items.EGG, 1),
+                new ItemStack(Items.NETHER_WART, 2),
                 new ItemStack(Registration.FLUXED_SPORES_BLOCK.get(), 4),
                 new ItemStack(Items.WHEAT, 2)
         ));
@@ -111,7 +111,8 @@ public class ModRecipeRegistry {
                 new ItemStack(Registration.ENDERIAN_INGOT_ITEM.get(), 4),
                 new ItemStack(Registration.BEDROCK_WIRE_ITEM.get(), 4),
                 new ItemStack(Registration.FLUXED_SPORES_ITEM.get(), 2),
-                new ItemStack(Registration.BLAZIUM_ITEM.get(), 2),
+                new ItemStack(Registration.DF_OAK_LOG_BLOCK.get(), 4),
+                new ItemStack(Registration.DF_OAK_PLANKS_BLOCK.get(), 2),
                 new ItemStack(Registration.ENDER_HUSH_ITEM.get(), 2)
         ));
 
@@ -119,9 +120,9 @@ public class ModRecipeRegistry {
                 new ItemStack(Registration.ENDERIAN_BLOCK_BLOCK.get(), 1),
                 new ItemStack(Items.OBSIDIAN, 2),
                 new ItemStack(Registration.BEDROCK_WIRE_ITEM.get(), 4),
-                new ItemStack(Registration.ENDERIAN_BRICK_ITEM.get(), 4),
+                new ItemStack(Registration.ENDERIAN_STAIRS_BLOCK.get(), 4),
                 new ItemStack(Registration.ENDERIAN_INGOT_ITEM.get(), 6),
-                new ItemStack(Registration.ENDERIAN_BRICK_BLOCK.get(), 4)
+                new ItemStack(Registration.ENDERIAN_BRICK_BLOCK.get(), 8)
         ));
 
     }
@@ -169,11 +170,11 @@ public class ModRecipeRegistry {
 
             eventRitualsRecipes.add(new EventRitualsRecipes(new ItemStack(Items.CLOCK),"world",
                     genPattern(
-                            "wiwiw",
-                            "iwwwi",
+                            "wiiiw",
+                            "iiwii",
                             "iw wi",
-                            "iwwwi",
-                            "wiwiw"),
+                            "iiwii",
+                            "wiiiw"),
                     new ItemStack(Items.LAPIS_LAZULI, 12),
                     new ItemStack(Items.CLOCK, 4)
             ));
@@ -207,7 +208,7 @@ public class ModRecipeRegistry {
                             "wiwiw"),
                     new ItemStack(Items.CHAIN, 2),
                     new ItemStack(Items.IRON_PICKAXE, 4),
-                    new ItemStack(Items.LIGHT_WEIGHTED_PRESSURE_PLATE, 2),
+                    new ItemStack(Items.HEAVY_WEIGHTED_PRESSURE_PLATE, 2),
                     new ItemStack(Items.CHAIN, 2)
             ));
             eventRitualsRecipes.add(new EventRitualsRecipes(new ItemStack(Items.GOLDEN_PICKAXE),"tool",
@@ -219,7 +220,7 @@ public class ModRecipeRegistry {
                             "wiwiw"),
                     new ItemStack(Items.GOLD_NUGGET, 2),
                     new ItemStack(Items.GOLDEN_PICKAXE, 4),
-                    new ItemStack(Items.HEAVY_WEIGHTED_PRESSURE_PLATE, 2),
+                    new ItemStack(Items.LIGHT_WEIGHTED_PRESSURE_PLATE, 2),
                     new ItemStack(Items.GOLD_NUGGET, 2)
             ));
             eventRitualsRecipes.add(new EventRitualsRecipes(new ItemStack(Items.DIAMOND_PICKAXE),"tool",
@@ -260,7 +261,7 @@ public class ModRecipeRegistry {
                             "wiwiw"),
                     new ItemStack(Items.CHAIN, 2),
                     new ItemStack(Items.IRON_AXE, 4),
-                    new ItemStack(Items.LIGHT_WEIGHTED_PRESSURE_PLATE, 2),
+                    new ItemStack(Items.HEAVY_WEIGHTED_PRESSURE_PLATE, 2),
                     new ItemStack(Items.CHAIN, 2)
             ));
             eventRitualsRecipes.add(new EventRitualsRecipes(new ItemStack(Items.GOLDEN_AXE),"tool",
@@ -272,7 +273,7 @@ public class ModRecipeRegistry {
                             "wiwiw"),
                     new ItemStack(Items.GOLD_NUGGET, 2),
                     new ItemStack(Items.GOLDEN_AXE, 4),
-                    new ItemStack(Items.HEAVY_WEIGHTED_PRESSURE_PLATE, 2),
+                    new ItemStack(Items.LIGHT_WEIGHTED_PRESSURE_PLATE, 2),
                     new ItemStack(Items.GOLD_NUGGET, 2)
             ));
             eventRitualsRecipes.add(new EventRitualsRecipes(new ItemStack(Items.DIAMOND_AXE),"tool",
@@ -313,7 +314,7 @@ public class ModRecipeRegistry {
                             "wiwiw"),
                     new ItemStack(Items.CHAIN, 2),
                     new ItemStack(Items.IRON_SWORD, 4),
-                    new ItemStack(Items.LIGHT_WEIGHTED_PRESSURE_PLATE, 2),
+                    new ItemStack(Items.HEAVY_WEIGHTED_PRESSURE_PLATE, 2),
                     new ItemStack(Items.CHAIN, 2)
             ));
 
@@ -355,7 +356,7 @@ public class ModRecipeRegistry {
                             "wiwiw"),
                     new ItemStack(Items.CHAIN, 2),
                     new ItemStack(Items.IRON_HOE, 4),
-                    new ItemStack(Items.LIGHT_WEIGHTED_PRESSURE_PLATE, 2),
+                    new ItemStack(Items.HEAVY_WEIGHTED_PRESSURE_PLATE, 2),
                     new ItemStack(Items.CHAIN, 2)
             ));
 
@@ -397,7 +398,7 @@ public class ModRecipeRegistry {
                             "wiwiw"),
                     new ItemStack(Items.CHAIN, 2),
                     new ItemStack(Items.IRON_SHOVEL, 4),
-                    new ItemStack(Items.LIGHT_WEIGHTED_PRESSURE_PLATE, 2),
+                    new ItemStack(Items.HEAVY_WEIGHTED_PRESSURE_PLATE, 2),
                     new ItemStack(Items.CHAIN, 2)
             ));
             eventRitualsRecipes.add(new EventRitualsRecipes(new ItemStack(Items.GOLDEN_SHOVEL),"tool",
@@ -409,7 +410,7 @@ public class ModRecipeRegistry {
                             "wiwiw"),
                     new ItemStack(Items.GOLD_NUGGET, 2),
                     new ItemStack(Items.GOLDEN_SHOVEL, 4),
-                    new ItemStack(Items.HEAVY_WEIGHTED_PRESSURE_PLATE, 2),
+                    new ItemStack(Items.LIGHT_WEIGHTED_PRESSURE_PLATE, 2),
                     new ItemStack(Items.GOLD_NUGGET, 2)
             ));
             eventRitualsRecipes.add(new EventRitualsRecipes(new ItemStack(Items.DIAMOND_SHOVEL),"tool",
