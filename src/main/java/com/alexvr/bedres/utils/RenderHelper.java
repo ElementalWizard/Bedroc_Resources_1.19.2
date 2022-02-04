@@ -28,7 +28,6 @@ import net.minecraftforge.client.model.data.EmptyModelData;
 
 public class RenderHelper {
 
-    public static final ResourceLocation FLUXBAR = new ResourceLocation(BedrockResources.MODID, "gui/flux_bar");
     public static final ResourceLocation ZETARUNE = new ResourceLocation(BedrockResources.MODID, "effect/zeta_rune");
     public static final ResourceLocation ALPHARUNE = new ResourceLocation(BedrockResources.MODID, "effect/alpha_rune");
     public static final ResourceLocation BETARUNE = new ResourceLocation(BedrockResources.MODID, "effect/beta_rune");

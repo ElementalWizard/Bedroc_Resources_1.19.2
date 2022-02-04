@@ -3,7 +3,9 @@ package com.alexvr.bedres.items;
 import com.alexvr.bedres.BedrockResources;
 import com.alexvr.bedres.capability.abilities.IPlayerAbility;
 import com.alexvr.bedres.capability.abilities.PlayerAbilityProvider;
+import com.alexvr.bedres.utils.IDisplayFlux;
 import com.mojang.math.Vector3f;
+import net.minecraft.client.Minecraft;
 import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
@@ -22,7 +24,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 import java.util.UUID;
 
-public class Staff extends TieredItem {
+public class Staff extends TieredItem implements IDisplayFlux {
     private static final UUID REDUCED_GRAVITY_ID = UUID.fromString("DEB06000-7979-4242-8888-00000DEB0600");
     private static final AttributeModifier REDUCED_GRAVITY = (new AttributeModifier(REDUCED_GRAVITY_ID, "Reduced gravity", (double)-0.80, AttributeModifier.Operation.MULTIPLY_TOTAL));
 
@@ -57,7 +59,7 @@ public class Staff extends TieredItem {
                 BedrockResources.LOGGER.debug("Granted low gravity to Entity: {}", player);
                 grav.addTransientModifier(REDUCED_GRAVITY);
             }
-            LazyOptional<IPlayerAbility> playerFlux = player.getCapability(PlayerAbilityProvider.PLAYER_ABILITY_CAPABILITY, null);
+            LazyOptional<IPlayerAbility> playerFlux = Minecraft.getInstance().player.getCapability(PlayerAbilityProvider.PLAYER_ABILITY_CAPABILITY, null);
             playerFlux.ifPresent(k -> {
                 if (k.getFlux() > 0.05){
                     k.removeFlux(.05);
@@ -91,5 +93,10 @@ public class Staff extends TieredItem {
     public void appendHoverText(ItemStack pStack, @Nullable Level pLevel, List<Component> pTooltipComponents, TooltipFlag pIsAdvanced) {
         pTooltipComponents.add(new TextComponent("While holding gravity will affect you differently"));
         super.appendHoverText(pStack, pLevel, pTooltipComponents, pIsAdvanced);
+    }
+
+    @Override
+    public boolean shouldDisplay(ItemStack offHand) {
+        return true;
     }
 }

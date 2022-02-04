@@ -130,9 +130,9 @@ public class ModConfig {
     private static void setupFluxConfig() {
         SERVER_BUILDER.comment("Bedrock Flux settings").push(PLAYER_ABILITY);
         DEF_FLUX = SERVER_BUILDER.comment("Default Bedrock Flux value")
-                .defineInRange("flux", 100, 0, Double.MAX_VALUE);
+                .defineInRange("flux", 250, 0, Double.MAX_VALUE);
         DEF_MAXFLUX = SERVER_BUILDER.comment("Default Max Bedrock Flux value")
-                .defineInRange("maxflux", 1000, 0, Double.MAX_VALUE);
+                .defineInRange("maxflux", 250, 0, Double.MAX_VALUE);
         DEF_FLUXCOOLDOWN = SERVER_BUILDER.comment("Default Bedrock Flux regen cooldown in ticks")
                 .defineInRange("fluxcooldown", 20, 0, Double.MAX_VALUE);
         SERVER_BUILDER.pop();

@@ -1,5 +1,6 @@
 package com.alexvr.bedres.setup;
 
+import com.alexvr.bedres.client.screen.FluxOverlay;
 import com.alexvr.bedres.items.MageStaff;
 import com.alexvr.bedres.utils.RenderHelper;
 import net.minecraft.client.Minecraft;
@@ -10,11 +11,12 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 
 public class ClientEvents {
+    private static final FluxOverlay FLUX_OVERLAY = new FluxOverlay();
 
     @SubscribeEvent
-    static void renderWorldLastEvent(RenderGameOverlayEvent.Pre evt) {
-       Player player = Minecraft.getInstance().player;
-
+    public static void renderSpellHUD(final RenderGameOverlayEvent.Pre event) {
+        if (event.getType() != RenderGameOverlayEvent.ElementType.ALL) return;
+        FLUX_OVERLAY.drawHUD(event.getMatrixStack(),event.getPartialTicks());
     }
 
     @SubscribeEvent

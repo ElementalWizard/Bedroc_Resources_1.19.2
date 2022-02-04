@@ -4,8 +4,10 @@ import com.alexvr.bedres.capability.abilities.IPlayerAbility;
 import com.alexvr.bedres.capability.abilities.PlayerAbilityProvider;
 import com.alexvr.bedres.entities.LightProjectileEntity;
 import com.alexvr.bedres.setup.Registration;
+import com.alexvr.bedres.utils.IDisplayFlux;
 import com.alexvr.bedres.utils.NBTHelper;
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
@@ -43,7 +45,7 @@ import java.util.Random;
 import static java.lang.Math.cos;
 import static java.lang.Math.sin;
 
-public class MageStaff extends Item {
+public class MageStaff extends Item implements IDisplayFlux {
 
     public MageStaff(Properties pProperties) {
         super(pProperties);
@@ -69,7 +71,7 @@ public class MageStaff extends Item {
     @Override
     public InteractionResultHolder<ItemStack> use(Level pLevel, Player pPlayer, InteractionHand pUsedHand) {
         ItemStack itemstack = pPlayer.getItemInHand(pUsedHand);
-        LazyOptional<IPlayerAbility> playerFlux = pPlayer.getCapability(PlayerAbilityProvider.PLAYER_ABILITY_CAPABILITY, null);
+        LazyOptional<IPlayerAbility> playerFlux = Minecraft.getInstance().player.getCapability(PlayerAbilityProvider.PLAYER_ABILITY_CAPABILITY, null);
         if (type.equals("zeta") && !pLevel.isClientSide()){
             playerFlux.ifPresent(k -> {
                 if (k.getFlux() > 2){
@@ -90,7 +92,7 @@ public class MageStaff extends Item {
             return;
         }
         Player player = (Player) pLivingEntity;
-        LazyOptional<IPlayerAbility> playerFlux = player.getCapability(PlayerAbilityProvider.PLAYER_ABILITY_CAPABILITY, null);
+        LazyOptional<IPlayerAbility> playerFlux = Minecraft.getInstance().player.getCapability(PlayerAbilityProvider.PLAYER_ABILITY_CAPABILITY, null);
         playerFlux.ifPresent(k -> {
             if (type.equals("alpha")){
                 getAlphaEffect(player,getForce(pStack, pTimeCharged) / 3F,player.getLookAngle(),k);
@@ -114,7 +116,7 @@ public class MageStaff extends Item {
             if (player.getCooldowns().isOnCooldown(pStack.getItem()) || !player.isUsingItem()){
                 return;
             }
-            LazyOptional<IPlayerAbility> playerFlux = player.getCapability(PlayerAbilityProvider.PLAYER_ABILITY_CAPABILITY, null);
+            LazyOptional<IPlayerAbility> playerFlux = Minecraft.getInstance().player.getCapability(PlayerAbilityProvider.PLAYER_ABILITY_CAPABILITY, null);
 
             if (type.equals("epsilon")){
                 if (lifeStealCounter <= 0){
@@ -420,6 +422,11 @@ public class MageStaff extends Item {
 
     public UseAnim getUseAnimation(ItemStack pStack) {
         return UseAnim.BOW;
+    }
+
+    @Override
+    public boolean shouldDisplay(ItemStack offHand) {
+        return true;
     }
 
     public enum TYPES{

@@ -1,7 +1,9 @@
 package com.alexvr.bedres.items;
 
+import com.alexvr.bedres.utils.IDisplayFlux;
 import com.alexvr.bedres.utils.NBTHelper;
 import net.minecraft.ChatFormatting;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.world.InteractionHand;
@@ -15,10 +17,18 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public class XPMedallion extends Item {
+public class XPMedallion extends Item implements IDisplayFlux {
 
     public XPMedallion(Properties pProperties) {
         super(pProperties.stacksTo(1).fireResistant().setNoRepair().defaultDurability(256));
+    }
+
+    @Override
+    public void verifyTagAfterLoad(CompoundTag pCompoundTag) {
+        if (pCompoundTag.contains("levels")){
+            levelsStored = pCompoundTag.getInt("levels");
+        }
+        super.verifyTagAfterLoad(pCompoundTag);
     }
 
     public int levelsStored = 0;
@@ -53,5 +63,10 @@ public class XPMedallion extends Item {
             }
         }
         return super.use(pLevel, player, pUsedHand);
+    }
+
+    @Override
+    public boolean shouldDisplay(ItemStack offHand) {
+        return true;
     }
 }

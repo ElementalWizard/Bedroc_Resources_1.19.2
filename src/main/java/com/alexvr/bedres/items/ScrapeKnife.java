@@ -3,6 +3,8 @@ package com.alexvr.bedres.items;
 import com.alexvr.bedres.capability.abilities.IPlayerAbility;
 import com.alexvr.bedres.capability.abilities.PlayerAbilityProvider;
 import com.alexvr.bedres.setup.Registration;
+import com.alexvr.bedres.utils.IDisplayFlux;
+import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.item.ItemEntity;
@@ -15,7 +17,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.common.util.LazyOptional;
 
-public class ScrapeKnife extends SwordItem {
+public class ScrapeKnife extends SwordItem implements IDisplayFlux {
 
     public ScrapeKnife(Item.Properties pProperties) {
         super(Tiers.STONE,1, -2.4F,pProperties);
@@ -26,7 +28,7 @@ public class ScrapeKnife extends SwordItem {
     @Override
     public InteractionResult useOn(UseOnContext pContext) {
         Level level = pContext.getLevel();
-        LazyOptional<IPlayerAbility> playerFlux = pContext.getPlayer().getCapability(PlayerAbilityProvider.PLAYER_ABILITY_CAPABILITY, null);
+        LazyOptional<IPlayerAbility> playerFlux = Minecraft.getInstance().player.getCapability(PlayerAbilityProvider.PLAYER_ABILITY_CAPABILITY, null);
         playerFlux.ifPresent(k -> {
             if (k.getFlux() > 0.25){
                 k.removeFlux(.25);
@@ -45,4 +47,8 @@ public class ScrapeKnife extends SwordItem {
         return super.useOn(pContext);
     }
 
+    @Override
+    public boolean shouldDisplay(ItemStack offHand) {
+        return true;
+    }
 }

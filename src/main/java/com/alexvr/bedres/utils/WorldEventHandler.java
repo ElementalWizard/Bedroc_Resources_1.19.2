@@ -3,8 +3,6 @@ package com.alexvr.bedres.utils;
 import com.alexvr.bedres.BedrockResources;
 import com.alexvr.bedres.capability.abilities.IPlayerAbility;
 import com.alexvr.bedres.capability.abilities.PlayerAbilityProvider;
-import com.alexvr.bedres.client.screen.FluxOverlay;
-import com.alexvr.bedres.items.FluxedOracle;
 import com.alexvr.bedres.items.MageStaff;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
@@ -67,21 +65,6 @@ public class WorldEventHandler {
     }
 
     @SubscribeEvent
-    public static void onPlayerCraft(PlayerEvent.ItemCraftedEvent event){
-        if (event.getCrafting().getItem() instanceof FluxedOracle && event.getPlayer().level.isClientSide){
-            Player player = event.getPlayer();
-            player.reviveCaps();
-            LazyOptional<IPlayerAbility> playerflux = player.getCapability(PlayerAbilityProvider.PLAYER_ABILITY_CAPABILITY, null);
-            playerflux.ifPresent(h -> {
-                h.setOracleCrafted(true);
-                h.setFluxOverlayScreen(new FluxOverlay(new TextComponent("Flux Overlay"),h));
-                h.getScreen().playerAbilty = h;
-            });
-            player.invalidateCaps();
-        }
-    }
-
-    @SubscribeEvent
     public static void onPlayerLogIn(PlayerEvent.PlayerLoggedInEvent event) {
         Player player = event.getPlayer();
         player.getCapability(PlayerAbilityProvider.PLAYER_ABILITY_CAPABILITY, null).ifPresent(h -> {
@@ -94,11 +77,6 @@ public class WorldEventHandler {
             player.sendMessage(new TextComponent("Jump Level: " + h.getJumpBoost()),player.getUUID());
             player.sendMessage(new TextComponent("Fall damage Status: " + h.takesFalldamage()),player.getUUID());
             player.sendMessage(new TextComponent("Flux Level: " + h.getFlux() + "/" + h.getMaxFlux()),player.getUUID());
-            player.sendMessage(new TextComponent("Flux GUI: " + h.getCraftedOracle()),player.getUUID());
-            if (h.getCraftedOracle()){
-                h.setFluxOverlayScreen(new FluxOverlay(new TextComponent("Flux Overlay"),h));
-                h.getScreen().playerAbilty = h;
-            }
 
         });
 
@@ -401,7 +379,6 @@ public class WorldEventHandler {
                 h.setFluxCooldown(o.getFluxCooldown());
                 h.setFlux(o.getFlux());
                 h.setMaxFlux(o.getMaxFlux());
-                h.setOracleCrafted(o.getCraftedOracle());
             }));
             event.getOriginal().invalidateCaps();
         }

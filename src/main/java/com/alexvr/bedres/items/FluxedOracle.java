@@ -2,6 +2,7 @@ package com.alexvr.bedres.items;
 
 import com.alexvr.bedres.capability.abilities.IPlayerAbility;
 import com.alexvr.bedres.capability.abilities.PlayerAbilityProvider;
+import com.alexvr.bedres.utils.IDisplayFlux;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.world.InteractionHand;
@@ -17,7 +18,7 @@ import org.jetbrains.annotations.Nullable;
 
 import javax.annotation.Nonnull;
 
-public class FluxedOracle extends Item {
+public class FluxedOracle extends Item implements IDisplayFlux {
 
 
     public FluxedOracle(Properties settings) {
@@ -60,4 +61,8 @@ public class FluxedOracle extends Item {
         return new InteractionResultHolder<>(InteractionResult.SUCCESS, stack);
     }
 
+    @Override
+    public boolean shouldDisplay(ItemStack offHand) {
+        return true;
+    }
 }

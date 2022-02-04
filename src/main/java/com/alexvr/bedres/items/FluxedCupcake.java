@@ -2,6 +2,8 @@ package com.alexvr.bedres.items;
 
 import com.alexvr.bedres.capability.abilities.IPlayerAbility;
 import com.alexvr.bedres.capability.abilities.PlayerAbilityProvider;
+import com.alexvr.bedres.utils.IDisplayFlux;
+import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.world.entity.LivingEntity;
@@ -15,7 +17,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public class FluxedCupcake extends Item {
+public class FluxedCupcake extends Item implements IDisplayFlux {
     public static final FoodProperties CUPCAKE = (new FoodProperties.Builder()).nutrition(4).saturationMod(0.3F).build();
 
     public FluxedCupcake(Item.Properties pProperties) {
@@ -24,7 +26,7 @@ public class FluxedCupcake extends Item {
 
     @Override
     public ItemStack finishUsingItem(ItemStack pStack, Level pLevel, LivingEntity pLivingEntity) {
-        LazyOptional<IPlayerAbility> abilities = pLivingEntity.getCapability(PlayerAbilityProvider.PLAYER_ABILITY_CAPABILITY, null);
+        LazyOptional<IPlayerAbility> abilities = Minecraft.getInstance().player.getCapability(PlayerAbilityProvider.PLAYER_ABILITY_CAPABILITY, null);
         abilities.ifPresent(flux -> {
             flux.addFlux((flux.getMaxFlux()-flux.getFlux())/10);
         });
@@ -37,4 +39,8 @@ public class FluxedCupcake extends Item {
         super.appendHoverText(pStack, pLevel, pTooltipComponents, pIsAdvanced);
     }
 
+    @Override
+    public boolean shouldDisplay(ItemStack offHand) {
+        return true;
+    }
 }

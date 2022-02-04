@@ -96,7 +96,6 @@ public class ClientSetup {
         event.addSprite(ETARUNE);
         event.addSprite(GAMARUNE);
         event.addSprite(THETARUNE);
-        event.addSprite(FLUXBAR);
     }
 
 }

@@ -1,7 +1,6 @@
 package com.alexvr.bedres.capability.abilities;
 
 import com.alexvr.bedres.blocks.enderianRitualPedestal.EnderianRitualPedestalTile;
-import com.alexvr.bedres.client.screen.FluxOverlay;
 import com.alexvr.bedres.setup.ModConfig;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.phys.Vec3;
@@ -16,8 +15,6 @@ public class PlayerAbility implements  IPlayerAbility{
     private double jump= ModConfig.DEF_JUMP.get(),speed = ModConfig.DEF_SPEED.get(), flux = ModConfig.DEF_FLUX.get(), maxflux = ModConfig.DEF_MAXFLUX.get(), fluxcooldown = ModConfig.DEF_FLUXCOOLDOWN.get();
     private boolean ritual = false;
     private boolean checking = false;
-    private boolean crafterOracle = false;
-    private FluxOverlay screen;
 
     private boolean fall_damage = true;
     private ArrayList<EnderianRitualPedestalTile> pedestals;
@@ -57,16 +54,6 @@ public class PlayerAbility implements  IPlayerAbility{
     }
 
     @Override
-    public FluxOverlay getScreen() {
-        return screen;
-    }
-
-    @Override
-    public Boolean getCraftedOracle() {
-        return crafterOracle;
-    }
-
-    @Override
     public Double getFlux() {
         return flux;
     }
@@ -82,11 +69,6 @@ public class PlayerAbility implements  IPlayerAbility{
     }
 
     @Override
-    public void setFluxOverlayScreen(FluxOverlay screen) {
-        this.screen =screen;
-    }
-
-    @Override
     public void setMaxFlux(Double amount) {
         maxflux = amount;
     }
@@ -99,11 +81,6 @@ public class PlayerAbility implements  IPlayerAbility{
     @Override
     public void addFlux(Double amount) {
         flux+=getFlux()+amount<=getMaxFlux()?amount:0;
-    }
-
-    @Override
-    public void setOracleCrafted(Boolean crafted) {
-        crafterOracle=crafted;
     }
 
     @Override
@@ -310,7 +287,6 @@ public class PlayerAbility implements  IPlayerAbility{
         flux = ModConfig.DEF_FLUX.get();
         maxflux = ModConfig.DEF_MAXFLUX.get();
         fluxcooldown = ModConfig.DEF_FLUXCOOLDOWN.get();
-        crafterOracle = false;
     }
 
     @Override
@@ -334,7 +310,6 @@ public class PlayerAbility implements  IPlayerAbility{
             tag.putDouble("lookingAtY", getlookPos().y);
             tag.putDouble("lookingAtZ", getlookPos().z);
         }
-        tag.putBoolean("crafted",getCraftedOracle());
         tag.putDouble("flux",getFlux());
         tag.putDouble("maxflux",getMaxFlux());
         tag.putDouble("fluxcooldown",getFluxCooldown());
@@ -357,12 +332,6 @@ public class PlayerAbility implements  IPlayerAbility{
         if (nbt.contains("lookingAtX")) {
             setLookPos(new Vec3(( nbt).getDouble("lookingAtX"), ( nbt).getDouble("lookingAtY"), ( nbt).getDouble("lookingAtZ")));
         }
-        setOracleCrafted(nbt.getBoolean("crafted"));
-//        if (getCraftedOracle()){
-//            Screen ff = new FluxOverlayScreen(Minecraft.getInstance());
-//            ff.flux = this;
-//            this.setFluxOverlayScreen(ff);
-//        }
         setFlux(nbt.getDouble("flux"));
         setMaxFlux(nbt.getDouble("maxflux"));
         setFluxCooldown(nbt.getDouble("fluxcooldown"));
