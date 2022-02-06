@@ -31,7 +31,7 @@ public class FluxOverlay extends GuiComponent {
     public void drawHUD(PoseStack ms, float pt) {
         if(!shouldDisplayBar())
             return;
-
+        Minecraft.getInstance().player.reviveCaps();
         LazyOptional<IPlayerAbility> playerflux = minecraft.player.getCapability(PlayerAbilityProvider.PLAYER_ABILITY_CAPABILITY, null);
         playerflux.ifPresent(h -> {
             RenderSystem.setShaderTexture(0, CONTAINER_BACKGROUND);
@@ -39,6 +39,7 @@ public class FluxOverlay extends GuiComponent {
             this.blit(ms, 4, minecraft.getWindow().getGuiScaledHeight() - 70 , 179, 14, 24, (int) (56 * (h.getFlux()/h.getMaxFlux())));
             this.blit(ms, 2, minecraft.getWindow().getGuiScaledHeight() - 65 , 213, 23, 10, 45);
         });
+        Minecraft.getInstance().player.invalidateCaps();
 
     }
 

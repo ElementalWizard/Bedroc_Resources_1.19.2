@@ -1,6 +1,5 @@
 package com.alexvr.bedres.items;
 
-import com.alexvr.bedres.BedrockResources;
 import com.alexvr.bedres.capability.abilities.IPlayerAbility;
 import com.alexvr.bedres.capability.abilities.PlayerAbilityProvider;
 import com.alexvr.bedres.utils.IDisplayFlux;
@@ -9,8 +8,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
@@ -26,21 +23,10 @@ import java.util.UUID;
 
 public class Staff extends TieredItem implements IDisplayFlux {
     private static final UUID REDUCED_GRAVITY_ID = UUID.fromString("DEB06000-7979-4242-8888-00000DEB0600");
-    private static final AttributeModifier REDUCED_GRAVITY = (new AttributeModifier(REDUCED_GRAVITY_ID, "Reduced gravity", (double)-0.80, AttributeModifier.Operation.MULTIPLY_TOTAL));
+    public static final AttributeModifier REDUCED_GRAVITY = (new AttributeModifier(REDUCED_GRAVITY_ID, "Reduced gravity", (double)-0.80, AttributeModifier.Operation.MULTIPLY_TOTAL));
 
-    boolean active = false;
     public Staff(Item.Properties pProperties) {
         super(Tiers.DIAMOND, pProperties);
-    }
-
-
-    @Override
-    public boolean onDroppedByPlayer(ItemStack item, Player player) {
-        AttributeInstance grav = player.getAttribute(ForgeMod.ENTITY_GRAVITY.get());
-        BedrockResources.LOGGER.debug("Removed low gravity from Entity: {}", player);
-        grav.removeModifier(REDUCED_GRAVITY);
-        active = false;
-        return super.onDroppedByPlayer(item, player);
     }
 
     @Override
@@ -49,44 +35,43 @@ public class Staff extends TieredItem implements IDisplayFlux {
             AttributeInstance grav = player.getAttribute(ForgeMod.ENTITY_GRAVITY.get());
             if (grav.hasModifier(REDUCED_GRAVITY))
             {
-                BedrockResources.LOGGER.debug("Removed low gravity from Entity: {}", player);
+                Minecraft.getInstance().player.reviveCaps();
                 grav.removeModifier(REDUCED_GRAVITY);
+                LazyOptional<IPlayerAbility> playerFlux = Minecraft.getInstance().player.getCapability(PlayerAbilityProvider.PLAYER_ABILITY_CAPABILITY, null);
+                playerFlux.ifPresent(k -> k.setGivenGravity(false));
+                Minecraft.getInstance().player.invalidateCaps();
+
             }
         }else if (pEntity instanceof Player player && (player.getMainHandItem().is(this) || player.getOffhandItem().is(this))){
             AttributeInstance grav = player.getAttribute(ForgeMod.ENTITY_GRAVITY.get());
-            if (!grav.hasModifier(REDUCED_GRAVITY))
-            {
-                BedrockResources.LOGGER.debug("Granted low gravity to Entity: {}", player);
-                grav.addTransientModifier(REDUCED_GRAVITY);
-            }
+            Minecraft.getInstance().player.reviveCaps();
             LazyOptional<IPlayerAbility> playerFlux = Minecraft.getInstance().player.getCapability(PlayerAbilityProvider.PLAYER_ABILITY_CAPABILITY, null);
             playerFlux.ifPresent(k -> {
-                if (k.getFlux() > 0.05){
-                    k.removeFlux(.05);
+                if (!grav.hasModifier(REDUCED_GRAVITY) && k.getFlux() >= 0.01)
+                {
+                    grav.addTransientModifier(REDUCED_GRAVITY);
+                    k.setGivenGravity(true);
+                }
+                if (k.getFlux() >= 0.01 && !player.isOnGround()){
+                    k.removeFlux(.01);
                     player.resetFallDistance();
                     player.fallDistance = 0;
                     for (int i = 0; i < 9; i++) {
                         pLevel.addParticle(new DustParticleOptions(new Vector3f(0.416f,0.051f,0.678f),2),pEntity.getOnPos().getX() + 0.8,pEntity.getOnPos().getY() + 0.4,((Player) pEntity).getOnPos().getZ() +0.8f,0,-0.4,0);
                     }
+                }else if (k.getFlux() < 0.01){
+                    if (grav.hasModifier(REDUCED_GRAVITY))
+                    {
+                        grav.removeModifier(REDUCED_GRAVITY);
+                        k.setGivenGravity(false);
+                    }
                 }
             });
+            Minecraft.getInstance().player.invalidateCaps();
 
         }
 
         super.inventoryTick(pStack, pLevel, pEntity, pSlotId, pIsSelected);
-    }
-
-    @Override
-    public InteractionResultHolder<ItemStack> use(Level pLevel, Player pPlayer, InteractionHand pUsedHand) {
-        AttributeInstance grav = pPlayer.getAttribute(ForgeMod.ENTITY_GRAVITY.get());
-        if (!grav.hasModifier(REDUCED_GRAVITY))
-        {
-            BedrockResources.LOGGER.info("Granted low gravity to Entity: {}", pPlayer);
-            grav.addTransientModifier(REDUCED_GRAVITY);
-            pPlayer.resetFallDistance();
-            active = true;
-        }
-        return super.use(pLevel, pPlayer, pUsedHand);
     }
 
     @Override

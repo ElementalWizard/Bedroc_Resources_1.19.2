@@ -21,12 +21,15 @@ public interface IPlayerAbility extends INBTSerializable<CompoundTag>
     Double getFlux();
     Double getMaxFlux();
     Double getFluxCooldown();
+    Boolean givenGravity();
     void setMaxFlux(Double amount);
     void setFlux(Double amount);
     void addFlux(Double amount);
     void removeFlux(Double amount);
     void setFluxCooldown(Double amount);
     void removeFluxCooldown(Double amount);
+    void setGivenGravity(Boolean givenGravity);
+    void flipGivenGravity();
 
     double getMiningSpeedBoost();
     int getRitualTimer();

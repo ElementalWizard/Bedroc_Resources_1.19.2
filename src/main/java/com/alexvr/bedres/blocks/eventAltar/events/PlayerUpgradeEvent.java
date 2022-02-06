@@ -12,17 +12,30 @@ import net.minecraftforge.common.util.LazyOptional;
 public class PlayerUpgradeEvent implements IEvent{
 
     public static void jump(Player player, ItemStack stack) {
-        //1/4 block height per upgrade, 2 blocks max
         player.reviveCaps();
         LazyOptional<IPlayerAbility> abilities = player.getCapability(PlayerAbilityProvider.PLAYER_ABILITY_CAPABILITY, null);
         abilities.ifPresent(iPlayerAbility -> {
             if (stack.is(Items.RABBIT_FOOT)){
-                if (iPlayerAbility.getJumpBoost()<=2) {
-                    iPlayerAbility.addJump(0.5);
+                if (iPlayerAbility.getJumpBoost()<=0.2) {
+                    if (iPlayerAbility.getJumpBoost()==0){
+                        iPlayerAbility.setJumpBoost(0.08f);
+                    }else if (iPlayerAbility.getJumpBoost()==0.08f){
+                        iPlayerAbility.setJumpBoost(0.15f);
+                    }else if (iPlayerAbility.getJumpBoost()==0.15f){
+                        iPlayerAbility.setJumpBoost(0.25f);
+                    }
                 }
             }else if (stack.is(Items.RABBIT_HIDE)){
-                if (iPlayerAbility.getJumpBoost()>=0.5f) {
-                    iPlayerAbility.addJump(-0.5);
+                if (iPlayerAbility.getJumpBoost()>=0.015f) {
+                    if (iPlayerAbility.getJumpBoost()==0.25f){
+                        iPlayerAbility.setJumpBoost(0.2f);
+                    }else if (iPlayerAbility.getJumpBoost()==0.2f){
+                        iPlayerAbility.setJumpBoost(0.15);
+                    }else if (iPlayerAbility.getJumpBoost()==0.15f){
+                        iPlayerAbility.setJumpBoost(0.08f);
+                    }else if (iPlayerAbility.getJumpBoost()==0.08){
+                        iPlayerAbility.setJumpBoost(0f);
+                    }
                 }
             }else{
                 iPlayerAbility.setJumpBoost(0f);

@@ -15,6 +15,7 @@ public class PlayerAbility implements  IPlayerAbility{
     private double jump= ModConfig.DEF_JUMP.get(),speed = ModConfig.DEF_SPEED.get(), flux = ModConfig.DEF_FLUX.get(), maxflux = ModConfig.DEF_MAXFLUX.get(), fluxcooldown = ModConfig.DEF_FLUXCOOLDOWN.get();
     private boolean ritual = false;
     private boolean checking = false;
+    private boolean givenGravity = false;
 
     private boolean fall_damage = true;
     private ArrayList<EnderianRitualPedestalTile> pedestals;
@@ -69,6 +70,11 @@ public class PlayerAbility implements  IPlayerAbility{
     }
 
     @Override
+    public Boolean givenGravity() {
+        return givenGravity;
+    }
+
+    @Override
     public void setMaxFlux(Double amount) {
         maxflux = amount;
     }
@@ -96,6 +102,16 @@ public class PlayerAbility implements  IPlayerAbility{
     @Override
     public void removeFluxCooldown(Double amount) {
         fluxcooldown-=amount;
+    }
+
+    @Override
+    public void setGivenGravity(Boolean givenGravity) {
+        this.givenGravity = givenGravity;
+    }
+
+    @Override
+    public void flipGivenGravity() {
+        this.givenGravity = !this.givenGravity;
     }
 
     @Override
@@ -287,6 +303,7 @@ public class PlayerAbility implements  IPlayerAbility{
         flux = ModConfig.DEF_FLUX.get();
         maxflux = ModConfig.DEF_MAXFLUX.get();
         fluxcooldown = ModConfig.DEF_FLUXCOOLDOWN.get();
+        givenGravity = false;
     }
 
     @Override
@@ -304,6 +321,7 @@ public class PlayerAbility implements  IPlayerAbility{
         tag.putDouble("jump",getJumpBoost());
         tag.putBoolean("ritual",getInRitual());
         tag.putBoolean("checking",getChecking());
+        tag.putBoolean("gravity", givenGravity());
         tag.putDouble("FOV",getFOV());
         if (getlookPos() != null) {
             tag.putDouble("lookingAtX", getlookPos().x);
@@ -335,5 +353,7 @@ public class PlayerAbility implements  IPlayerAbility{
         setFlux(nbt.getDouble("flux"));
         setMaxFlux(nbt.getDouble("maxflux"));
         setFluxCooldown(nbt.getDouble("fluxcooldown"));
+        setGivenGravity(nbt.getBoolean("gravity"));
+
     }
 }

@@ -28,6 +28,7 @@ public class ScrapeKnife extends SwordItem implements IDisplayFlux {
     @Override
     public InteractionResult useOn(UseOnContext pContext) {
         Level level = pContext.getLevel();
+        Minecraft.getInstance().player.reviveCaps();
         LazyOptional<IPlayerAbility> playerFlux = Minecraft.getInstance().player.getCapability(PlayerAbilityProvider.PLAYER_ABILITY_CAPABILITY, null);
         playerFlux.ifPresent(k -> {
             if (k.getFlux() > 0.25){
@@ -44,6 +45,7 @@ public class ScrapeKnife extends SwordItem implements IDisplayFlux {
                 }
             }
         });
+        Minecraft.getInstance().player.invalidateCaps();
         return super.useOn(pContext);
     }
 

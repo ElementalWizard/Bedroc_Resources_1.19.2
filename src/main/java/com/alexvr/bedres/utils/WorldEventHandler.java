@@ -4,11 +4,14 @@ import com.alexvr.bedres.BedrockResources;
 import com.alexvr.bedres.capability.abilities.IPlayerAbility;
 import com.alexvr.bedres.capability.abilities.PlayerAbilityProvider;
 import com.alexvr.bedres.items.MageStaff;
+import com.alexvr.bedres.setup.Registration;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
 import net.minecraft.client.KeyMapping;
+import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.block.Block;
@@ -16,6 +19,7 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Material;
 import net.minecraft.world.phys.BlockHitResult;
+import net.minecraftforge.common.ForgeMod;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.living.LivingDamageEvent;
@@ -31,12 +35,31 @@ import net.minecraftforge.fml.common.Mod;
 import java.util.ArrayList;
 import java.util.Map;
 
+import static com.alexvr.bedres.items.Staff.REDUCED_GRAVITY;
+
 @Mod.EventBusSubscriber(modid = BedrockResources.MODID)
 public class WorldEventHandler {
 
     @SubscribeEvent
     public static void onPlayerTick(TickEvent.PlayerTickEvent event) {
         Player player = event.player;
+        if (Minecraft.getInstance().player != null){
+            Minecraft.getInstance().player.reviveCaps();
+            LazyOptional<IPlayerAbility> playerFlux = Minecraft.getInstance().player.getCapability(PlayerAbilityProvider.PLAYER_ABILITY_CAPABILITY, null);
+            playerFlux.ifPresent(k -> {
+                if (k.givenGravity() && !player.getInventory().contains(new ItemStack(Registration.STAFF_ITEM.get()))){
+                    AttributeInstance grav = player.getAttribute(ForgeMod.ENTITY_GRAVITY.get());
+                    k.setGivenGravity(false);
+                    if (grav.hasModifier(REDUCED_GRAVITY))
+                    {
+                        grav.removeModifier(REDUCED_GRAVITY);
+
+                    }
+                }
+            });
+            Minecraft.getInstance().player.invalidateCaps();
+        }
+
         if (!player.level.isClientSide()) {
             return;
         }
@@ -132,12 +155,14 @@ public class WorldEventHandler {
 
     @SubscribeEvent
     public static void PlayerJumpEvent(LivingEvent.LivingJumpEvent event) {
+        event.getEntityLiving().reviveCaps();
         LazyOptional<IPlayerAbility> abilities = event.getEntityLiving().getCapability(PlayerAbilityProvider.PLAYER_ABILITY_CAPABILITY, null);
         abilities.ifPresent(h -> {
             if (h.getJumpBoost()>0) {
                 event.getEntityLiving().setDeltaMovement(event.getEntityLiving().getDeltaMovement().add(0, h.getJumpBoost(), 0));
             }
         });
+        event.getEntityLiving().invalidateCaps();
     }
     @SubscribeEvent
     public static void PlayerBreakBlockEvent(PlayerInteractEvent.HarvestCheck event) {
@@ -359,6 +384,7 @@ public class WorldEventHandler {
         Player player = event.getPlayer();
         if (event.isWasDeath()){
             event.getOriginal().reviveCaps();
+            player.reviveCaps();
             LazyOptional<IPlayerAbility> playerAbility = player.getCapability(PlayerAbilityProvider.PLAYER_ABILITY_CAPABILITY, null);
             LazyOptional<IPlayerAbility> oldplayerAbility =  event.getOriginal().getCapability(PlayerAbilityProvider.PLAYER_ABILITY_CAPABILITY, null);
             playerAbility.ifPresent(h -> oldplayerAbility.ifPresent(o -> {
@@ -381,6 +407,7 @@ public class WorldEventHandler {
                 h.setMaxFlux(o.getMaxFlux());
             }));
             event.getOriginal().invalidateCaps();
+            player.invalidateCaps();
         }
     }
 
