@@ -36,7 +36,7 @@ import org.jetbrains.annotations.NotNull;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Random;
 
-public class SporeDeityEntity extends Monster {
+public class SporeDeityEntity extends Monster implements PowerableMob {
 
     private boolean ATTACKING = false;
     public static final EntityDataAccessor<Boolean> DATA_ATTACKING = SynchedEntityData.defineId(SporeDeityEntity.class, EntityDataSerializers.BOOLEAN);
@@ -286,5 +286,10 @@ public class SporeDeityEntity extends Monster {
     @Override
     protected SoundEvent getDeathSound() {
         return SoundEvents.ENDER_DRAGON_DEATH;
+    }
+
+    @Override
+    public boolean isPowered() {
+        return true;
     }
 }

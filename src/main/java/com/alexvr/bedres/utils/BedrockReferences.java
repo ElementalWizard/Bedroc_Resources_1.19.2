@@ -22,6 +22,8 @@ public class BedrockReferences {
     public static final String RAW_ENDERIAN_REGNAME = "raw_enderian";
     public static final String FLUXED_CREEP_REGNAME = "fluxed_creep";
     public static final String CHAINED_BLAZE_REGNAME = "chained_blaze";
+    public static final String TRECKING_CREEPER_REGNAME = "trecking_creeper";
+    public static final String BABY_GHAST_REGNAME = "baby_ghast";
     public static final String FLUXED_CREEP_EGG_REGNAME = "fluxed_creep_egg";
     public static final String SPORE_DEITY_REGNAME = "spore_deity";
     public static final String SPORE_DEITY_EGG_REGNAME = "spore_deity_egg";
@@ -39,6 +41,7 @@ public class BedrockReferences {
     public static final String MAGE_STAFF_REGNAME = "mage_staff";
     public static final String XP_MEDALLION_REGNAME = "xp_medallion";
 
+    public static final String HEXTILE_REGNAME = "hex_tile";
     public static final String SCRAPE_TANK_REGNAME = "scrape_tank";
     public static final String ENDERIAN_BLOCK_REGNAME = "enderian_block";
     public static final String ENDERIAN_ORE_REGNAME = "enderian_ore";

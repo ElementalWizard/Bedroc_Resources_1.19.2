@@ -17,6 +17,7 @@ public class ModLootTablesProvider extends BaseLootTableProvider {
         lootTables.put(Registration.ENDERIAN_ORE_DEEPSLATE.get(),createSilktoucheTable(BedrockReferences.ENDERIAN_ORE_REGNAME + "_deepslate", Registration.ENDERIAN_ORE_DEEPSLATE.get(), Registration.RAW_ENDERIAN_CHUNK.get(),1,3));
         lootTables.put(Registration.ENDERIAN_BLOCK_BLOCK.get(),createSimpleTable(BedrockReferences.ENDERIAN_BLOCK_REGNAME, Registration.ENDERIAN_BLOCK_BLOCK.get()));
 
+        lootTables.put(Registration.HEXTILE_BLOCK.get(),createSimpleTable(BedrockReferences.HEXTILE_REGNAME, Registration.HEXTILE_BLOCK.get()));
         lootTables.put(Registration.ROPE_BLOCK.get(),createSimpleTable(BedrockReferences.ROPE_REGNAME, Registration.ROPE_BLOCK.get()));
         lootTables.put(Registration.ENDERIAN_BRICK_BLOCK.get(),createSimpleTable(BedrockReferences.ENDERIAN_BRICK_REGNAME, Registration.ENDERIAN_BRICK_BLOCK.get()));
         lootTables.put(Registration.ENDERIAN_STAIRS_BLOCK.get(),createSimpleTable(BedrockReferences.ENDERIAN_STAIRS_REGNAME, Registration.ENDERIAN_STAIRS_BLOCK.get()));

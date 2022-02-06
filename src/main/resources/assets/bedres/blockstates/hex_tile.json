@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "": {
+      "model": "bedres:block/hex_tile"
+    }
+  }
+}

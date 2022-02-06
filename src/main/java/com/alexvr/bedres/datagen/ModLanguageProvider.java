@@ -36,6 +36,7 @@ public class ModLanguageProvider extends LanguageProvider {
         add(Registration.ROPE_BLOCK.get(),"Rope" );
         add(Registration.EVENT_ALTAR_BLOCK.get(),"Event Ritual Altar" );
         add(Registration.LIGHT_BLOCK.get(),"Light Block" );
+        add(Registration.HEXTILE_BLOCK.get(),"HexTile" );
 
         add(Registration.DF_OAK_LEAVE_BLOCK.get(),"Decaying Fluxed Leaves" );
         add(Registration.DF_SAPPLING_BLOCK.get(),"Decaying Fluxed Sappling" );
@@ -128,10 +129,14 @@ public class ModLanguageProvider extends LanguageProvider {
         add(Registration.SPORE_DEITY_EGG_ITEM.get(), "Spore Deity Spawn Egg");
         add(Registration.FLUXED_CREEP_EGG_ITEM.get(), "Fluxed Creep Spawn Egg");
         add(Registration.CHAINED_BLAZE_EGG_ITEM.get(), "Chained Blaze Spawn Egg");
+        add(Registration.TRECKING_CREEPER_EGG_ITEM.get(), "Trecking Creeper Spawn Egg");
+        add(Registration.BABY_GHAST_EGG_ITEM.get(), "Baby Ghast Spawn Egg");
 
         add(Registration.FLUXED_CREEP.get(), "Fluxed Creep");
         add(Registration.SPORE_DEITY.get(), "Spore Deity");
         add(Registration.CHAINED_BLAZE.get(), "Chained Blaze");
+        add(Registration.TRECKING_CREEPER.get(), "Trecking Creeper");
+        add(Registration.BABY_GHAST.get(), "Baby Ghast");
         add(Registration.LIGHT_PROJ_ENTITY.get(), "Light Projectile");
     }
 

@@ -11,9 +11,7 @@
       "conditions": {
         "items": [
           {
-            "items": [
-              "bedres:void_tears"
-            ]
+            "tag": "forge:storage_blocks/gold"
           }
         ]
       }

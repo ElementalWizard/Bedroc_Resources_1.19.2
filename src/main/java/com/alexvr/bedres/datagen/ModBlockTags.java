@@ -34,10 +34,12 @@ public class ModBlockTags extends BlockTagsProvider {
                 .add(Registration.ENDERIAN_STAIRS_BLOCK.get())
                 .add(Registration.DF_COOBLE_BLOCK.get())
                 .add(Registration.EVENT_ALTAR_BLOCK.get())
+                .add(Registration.HEXTILE_BLOCK.get())
                 .add(Registration.ITEM_PLATFORM_BLOCK.get());
 
         tag(BlockTags.NEEDS_STONE_TOOL)
-                .add(Registration.DF_COOBLE_BLOCK.get());
+                .add(Registration.DF_COOBLE_BLOCK.get())
+                .add(Registration.HEXTILE_BLOCK.get());
 
         tag(BlockTags.NEEDS_IRON_TOOL)
                 .add(Registration.SPIKE_BLOCK.get())

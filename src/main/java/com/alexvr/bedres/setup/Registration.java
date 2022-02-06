@@ -20,9 +20,11 @@ import com.alexvr.bedres.blocks.scrapeTank.ScrapeTankMenu;
 import com.alexvr.bedres.blocks.scrapeTank.ScrapeTankTile;
 import com.alexvr.bedres.client.particles.lightParticle.LightParticleType;
 import com.alexvr.bedres.entities.LightProjectileEntity;
+import com.alexvr.bedres.entities.babyghast.BabyGhastEntity;
 import com.alexvr.bedres.entities.chainedblaze.ChainedBlazeEntity;
 import com.alexvr.bedres.entities.fluxedcreep.FluxedCreepEntity;
 import com.alexvr.bedres.entities.sporedeity.SporeDeityEntity;
+import com.alexvr.bedres.entities.treckingcreeper.TreckingCreeperEntity;
 import com.alexvr.bedres.items.*;
 import com.alexvr.bedres.utils.BedrockReferences;
 import com.alexvr.bedres.world.features.AltarStructure;
@@ -39,6 +41,7 @@ import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
@@ -60,6 +63,7 @@ import static com.alexvr.bedres.BedrockResources.MODID;
 
 public class Registration {
 
+    private static final DeferredRegister<Biome> BIOMES = DeferredRegister.create(ForgeRegistries.BIOMES, MODID);
     private static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, MODID);
     private static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, MODID);
     private static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITIES = DeferredRegister.create(ForgeRegistries.BLOCK_ENTITIES, MODID);
@@ -80,7 +84,11 @@ public class Registration {
         ENTITIES.register(bus);
         PARTICLES.register(bus);
         SOUND_EVENTS.register(bus);
+        BIOMES.register(bus);
     }
+
+//    public static Biome FLUXED_BIOME = BIOMES.register("fluxed_biome", DecayingFluxedBiome.createBiome());
+
 
     public static final RegistryObject<SoundEvent> FLUXED_CREEP_IDLE = SOUND_EVENTS.register("fluxed_creep_idle",
             () -> new SoundEvent(new ResourceLocation(MODID, "fluxed_creep_idle")));
@@ -101,21 +109,35 @@ public class Registration {
             .clientTrackingRange(8)
             .setShouldReceiveVelocityUpdates(false)
             .build(BedrockReferences.SPORE_DEITY_REGNAME));
-    public static final RegistryObject<Item> SPORE_DEITY_EGG_ITEM = ITEMS.register(BedrockReferences.SPORE_DEITY_REGNAME, () -> new ForgeSpawnEggItem(SPORE_DEITY, 0xff0000, 0x00ff00, new Item.Properties().tab(ModSetup.GROUP)));
+    public static final RegistryObject<Item> SPORE_DEITY_EGG_ITEM = ITEMS.register(BedrockReferences.SPORE_DEITY_REGNAME, () -> new ForgeSpawnEggItem(SPORE_DEITY, 0x000000, 0xffffff, new Item.Properties().tab(ModSetup.GROUP)));
 
     public static final RegistryObject<EntityType<FluxedCreepEntity>> FLUXED_CREEP = ENTITIES.register(BedrockReferences.FLUXED_CREEP_REGNAME, () -> EntityType.Builder.of(FluxedCreepEntity::new, MobCategory.MONSTER)
             .sized(0.8f, 1.95f)
             .clientTrackingRange(8)
             .setShouldReceiveVelocityUpdates(false)
             .build(BedrockReferences.FLUXED_CREEP_REGNAME));
-    public static final RegistryObject<Item> FLUXED_CREEP_EGG_ITEM = ITEMS.register(BedrockReferences.FLUXED_CREEP_REGNAME, () -> new ForgeSpawnEggItem(FLUXED_CREEP, 0xff0000, 0x00ff00, new Item.Properties().tab(ModSetup.GROUP)));
+    public static final RegistryObject<Item> FLUXED_CREEP_EGG_ITEM = ITEMS.register(BedrockReferences.FLUXED_CREEP_REGNAME, () -> new ForgeSpawnEggItem(FLUXED_CREEP, 0x8e7cc3, 0x000000, new Item.Properties().tab(ModSetup.GROUP)));
 
     public static final RegistryObject<EntityType<ChainedBlazeEntity>> CHAINED_BLAZE = ENTITIES.register(BedrockReferences.CHAINED_BLAZE_REGNAME, () -> EntityType.Builder.of(ChainedBlazeEntity::new, MobCategory.MONSTER)
             .sized(0.8f, 1.95f)
             .clientTrackingRange(8)
             .setShouldReceiveVelocityUpdates(false)
             .build(BedrockReferences.CHAINED_BLAZE_REGNAME));
-    public static final RegistryObject<Item> CHAINED_BLAZE_EGG_ITEM = ITEMS.register(BedrockReferences.CHAINED_BLAZE_REGNAME, () -> new ForgeSpawnEggItem(CHAINED_BLAZE, 0xff0000, 0x00ff00, new Item.Properties().tab(ModSetup.GROUP)));
+    public static final RegistryObject<Item> CHAINED_BLAZE_EGG_ITEM = ITEMS.register(BedrockReferences.CHAINED_BLAZE_REGNAME, () -> new ForgeSpawnEggItem(CHAINED_BLAZE, 0x351c75, 0x5b5b5b, new Item.Properties().tab(ModSetup.GROUP)));
+
+    public static final RegistryObject<EntityType<TreckingCreeperEntity>> TRECKING_CREEPER = ENTITIES.register(BedrockReferences.TRECKING_CREEPER_REGNAME, () -> EntityType.Builder.of(TreckingCreeperEntity::new, MobCategory.MONSTER)
+            .sized(0.30f, 0.5f)
+            .clientTrackingRange(16)
+            .setShouldReceiveVelocityUpdates(false)
+            .build(BedrockReferences.TRECKING_CREEPER_REGNAME));
+    public static final RegistryObject<Item> TRECKING_CREEPER_EGG_ITEM = ITEMS.register(BedrockReferences.TRECKING_CREEPER_REGNAME, () -> new ForgeSpawnEggItem(TRECKING_CREEPER, 0x6aa84f, 0x000000, new Item.Properties().tab(ModSetup.GROUP)));
+
+    public static final RegistryObject<EntityType<BabyGhastEntity>> BABY_GHAST = ENTITIES.register(BedrockReferences.BABY_GHAST_REGNAME, () -> EntityType.Builder.of(BabyGhastEntity::new, MobCategory.MONSTER)
+            .sized(0.6f, 0.75f)
+            .clientTrackingRange(16)
+            .setShouldReceiveVelocityUpdates(false)
+            .build(BedrockReferences.BABY_GHAST_REGNAME));
+    public static final RegistryObject<Item> BABY_GHAST_EGG_ITEM = ITEMS.register(BedrockReferences.BABY_GHAST_REGNAME, () -> new ForgeSpawnEggItem(BABY_GHAST, 0xffffff, 0xff0000, new Item.Properties().tab(ModSetup.GROUP)));
 
 
     private static final BlockBehaviour.Properties ORE_PROPERTIES = BlockBehaviour.Properties.of(Material.STONE).strength(2f);
@@ -159,6 +181,9 @@ public class Registration {
 
     public static final RegistryObject<Rope> ROPE_BLOCK = BLOCKS.register(BedrockReferences.ROPE_REGNAME, () -> new Rope(BLOCK_PROPERTIES.noOcclusion().instabreak().noCollission().friction(3)));
     public static final RegistryObject<Item> ROPE_ITEM = fromBlock(ROPE_BLOCK);
+
+    public static final RegistryObject<HexTile> HEXTILE_BLOCK = BLOCKS.register(BedrockReferences.HEXTILE_REGNAME, () ->new HexTile(BlockBehaviour.Properties.of(Material.DECORATION, MaterialColor.COLOR_MAGENTA).requiresCorrectToolForDrops().strength(2.0F, 6.0F)));
+    public static final RegistryObject<Item> HEXTILE_ITEM = fromBlock(HEXTILE_BLOCK);
 
     public static final RegistryObject<Block> ENDERIAN_BRICK_BLOCK = BLOCKS.register(BedrockReferences.ENDERIAN_BRICK_REGNAME, () ->new Block(BlockBehaviour.Properties.of(Material.STONE, MaterialColor.COLOR_BLUE).requiresCorrectToolForDrops().strength(2.0F, 6.0F)));
     public static final RegistryObject<Item> ENDERIAN_BRICK_ITEM = fromBlock(ENDERIAN_BRICK_BLOCK);

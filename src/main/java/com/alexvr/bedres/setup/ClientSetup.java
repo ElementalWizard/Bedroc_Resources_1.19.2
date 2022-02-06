@@ -1,13 +1,18 @@
 package com.alexvr.bedres.setup;
 
 import com.alexvr.bedres.BedrockResources;
+import com.alexvr.bedres.blocks.HexTile;
 import com.alexvr.bedres.client.renderer.*;
 import com.alexvr.bedres.client.screen.ScrapeTankScreen;
+import com.alexvr.bedres.entities.babyghast.BabyGhastModel;
+import com.alexvr.bedres.entities.babyghast.BabyGhastRenderer;
 import com.alexvr.bedres.entities.chainedblaze.ChainedBlazeModel;
 import com.alexvr.bedres.entities.chainedblaze.ChainedBlazeRenderer;
 import com.alexvr.bedres.entities.fluxedcreep.FluxedCreepModel;
 import com.alexvr.bedres.entities.fluxedcreep.FluxedCreepRenderer;
 import com.alexvr.bedres.entities.sporedeity.SporeDeityRenderer;
+import com.alexvr.bedres.entities.treckingcreeper.TreckingCreeperModel;
+import com.alexvr.bedres.entities.treckingcreeper.TreckingCreeperRenderer;
 import com.alexvr.bedres.items.MageStaff;
 import com.alexvr.bedres.utils.KeyBindings;
 import net.minecraft.client.gui.screens.MenuScreens;
@@ -15,6 +20,7 @@ import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
 import net.minecraft.client.renderer.texture.TextureAtlas;
+import net.minecraft.world.item.DyeColor;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.ColorHandlerEvent;
 import net.minecraftforge.client.event.EntityRenderersEvent;
@@ -32,6 +38,12 @@ public class ClientSetup {
     @SubscribeEvent
     public static void onItemColor(ColorHandlerEvent.Item event) {
         event.getItemColors().register((stack, i) -> ((MageStaff)stack.getItem()).getColor(stack), Registration.MAGE_STAFF_ITEM.get());
+        event.getItemColors().register((stack, i) -> DyeColor.MAGENTA.getMaterialColor().col, Registration.HEXTILE_ITEM.get());
+    }
+
+    @SubscribeEvent
+    public static void onBlockColor(ColorHandlerEvent.Block event) {
+        event.getBlockColors().register((p_92646_, p_92647_, p_92648_, p_92649_) -> HexTile.getColor(p_92646_), Registration.HEXTILE_BLOCK.get());
     }
 
     public static void init(FMLClientSetupEvent event){
@@ -72,6 +84,8 @@ public class ClientSetup {
     public static void onRegisterLayers(EntityRenderersEvent.RegisterLayerDefinitions event) {
         event.registerLayerDefinition(FluxedCreepModel.LAYER_LOCATION, FluxedCreepModel::createBodyLayer);
         event.registerLayerDefinition(ChainedBlazeModel.LAYER_LOCATION,ChainedBlazeModel::createBodyLayer);
+        event.registerLayerDefinition(TreckingCreeperModel.LAYER_LOCATION,TreckingCreeperModel::createBodyLayer);
+        event.registerLayerDefinition(BabyGhastModel.LAYER_LOCATION,BabyGhastModel::createBodyLayer);
     }
 
     @SubscribeEvent
@@ -79,6 +93,8 @@ public class ClientSetup {
         event.registerEntityRenderer(Registration.SPORE_DEITY.get(), SporeDeityRenderer::new);
         event.registerEntityRenderer(Registration.FLUXED_CREEP.get(), FluxedCreepRenderer::new);
         event.registerEntityRenderer(Registration.CHAINED_BLAZE.get(), ChainedBlazeRenderer::new);
+        event.registerEntityRenderer(Registration.TRECKING_CREEPER.get(), TreckingCreeperRenderer::new);
+        event.registerEntityRenderer(Registration.BABY_GHAST.get(), BabyGhastRenderer::new);
         event.registerEntityRenderer(Registration.LIGHT_PROJ_ENTITY.get(), RenderStub::new);
     }
 

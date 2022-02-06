@@ -38,7 +38,7 @@ public class ModSetup {
     public static void init(FMLCommonSetupEvent event) {
 
         event.enqueueWork(() -> {
-
+//            DecayingFluxedBiome.init();
             ModWorldgen.onCommonSetup();
             ModOres.registerConfiguredFeatures();
             ModStructures.setupStructures();
