@@ -26,10 +26,12 @@ public class FluxedCupcake extends Item implements IDisplayFlux {
 
     @Override
     public ItemStack finishUsingItem(ItemStack pStack, Level pLevel, LivingEntity pLivingEntity) {
+        Minecraft.getInstance().player.reviveCaps();
         LazyOptional<IPlayerAbility> abilities = Minecraft.getInstance().player.getCapability(PlayerAbilityProvider.PLAYER_ABILITY_CAPABILITY, null);
         abilities.ifPresent(flux -> {
             flux.addFlux((flux.getMaxFlux()-flux.getFlux())/10);
         });
+        Minecraft.getInstance().player.invalidateCaps();
         return super.finishUsingItem(pStack, pLevel, pLivingEntity);
     }
 

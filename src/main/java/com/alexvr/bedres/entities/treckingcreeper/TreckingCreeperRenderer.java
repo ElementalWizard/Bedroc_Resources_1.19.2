@@ -22,6 +22,7 @@ public class TreckingCreeperRenderer extends MobRenderer<TreckingCreeperEntity, 
     private static final ResourceLocation RESOURCE_LOCATION_YELLOW =  new ResourceLocation(BedrockResources.MODID, "textures/entity/" + BedrockReferences.TRECKING_CREEPER_REGNAME +"/"+ BedrockReferences.TRECKING_CREEPER_REGNAME +"_yellow.png");
     public TreckingCreeperRenderer(EntityRendererProvider.Context context) {
         super(context,  new TreckingCreeperModel<>(context.bakeLayer(TreckingCreeperModel.LAYER_LOCATION)), 0.5F);
+        this.addLayer(new TreckingCreeperPowerLayer(this, context.getModelSet()));
     }
 
     protected void scale(TreckingCreeperEntity pLivingEntity, PoseStack pMatrixStack, float pPartialTickTime) {

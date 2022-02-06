@@ -1,32 +1,24 @@
 package com.alexvr.bedres.entities.sporedeity;
 
+import com.alexvr.bedres.BedrockResources;
+import com.alexvr.bedres.utils.BedrockReferences;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterables;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.model.HumanoidModel;
+import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
 import net.minecraft.client.renderer.RenderType;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.LivingEntity;
 
-import java.util.List;
-import java.util.Random;
-
 public class SporeDeityModel<T extends LivingEntity> extends HumanoidModel<T> {
 
-
-    private static final String EAR = "ear";
-    private static final String CLOAK = "cloak";
-    private static final String LEFT_SLEEVE = "left_sleeve";
-    private static final String RIGHT_SLEEVE = "right_sleeve";
-    private static final String LEFT_PANTS = "left_pants";
-    private static final String RIGHT_PANTS = "right_pants";
-    private final List<ModelPart> parts;
     public final ModelPart leftSleeve;
     public final ModelPart rightSleeve;
     public final ModelPart leftPants;
@@ -34,6 +26,7 @@ public class SporeDeityModel<T extends LivingEntity> extends HumanoidModel<T> {
     public final ModelPart jacket;
     private final ModelPart cloak;
     private final ModelPart ear;
+    public static final ModelLayerLocation ARMOR_LAYER_LOCATION = new ModelLayerLocation(new ResourceLocation(BedrockResources.MODID, BedrockReferences.SPORE_DEITY_REGNAME), "armor");
 
     public SporeDeityModel(ModelPart part) {
         super(part, RenderType::entityTranslucent);
@@ -44,32 +37,22 @@ public class SporeDeityModel<T extends LivingEntity> extends HumanoidModel<T> {
         this.leftPants = part.getChild("left_pants");
         this.rightPants = part.getChild("right_pants");
         this.jacket = part.getChild("jacket");
-        this.parts = part.getAllParts().filter((p_170824_) -> {
-            return !p_170824_.isEmpty();
-        }).collect(ImmutableList.toImmutableList());
         }
 
     public static LayerDefinition createBodyLayer() {
-        MeshDefinition meshdefinition = createMesh(CubeDeformation.NONE, false);
+        MeshDefinition meshdefinition = createMesh(CubeDeformation.NONE);
         return LayerDefinition.create(meshdefinition, 64, 32);
     }
 
-    public static MeshDefinition createMesh(CubeDeformation pCubeDeformation, boolean pSlim) {
+    public static MeshDefinition createMesh(CubeDeformation pCubeDeformation) {
         MeshDefinition meshdefinition = HumanoidModel.createMesh(pCubeDeformation, 0.0F);
         PartDefinition partdefinition = meshdefinition.getRoot();
         partdefinition.addOrReplaceChild("ear", CubeListBuilder.create().texOffs(24, 0).addBox(-3.0F, -6.0F, -1.0F, 6.0F, 6.0F, 1.0F, pCubeDeformation), PartPose.ZERO);
         partdefinition.addOrReplaceChild("cloak", CubeListBuilder.create().texOffs(0, 0).addBox(-5.0F, 0.0F, -1.0F, 10.0F, 16.0F, 1.0F, pCubeDeformation, 1.0F, 0.5F), PartPose.offset(0.0F, 0.0F, 0.0F));
-        float f = 0.25F;
-        if (pSlim) {
-            partdefinition.addOrReplaceChild("left_arm", CubeListBuilder.create().texOffs(32, 48).addBox(-1.0F, -2.0F, -2.0F, 3.0F, 12.0F, 4.0F, pCubeDeformation), PartPose.offset(5.0F, 2.5F, 0.0F));
-            partdefinition.addOrReplaceChild("right_arm", CubeListBuilder.create().texOffs(40, 16).addBox(-2.0F, -2.0F, -2.0F, 3.0F, 12.0F, 4.0F, pCubeDeformation), PartPose.offset(-5.0F, 2.5F, 0.0F));
-            partdefinition.addOrReplaceChild("left_sleeve", CubeListBuilder.create().texOffs(48, 48).addBox(-1.0F, -2.0F, -2.0F, 3.0F, 12.0F, 4.0F, pCubeDeformation.extend(0.25F)), PartPose.offset(5.0F, 2.5F, 0.0F));
-            partdefinition.addOrReplaceChild("right_sleeve", CubeListBuilder.create().texOffs(40, 32).addBox(-2.0F, -2.0F, -2.0F, 3.0F, 12.0F, 4.0F, pCubeDeformation.extend(0.25F)), PartPose.offset(-5.0F, 2.5F, 0.0F));
-        } else {
-            partdefinition.addOrReplaceChild("left_arm", CubeListBuilder.create().texOffs(32, 48).addBox(-1.0F, -2.0F, -2.0F, 4.0F, 12.0F, 4.0F, pCubeDeformation), PartPose.offset(5.0F, 2.0F, 0.0F));
-            partdefinition.addOrReplaceChild("left_sleeve", CubeListBuilder.create().texOffs(48, 48).addBox(-1.0F, -2.0F, -2.0F, 4.0F, 12.0F, 4.0F, pCubeDeformation.extend(0.25F)), PartPose.offset(5.0F, 2.0F, 0.0F));
-            partdefinition.addOrReplaceChild("right_sleeve", CubeListBuilder.create().texOffs(40, 32).addBox(-3.0F, -2.0F, -2.0F, 4.0F, 12.0F, 4.0F, pCubeDeformation.extend(0.25F)), PartPose.offset(-5.0F, 2.0F, 0.0F));
-        }
+
+        partdefinition.addOrReplaceChild("left_arm", CubeListBuilder.create().texOffs(32, 48).addBox(-1.0F, -2.0F, -2.0F, 4.0F, 12.0F, 4.0F, pCubeDeformation), PartPose.offset(5.0F, 2.0F, 0.0F));
+        partdefinition.addOrReplaceChild("left_sleeve", CubeListBuilder.create().texOffs(48, 48).addBox(-1.0F, -2.0F, -2.0F, 4.0F, 12.0F, 4.0F, pCubeDeformation.extend(0.25F)), PartPose.offset(5.0F, 2.0F, 0.0F));
+        partdefinition.addOrReplaceChild("right_sleeve", CubeListBuilder.create().texOffs(40, 32).addBox(-3.0F, -2.0F, -2.0F, 4.0F, 12.0F, 4.0F, pCubeDeformation.extend(0.25F)), PartPose.offset(-5.0F, 2.0F, 0.0F));
 
         partdefinition.addOrReplaceChild("left_leg", CubeListBuilder.create().texOffs(16, 48).addBox(-2.0F, 0.0F, -2.0F, 4.0F, 12.0F, 4.0F, pCubeDeformation), PartPose.offset(1.9F, 12.0F, 0.0F));
         partdefinition.addOrReplaceChild("left_pants", CubeListBuilder.create().texOffs(0, 48).addBox(-2.0F, 0.0F, -2.0F, 4.0F, 12.0F, 4.0F, pCubeDeformation.extend(0.25F)), PartPose.offset(1.9F, 12.0F, 0.0F));
@@ -116,10 +99,8 @@ public class SporeDeityModel<T extends LivingEntity> extends HumanoidModel<T> {
             this.rightArm.yRot = 0.0F;
             this.leftArm.yRot = 0.0F;
         }
-
-
-
     }
+
     public void setAllVisible(boolean pVisible) {
         super.setAllVisible(pVisible);
         this.leftSleeve.visible = pVisible;
@@ -134,21 +115,6 @@ public class SporeDeityModel<T extends LivingEntity> extends HumanoidModel<T> {
     public void translateToHand(HumanoidArm pSide, PoseStack pPoseStack) {
         ModelPart modelpart = this.getArm(pSide);
         modelpart.translateAndRotate(pPoseStack);
-
-    }
-
-    public ModelPart getRandomModelPart(Random pRandom) {
-        return this.parts.get(pRandom.nextInt(this.parts.size()));
-    }
-
-    public void renderEars(PoseStack pPoseStack, VertexConsumer pBuffer, int pPackedLight, int pPackedOverlay) {
-        this.ear.copyFrom(this.head);
-        this.ear.x = 0.0F;
-        this.ear.y = 0.0F;
-        this.ear.render(pPoseStack, pBuffer, pPackedLight, pPackedOverlay);
-    }
-    public void renderCloak(PoseStack pPoseStack, VertexConsumer pBuffer, int pPackedLight, int pPackedOverlay) {
-        this.cloak.render(pPoseStack, pBuffer, pPackedLight, pPackedOverlay);
     }
 
 }

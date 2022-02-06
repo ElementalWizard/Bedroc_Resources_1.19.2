@@ -10,6 +10,7 @@ import com.alexvr.bedres.entities.chainedblaze.ChainedBlazeModel;
 import com.alexvr.bedres.entities.chainedblaze.ChainedBlazeRenderer;
 import com.alexvr.bedres.entities.fluxedcreep.FluxedCreepModel;
 import com.alexvr.bedres.entities.fluxedcreep.FluxedCreepRenderer;
+import com.alexvr.bedres.entities.sporedeity.SporeDeityModel;
 import com.alexvr.bedres.entities.sporedeity.SporeDeityRenderer;
 import com.alexvr.bedres.entities.treckingcreeper.TreckingCreeperModel;
 import com.alexvr.bedres.entities.treckingcreeper.TreckingCreeperRenderer;
@@ -84,7 +85,9 @@ public class ClientSetup {
     public static void onRegisterLayers(EntityRenderersEvent.RegisterLayerDefinitions event) {
         event.registerLayerDefinition(FluxedCreepModel.LAYER_LOCATION, FluxedCreepModel::createBodyLayer);
         event.registerLayerDefinition(ChainedBlazeModel.LAYER_LOCATION,ChainedBlazeModel::createBodyLayer);
+        event.registerLayerDefinition(SporeDeityModel.ARMOR_LAYER_LOCATION,SporeDeityModel::createBodyLayer);
         event.registerLayerDefinition(TreckingCreeperModel.LAYER_LOCATION,TreckingCreeperModel::createBodyLayer);
+        event.registerLayerDefinition(TreckingCreeperModel.ARMOR_LAYER_LOCATION,TreckingCreeperModel::createBodyLayer);
         event.registerLayerDefinition(BabyGhastModel.LAYER_LOCATION,BabyGhastModel::createBodyLayer);
     }
 

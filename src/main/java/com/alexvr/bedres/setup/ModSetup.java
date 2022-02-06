@@ -6,8 +6,11 @@ import com.alexvr.bedres.world.ModWorldgen;
 import com.alexvr.bedres.world.dimension.ModDimensions;
 import com.alexvr.bedres.world.features.ModStructures;
 import com.alexvr.bedres.world.ores.ModOres;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.SpawnPlacements;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
@@ -45,6 +48,8 @@ public class ModSetup {
             ModStructures.registerConfiguredStructures();
             ModDimensions.register();
             MinecraftForge.EVENT_BUS.register(new CapabilityHandler());
+            SpawnPlacements.register(Registration.TRECKING_CREEPER.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, Mob::checkMobSpawnRules);
+            SpawnPlacements.register(Registration.BABY_GHAST.get(), SpawnPlacements.Type.NO_RESTRICTIONS, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, Mob::checkMobSpawnRules);
         });
     }
 

@@ -71,6 +71,7 @@ public class MageStaff extends Item implements IDisplayFlux {
     @Override
     public InteractionResultHolder<ItemStack> use(Level pLevel, Player pPlayer, InteractionHand pUsedHand) {
         ItemStack itemstack = pPlayer.getItemInHand(pUsedHand);
+        Minecraft.getInstance().player.reviveCaps();
         LazyOptional<IPlayerAbility> playerFlux = Minecraft.getInstance().player.getCapability(PlayerAbilityProvider.PLAYER_ABILITY_CAPABILITY, null);
         if (type.equals("zeta") && !pLevel.isClientSide()){
             playerFlux.ifPresent(k -> {
@@ -79,9 +80,10 @@ public class MageStaff extends Item implements IDisplayFlux {
                     getZetaEffect(pPlayer,pLevel);
                 }
             });
-
+            Minecraft.getInstance().player.invalidateCaps();
             return new InteractionResultHolder<>(InteractionResult.SUCCESS, itemstack);
         }
+        Minecraft.getInstance().player.invalidateCaps();
         pPlayer.startUsingItem(pUsedHand);
         return InteractionResultHolder.consume(itemstack);
     }
@@ -92,6 +94,7 @@ public class MageStaff extends Item implements IDisplayFlux {
             return;
         }
         Player player = (Player) pLivingEntity;
+        Minecraft.getInstance().player.reviveCaps();
         LazyOptional<IPlayerAbility> playerFlux = Minecraft.getInstance().player.getCapability(PlayerAbilityProvider.PLAYER_ABILITY_CAPABILITY, null);
         playerFlux.ifPresent(k -> {
             if (type.equals("alpha")){
@@ -106,7 +109,7 @@ public class MageStaff extends Item implements IDisplayFlux {
         if (pLevel.isClientSide()) {
             player.getCooldowns().addCooldown(pStack.getItem(), 10);
         }
-
+        Minecraft.getInstance().player.invalidateCaps();
         super.releaseUsing(pStack, pLevel, pLivingEntity, pTimeCharged);
     }
 
@@ -116,6 +119,7 @@ public class MageStaff extends Item implements IDisplayFlux {
             if (player.getCooldowns().isOnCooldown(pStack.getItem()) || !player.isUsingItem()){
                 return;
             }
+            Minecraft.getInstance().player.reviveCaps();
             LazyOptional<IPlayerAbility> playerFlux = Minecraft.getInstance().player.getCapability(PlayerAbilityProvider.PLAYER_ABILITY_CAPABILITY, null);
 
             if (type.equals("epsilon")){
@@ -162,6 +166,7 @@ public class MageStaff extends Item implements IDisplayFlux {
                     }
                 }
             }
+            Minecraft.getInstance().player.invalidateCaps();
         }
         super.onUseTick(pLevel, pLivingEntity, pStack, pRemainingUseDuration);
     }
@@ -257,7 +262,7 @@ public class MageStaff extends Item implements IDisplayFlux {
     private void getBetaEffect(Player player, float power, IPlayerAbility flux) {
         Level world = player.level;
         BlockHitResult lookingAt = getLookingAt(player, ClipContext.Fluid.ANY);
-        if (world.isEmptyBlock(lookingAt.getBlockPos()) || flux.getFlux() < power*power){
+        if (world.isEmptyBlock(lookingAt.getBlockPos()) || flux.getFlux() < power){
             player.sendMessage(new TranslatableComponent("bedres.mage_staff.lightning.fail"),player.getUUID());
             return;
         }
@@ -266,7 +271,7 @@ public class MageStaff extends Item implements IDisplayFlux {
         lightningbolt.setVisualOnly(false);
         lightningbolt.setDamage(power);
         world.addFreshEntity(lightningbolt);
-        flux.removeFlux((double) (power*power));
+        flux.removeFlux((double) (power));
     }
 
     public void getAlphaEffect(Player player, float speed, Vec3 playerLook, IPlayerAbility flux){

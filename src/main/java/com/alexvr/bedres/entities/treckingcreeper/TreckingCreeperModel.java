@@ -14,6 +14,7 @@ import net.minecraft.world.entity.Entity;
 public class TreckingCreeperModel<T extends Entity> extends EntityModel<T> {
 	// This layer location should be baked with EntityRendererProvider.Context in the entity renderer and passed into this model's constructor
 	public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(new ResourceLocation("bedres", "trecking_creeper"), "main");
+	public static final ModelLayerLocation ARMOR_LAYER_LOCATION = new ModelLayerLocation(new ResourceLocation("bedres", "trecking_creeper"), "armor");
 	private final ModelPart head;
 	private final ModelPart backpack;
 	private final ModelPart body;

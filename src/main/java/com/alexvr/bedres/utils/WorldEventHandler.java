@@ -3,6 +3,7 @@ package com.alexvr.bedres.utils;
 import com.alexvr.bedres.BedrockResources;
 import com.alexvr.bedres.capability.abilities.IPlayerAbility;
 import com.alexvr.bedres.capability.abilities.PlayerAbilityProvider;
+import com.alexvr.bedres.entities.treckingcreeper.TreckingCreeperEntity;
 import com.alexvr.bedres.items.MageStaff;
 import com.alexvr.bedres.setup.Registration;
 import com.google.common.collect.ImmutableMap;
@@ -11,9 +12,12 @@ import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
+import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.biome.MobSpawnSettings;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
@@ -22,13 +26,11 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraftforge.common.ForgeMod;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.event.entity.living.LivingDamageEvent;
-import net.minecraftforge.event.entity.living.LivingEvent;
-import net.minecraftforge.event.entity.living.LivingFallEvent;
-import net.minecraftforge.event.entity.living.LivingHurtEvent;
+import net.minecraftforge.event.entity.living.*;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.entity.player.PlayerWakeUpEvent;
+import net.minecraftforge.event.world.BiomeLoadingEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
@@ -85,6 +87,23 @@ public class WorldEventHandler {
     @SubscribeEvent
     public static void onDamage(LivingDamageEvent event){
 
+    }
+
+    @SubscribeEvent
+    public static void onBiomesLoad(BiomeLoadingEvent event) {
+        Biome.BiomeCategory biomecat = event.getCategory();
+        event.getSpawns().getSpawner(MobCategory.MONSTER).add(new MobSpawnSettings.SpawnerData(Registration.TRECKING_CREEPER.get(), 15, 1, 3));
+        if (biomecat == Biome.BiomeCategory.NETHER){
+            event.getSpawns().getSpawner(MobCategory.MONSTER).add(new MobSpawnSettings.SpawnerData(Registration.BABY_GHAST.get(), 10, 1, 3));
+        }
+
+    }
+
+    @SubscribeEvent
+    public static void onEntitySpawn(LivingSpawnEvent event) {
+        if (event.getEntity() instanceof TreckingCreeperEntity treckingCreeperEntity){
+            treckingCreeperEntity.setType(event.getWorld().getBiome(treckingCreeperEntity.getOnPos()).getBiomeCategory());
+        }
     }
 
     @SubscribeEvent
