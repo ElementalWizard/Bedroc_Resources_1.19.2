@@ -30,6 +30,7 @@ import java.util.List;
 import java.util.Map;
 
 import static com.alexvr.bedres.blocks.gravityBubble.FluxedGravityBubble.ENABLED;
+import static com.alexvr.bedres.setup.ModConfig.GRAVITY_BUBBLE_RADIUS;
 
 
 public class FluxedGravityBubbleTile extends BlockEntity {
@@ -140,7 +141,7 @@ public class FluxedGravityBubbleTile extends BlockEntity {
     }
     public void tickServer() {
         if (triggerBox == null) {
-            triggerBox = new AABB(getBlockPos()).inflate(7).move(0,4,0);
+            triggerBox = new AABB(getBlockPos()).inflate(GRAVITY_BUBBLE_RADIUS.get()).move(0,GRAVITY_BUBBLE_RADIUS.get()%2==0?GRAVITY_BUBBLE_RADIUS.get()/2f:(GRAVITY_BUBBLE_RADIUS.get()+1)/2f,0);
         }
         List<Player> entities = level.getEntitiesOfClass(Player.class, triggerBox);
         List<String> entitiesAccounted = new ArrayList<>();

@@ -30,6 +30,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import static com.alexvr.bedres.blocks.bedrockiumPedestal.BedrociumPedestal.CRAFTING;
 import static com.alexvr.bedres.blocks.bedrockiumPedestal.BedrociumPedestal.VALIDRECIPE;
+import static com.alexvr.bedres.setup.ModConfig.RITUAL_TICKS_PER_ITEM;
 import static com.alexvr.bedres.utils.ParticleHelper.spawnItemParticles;
 import static com.alexvr.bedres.utils.ParticleHelper.spawnItemParticlesWithVelocity;
 
@@ -45,7 +46,7 @@ public class BedrociumPedestalTile extends BlockEntity {
     public int craftingItemAmount = 0;
     public int craftingItemConsumed = 0;
     public float craftingProgress = 0f;
-    public float MaxItemConsumptionTicks = 100f;
+    public float MaxItemConsumptionTicks = RITUAL_TICKS_PER_ITEM.get();
     public float itemConsumptionTicks = 0f;
     public ItemStack outPut = ItemStack.EMPTY;
     public BedrockiumTowerTile target;

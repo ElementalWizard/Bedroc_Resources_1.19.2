@@ -13,11 +13,8 @@ import net.minecraft.data.worldgen.PlainVillagePools;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biome;
-import net.minecraft.world.level.biome.MobSpawnSettings;
 import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.levelgen.FlatLevelSource;
 import net.minecraft.world.level.levelgen.StructureSettings;
@@ -26,14 +23,13 @@ import net.minecraft.world.level.levelgen.feature.StructureFeature;
 import net.minecraft.world.level.levelgen.feature.configurations.JigsawConfiguration;
 import net.minecraft.world.level.levelgen.feature.configurations.StructureFeatureConfiguration;
 import net.minecraft.world.level.levelgen.structure.pieces.PieceGeneratorSupplier;
-import net.minecraftforge.common.util.Lazy;
-import net.minecraftforge.event.world.StructureSpawnListGatherEvent;
 import net.minecraftforge.event.world.WorldEvent;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
+
+import static com.alexvr.bedres.setup.ModConfig.*;
 
 public class ModStructures {
     public static ConfiguredStructureFeature<?, ?> CONFIGURED_ALTAR_OVERWORLD = Registration.ALTAR_OVERWORLD.get()
@@ -51,11 +47,11 @@ public class ModStructures {
 
         setupMapSpacingAndLand(
                 Registration.ALTAR_OVERWORLD.get(),
-                new StructureFeatureConfiguration(10,5,1294567890),
+                new StructureFeatureConfiguration(ALTAR_SPACING.get(),ALTAR_SEPARATION.get(),1294567890),
                 false);
         setupMapSpacingAndLand(
                 Registration.DUNGEON.get(),
-                new StructureFeatureConfiguration(64,32,1294567890),
+                new StructureFeatureConfiguration(MYSTERYDUNGEON_SPACING.get(),MYSTERYDUNGEON_SEPARATION.get(),1294567890),
                 false);
 
     }
@@ -221,14 +217,4 @@ public class ModStructures {
         );
     }
 
-    private static final Lazy<List<MobSpawnSettings.SpawnerData>> STRUCTURE_MONSTERS = Lazy.of(() -> ImmutableList.of(
-            new MobSpawnSettings.SpawnerData(EntityType.ILLUSIONER, 200, 4, 9),
-            new MobSpawnSettings.SpawnerData(EntityType.VINDICATOR, 200, 4, 9)
-    ));
-
-    public static void setupStructureSpawns(final StructureSpawnListGatherEvent event) {
-        if (event.getStructure() == Registration.ALTAR_OVERWORLD.get() || event.getStructure() == Registration.DUNGEON.get()) {
-            event.addEntitySpawns(MobCategory.MONSTER, STRUCTURE_MONSTERS.get());
-        }
-    }
 }

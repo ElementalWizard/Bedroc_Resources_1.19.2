@@ -23,6 +23,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import static com.alexvr.bedres.blocks.bedrockiumPedestal.BedrociumPedestal.CRAFTING;
 import static com.alexvr.bedres.blocks.bedrockiumPedestal.BedrociumPedestal.VALIDRECIPE;
+import static com.alexvr.bedres.setup.ModConfig.PEDESTAL_TICKS_PER_ITEM;
 
 
 public class EventAltarTile extends BlockEntity {
@@ -30,7 +31,7 @@ public class EventAltarTile extends BlockEntity {
     public List<EnderianRitualPedestalTile> tiles = new ArrayList<>();
     int target = -1;
     EventRitualsRecipes recipe = null;
-    int ticksPerItem = 40;
+    int ticksPerItem = PEDESTAL_TICKS_PER_ITEM.get();
     int craftingTick = 0;
     Player playerInside;
     public EventAltarTile(BlockPos pWorldPosition, BlockState pBlockState) {

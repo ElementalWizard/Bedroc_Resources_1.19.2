@@ -21,6 +21,7 @@ import java.util.Locale;
 
 import static com.alexvr.bedres.BedrockResources.LOGGER;
 import static com.alexvr.bedres.BedrockResources.MODID;
+import static com.alexvr.bedres.setup.ModConfig.*;
 
 @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD)
 public class ModFeatures {
@@ -52,9 +53,9 @@ public class ModFeatures {
     @SubscribeEvent
     public static void registerFeatures(RegistryEvent.Register<Feature<?>> event) {
         event.getRegistry().registerAll(
-                new WorldGenFlower(Registration.SUN_DAIZE_BLOCK.get(), 15, false).setRegistryName(BedrockReferences.SUN_DAIZE_REGNAME),
-                new WorldGenFlower(Registration.ENDER_HUSH_BLOCK.get(), 35, false).setRegistryName(BedrockReferences.ENDER_HUSH_REGNAME),
-                new WorldGenFlower(Registration.BLAZIUM_BLOCK.get(), 25, true).setRegistryName(BedrockReferences.BLAZIUM_REGNAME),
+                new WorldGenFlower(Registration.SUN_DAIZE_BLOCK.get(), SUNDAIZE_CHANCE.get(), false).setRegistryName(BedrockReferences.SUN_DAIZE_REGNAME),
+                new WorldGenFlower(Registration.ENDER_HUSH_BLOCK.get(), ENDERHUSH_CHANCE.get(), false).setRegistryName(BedrockReferences.ENDER_HUSH_REGNAME),
+                new WorldGenFlower(Registration.BLAZIUM_BLOCK.get(), BLAIZE_CHANCE.get(), true).setRegistryName(BedrockReferences.BLAZIUM_REGNAME),
                 new WorldGenDFTree().setRegistryName("df_tree")
         );
 

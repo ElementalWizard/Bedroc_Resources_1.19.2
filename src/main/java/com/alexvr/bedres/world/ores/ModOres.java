@@ -20,15 +20,9 @@ import net.minecraft.world.level.levelgen.structure.templatesystem.TagMatchTest;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.event.world.BiomeLoadingEvent;
 
+import static com.alexvr.bedres.setup.ModConfig.*;
+
 public class ModOres {
-    public static final int OVERWORLD_VEINSIZE = 5;
-    public static final int OVERWORLD_AMOUNT = 3;
-    public static final int DEEPSLATE_VEINSIZE = 5;
-    public static final int DEEPSLATE_AMOUNT = 3;
-    public static final int NETHER_VEINSIZE = 5;
-    public static final int NETHER_AMOUNT = 3;
-    public static final int END_VEINSIZE = 10;
-    public static final int END_AMOUNT = 6;
 
     public static final RuleTest IN_ENDSTONE = new TagMatchTest(Tags.Blocks.END_STONES);
 
@@ -39,33 +33,33 @@ public class ModOres {
 
     public static void registerConfiguredFeatures() {
 
-        OreConfiguration overworldConfig = new OreConfiguration(OreFeatures.STONE_ORE_REPLACEABLES, Registration.ENDERIAN_ORE_OVERWORLD.get().defaultBlockState(), OVERWORLD_VEINSIZE);
+        OreConfiguration overworldConfig = new OreConfiguration(OreFeatures.STONE_ORE_REPLACEABLES, Registration.ENDERIAN_ORE_OVERWORLD.get().defaultBlockState(), OVERWORLD_VEINSIZE.get());
         OVERWORLD_OREGEN = registerPlacedFeature(BedrockReferences.ENDERIAN_ORE_REGNAME + "_overworld", Feature.ORE.configured(overworldConfig),
-                CountPlacement.of(OVERWORLD_AMOUNT),
+                CountPlacement.of(OVERWORLD_AMOUNT.get()),
                 InSquarePlacement.spread(),
                 new DimensionBiomeFilter(key -> !ModDimensions.MYSDIM.equals(key)),
-                HeightRangePlacement.uniform(VerticalAnchor.absolute(0), VerticalAnchor.absolute(90)));
+                HeightRangePlacement.uniform(VerticalAnchor.absolute(OVERWORLD_MINY.get()), VerticalAnchor.absolute(OVERWORLD_MAXY.get())));
 
-        OreConfiguration deepslateConfig = new OreConfiguration(OreFeatures.DEEPSLATE_ORE_REPLACEABLES, Registration.ENDERIAN_ORE_DEEPSLATE.get().defaultBlockState(), DEEPSLATE_VEINSIZE);
+        OreConfiguration deepslateConfig = new OreConfiguration(OreFeatures.DEEPSLATE_ORE_REPLACEABLES, Registration.ENDERIAN_ORE_DEEPSLATE.get().defaultBlockState(), DEEPSLATE_VEINSIZE.get());
         DEEPSLATE_OREGEN = registerPlacedFeature(BedrockReferences.ENDERIAN_ORE_REGNAME + "_deepslate", Feature.ORE.configured(deepslateConfig),
-                CountPlacement.of(DEEPSLATE_AMOUNT),
+                CountPlacement.of(DEEPSLATE_AMOUNT.get()),
                 InSquarePlacement.spread(),
                 BiomeFilter.biome(),
-                HeightRangePlacement.uniform(VerticalAnchor.bottom(), VerticalAnchor.aboveBottom(64)));
+                HeightRangePlacement.uniform(VerticalAnchor.bottom(), VerticalAnchor.aboveBottom(DEEPSLATE_MAXY.get())));
 
-        OreConfiguration netherConfig = new OreConfiguration(OreFeatures.NETHER_ORE_REPLACEABLES, Registration.ENDERIAN_ORE_NETHER.get().defaultBlockState(), NETHER_VEINSIZE);
+        OreConfiguration netherConfig = new OreConfiguration(OreFeatures.NETHER_ORE_REPLACEABLES, Registration.ENDERIAN_ORE_NETHER.get().defaultBlockState(), NETHER_VEINSIZE.get());
         NETHER_OREGEN = registerPlacedFeature(BedrockReferences.ENDERIAN_ORE_REGNAME + "_nether", Feature.ORE.configured(netherConfig),
-                CountPlacement.of(NETHER_AMOUNT),
+                CountPlacement.of(NETHER_AMOUNT.get()),
                 InSquarePlacement.spread(),
                 BiomeFilter.biome(),
-                HeightRangePlacement.uniform(VerticalAnchor.absolute(0), VerticalAnchor.absolute(90)));
+                HeightRangePlacement.uniform(VerticalAnchor.absolute(NETHER_MINY.get()), VerticalAnchor.absolute(NETHER_MAXY.get())));
 
-        OreConfiguration endConfig = new OreConfiguration(IN_ENDSTONE, Registration.ENDERIAN_ORE_END.get().defaultBlockState(), END_VEINSIZE);
+        OreConfiguration endConfig = new OreConfiguration(IN_ENDSTONE, Registration.ENDERIAN_ORE_END.get().defaultBlockState(), END_VEINSIZE.get());
         END_OREGEN = registerPlacedFeature(BedrockReferences.ENDERIAN_ORE_REGNAME + "_end", Feature.ORE.configured(endConfig),
-                CountPlacement.of(END_AMOUNT),
+                CountPlacement.of(END_AMOUNT.get()),
                 InSquarePlacement.spread(),
                 BiomeFilter.biome(),
-                HeightRangePlacement.uniform(VerticalAnchor.absolute(0), VerticalAnchor.absolute(100)));
+                HeightRangePlacement.uniform(VerticalAnchor.absolute(END_MINY.get()), VerticalAnchor.absolute(END_MAXY.get())));
     }
 
     private static <C extends FeatureConfiguration, F extends Feature<C>> PlacedFeature registerPlacedFeature(String registryName, ConfiguredFeature<C, F> feature, PlacementModifier... placementModifiers) {

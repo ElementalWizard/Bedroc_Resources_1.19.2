@@ -38,6 +38,7 @@ import java.util.ArrayList;
 import java.util.Map;
 
 import static com.alexvr.bedres.items.Staff.REDUCED_GRAVITY;
+import static com.alexvr.bedres.setup.ModConfig.*;
 
 @Mod.EventBusSubscriber(modid = BedrockResources.MODID)
 public class WorldEventHandler {
@@ -92,11 +93,13 @@ public class WorldEventHandler {
     @SubscribeEvent
     public static void onBiomesLoad(BiomeLoadingEvent event) {
         Biome.BiomeCategory biomecat = event.getCategory();
-        event.getSpawns().getSpawner(MobCategory.MONSTER).add(new MobSpawnSettings.SpawnerData(Registration.TRECKING_CREEPER.get(), 15, 1, 3));
+        event.getSpawns().getSpawner(MobCategory.MONSTER).add(new MobSpawnSettings.SpawnerData(Registration.TRECKING_CREEPER.get(), TRECKING_CREEPER_WEIGHT.get(), TRECKING_CREEPER_MIN_GROUP.get(), TRECKING_CREEPER_MAX_GROUP.get()));
         if (biomecat == Biome.BiomeCategory.NETHER){
-            event.getSpawns().getSpawner(MobCategory.MONSTER).add(new MobSpawnSettings.SpawnerData(Registration.BABY_GHAST.get(), 10, 1, 3));
+            event.getSpawns().getSpawner(MobCategory.MONSTER).add(new MobSpawnSettings.SpawnerData(Registration.BABY_GHAST.get(), BABY_GHAST_WEIGHT.get(), BABY_GHAST_MIN_GROUP.get(), BABY_GHAST_MAX_GROUP.get()));
         }
-
+        if (biomecat == Biome.BiomeCategory.THEEND){
+            event.getSpawns().getSpawner(MobCategory.MONSTER).add(new MobSpawnSettings.SpawnerData(Registration.FLUXED_CREEP.get(), FLUXED_CREEP_WEIGHT.get(), FLUXED_CREEP_MIN_GROUP.get(), FLUXED_CREEP_MAX_GROUP.get()));
+        }
     }
 
     @SubscribeEvent
