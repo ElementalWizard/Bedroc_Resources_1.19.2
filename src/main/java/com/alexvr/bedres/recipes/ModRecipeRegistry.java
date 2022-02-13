@@ -430,6 +430,22 @@ public class ModRecipeRegistry {
     }
 
     public static void setUpEventRitualPlayerRecipes(){
+        eventRitualsRecipes.add(new EventRitualsRecipes(new ItemStack(Registration.BEDROCK_COMPRESSED_WIRE_ITEM.get()),"player_upgrade",
+                genPattern(
+                        "wiiiw",
+                        "iwwwi",
+                        "iw wi",
+                        "iwwwi",
+                        "wiiiw"),
+                new ItemStack(Items.DIAMOND_BLOCK, 1),
+                new ItemStack(Items.END_CRYSTAL, 2),
+                new ItemStack(Registration.ENDER_HUSH_ITEM.get(), 2),
+                new ItemStack(Registration.VOID_TEAR_ITEM.get(), 1),
+                new ItemStack(Items.ENDER_CHEST, 1),
+                new ItemStack(Registration.BEDROCK_COMPRESSED_WIRE_ITEM.get(), 2),
+                new ItemStack(Items.ENDER_PEARL, 3)
+        ));
+
         //MINING SPEED
         {
             eventRitualsRecipes.add(new EventRitualsRecipes(new ItemStack(Items.REDSTONE),"player_upgrade",

@@ -22,7 +22,6 @@ public class ScrapeKnife extends SwordItem implements IDisplayFlux {
     public ScrapeKnife(Item.Properties pProperties) {
         super(Tiers.STONE,1, -2.4F,pProperties);
 
-
     }
 
     @Override

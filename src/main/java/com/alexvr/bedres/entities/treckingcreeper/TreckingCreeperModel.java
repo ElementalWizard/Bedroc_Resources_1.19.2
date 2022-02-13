@@ -10,6 +10,7 @@ import net.minecraft.client.model.geom.builders.*;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.item.DyeColor;
 
 public class TreckingCreeperModel<T extends Entity> extends EntityModel<T> {
 	// This layer location should be baked with EntityRendererProvider.Context in the entity renderer and passed into this model's constructor
@@ -22,6 +23,7 @@ public class TreckingCreeperModel<T extends Entity> extends EntityModel<T> {
 	private final ModelPart left_hind_leg;
 	private final ModelPart right_hind_leg;
 	private final ModelPart right_front_leg;
+	private DyeColor color = DyeColor.BROWN;
 
 
 	public TreckingCreeperModel(ModelPart root) {
@@ -68,7 +70,12 @@ public class TreckingCreeperModel<T extends Entity> extends EntityModel<T> {
 	@Override
 	public void renderToBuffer(PoseStack poseStack, VertexConsumer buffer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
 		head.render(poseStack, buffer, packedLight, packedOverlay);
-		backpack.render(poseStack, buffer, packedLight, packedOverlay);
+		if (backpack.visible){
+			var r = (color.getMaterialColor().col >> 16 & 255) / 255F;
+			var g = (color.getMaterialColor().col >> 8 & 255) / 255F;
+			var b = (color.getMaterialColor().col & 255) / 255F;
+			backpack.render(poseStack, buffer, packedLight, packedOverlay,r,g,b,1);
+		}
 		body.render(poseStack, buffer, packedLight, packedOverlay);
 		left_front_leg.render(poseStack, buffer, packedLight, packedOverlay);
 		left_hind_leg.render(poseStack, buffer, packedLight, packedOverlay);
@@ -76,4 +83,12 @@ public class TreckingCreeperModel<T extends Entity> extends EntityModel<T> {
 		right_hind_leg.render(poseStack, buffer, packedLight, packedOverlay);
 	}
 
-}
+	public void prepareMobModel(T pEntity, float pLimbSwing, float pLimbSwingAmount, float pPartialTick) {
+		if (pEntity instanceof TreckingCreeperEntity treckingCreeperEntity){
+			this.backpack.visible = treckingCreeperEntity.isTamed();
+			this.color = treckingCreeperEntity.getBackpackColor();
+		}
+	}
+
+
+	}

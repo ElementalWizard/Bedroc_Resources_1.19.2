@@ -35,6 +35,11 @@ public class ModRecipes extends RecipeProvider {
                 .unlockedBy("has_chunk", has(Registration.RAW_ENDERIAN_CHUNK.get()))
                 .save(p_176532_, "enderian_ingot2");
         planksFromLog(p_176532_, Registration.DF_OAK_PLANKS_BLOCK.get(), Registration.DF_LOG_ITEM);
+        
+        shapeless1x1Recipes(p_176532_,Items.RED_DYE, Registration.BLAZIUM_ITEM.get());
+        shapeless1x1Recipes(p_176532_,Items.YELLOW_DYE, Registration.SUN_DAIZE_ITEM.get());
+        shapeless1x1Recipes(p_176532_,Items.PURPLE_DYE,Registration.ENDER_HUSH_ITEM.get());
+
         woodenBoat(p_176532_, Items.OAK_BOAT, Registration.DF_OAK_PLANKS_BLOCK.get());
         nineBlockStorageRecipes(p_176532_, Registration.ENDERIAN_INGOT_ITEM.get(), Registration.ENDERIAN_BLOCK_ITEM.get());
         nineBlockStorageRecipes(p_176532_, Registration.BEDROCK_WIRE_ITEM.get(), Registration.BEDROCK_COMPRESSED_WIRE_ITEM.get());
@@ -100,6 +105,9 @@ public class ModRecipes extends RecipeProvider {
     private static void nineBlockStorageRecipes(Consumer<FinishedRecipe> p_176569_, ItemLike p_176570_, ItemLike p_176571_, String p_176572_, @Nullable String p_176573_, String p_176574_, @Nullable String p_176575_) {
         ShapelessRecipeBuilder.shapeless(p_176570_, 9).requires(p_176571_).group(p_176575_).unlockedBy(getHasName(p_176571_), has(p_176571_)).save(p_176569_, new ResourceLocation(p_176574_));
         ShapedRecipeBuilder.shaped(p_176571_).define('#', p_176570_).pattern("###").pattern("###").pattern("###").group(p_176573_).unlockedBy(getHasName(p_176570_), has(p_176570_)).save(p_176569_, new ResourceLocation(p_176572_));
+    }
+    private static void shapeless1x1Recipes(Consumer<FinishedRecipe> p_176569_, ItemLike p_176570_, ItemLike p_176571_) {
+        ShapelessRecipeBuilder.shapeless(p_176570_, 1).requires(p_176571_).group((String)null).unlockedBy(getHasName(p_176571_), has(p_176571_)).save(p_176569_, new ResourceLocation(getSimpleRecipeName(p_176570_)));
     }
     private static void woodenBoat(Consumer<FinishedRecipe> p_126022_, ItemLike p_126023_, ItemLike p_126024_) {
         ShapedRecipeBuilder.shaped(p_126023_).define('#', p_126024_).pattern("# #").pattern("###").group("boat").unlockedBy("in_water", insideOf(Blocks.WATER)).save(p_126022_);

@@ -1,8 +1,9 @@
 {
   "bedres.key.category": "Bedrock Resources Keybindings",
-  "bedres.key.toggle_wand": "Toggle Mage Staff Ability",
+  "bedres.key.toggle_mode": "Toggle Item Mode",
   "bedres.mage_staff.green_thumb.fail": "Block cant be bonemealed",
   "bedres.mage_staff.lightning.fail": "Target entity or block not air",
+  "bedres:fluxed_plains": "Desolated Fluxed Plains",
   "block.bedres.base_spike": "Bedrockium Tower",
   "block.bedres.bedrock_compressed_wire": "Bedrock Compressed Wire",
   "block.bedres.bedrock_stairs": "Bedrockium Stairs",
@@ -38,6 +39,7 @@
   "block.bedres.spike": "Bedrockium Spike",
   "block.bedres.sun_daize": "Sun Daize",
   "block.bedres.void_tears": "Void Tears",
+  "container.event.player_upgrade.bedrock_compressed_wire": "Flux Storage Upgrade",
   "container.event.player_upgrade.bedrock_wire": "Mining Speed Decrease",
   "container.event.player_upgrade.chain": "Jump Reset",
   "container.event.player_upgrade.honey_block": "Fall Damage Reset",

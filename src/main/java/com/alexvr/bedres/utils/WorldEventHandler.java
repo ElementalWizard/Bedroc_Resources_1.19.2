@@ -5,6 +5,7 @@ import com.alexvr.bedres.capability.abilities.IPlayerAbility;
 import com.alexvr.bedres.capability.abilities.PlayerAbilityProvider;
 import com.alexvr.bedres.entities.treckingcreeper.TreckingCreeperEntity;
 import com.alexvr.bedres.items.MageStaff;
+import com.alexvr.bedres.items.XPMedallion;
 import com.alexvr.bedres.setup.Registration;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
@@ -29,7 +30,6 @@ import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.living.*;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
-import net.minecraftforge.event.entity.player.PlayerWakeUpEvent;
 import net.minecraftforge.event.world.BiomeLoadingEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -67,27 +67,35 @@ public class WorldEventHandler {
             return;
         }
 
-        ItemStack wand = player.getMainHandItem();
+        ItemStack mainHandItem = player.getMainHandItem();
 
-        if (!(wand.getItem() instanceof MageStaff))
+        if (!(mainHandItem.getItem() instanceof MageStaff) && !(mainHandItem.getItem() instanceof XPMedallion))
             return;
-        KeyMapping toggleWand = KeyBindings.toggleWang;
-        if (toggleWand.consumeClick() ) {
-            ((MageStaff)wand.getItem()).cycleRune(wand, player);
-            return;
+        KeyMapping toggle = KeyBindings.toggleMode;
+        if (mainHandItem.getItem() instanceof XPMedallion){
+            if (toggle.consumeClick() ) {
+                ((XPMedallion)mainHandItem.getItem()).cycleMode(mainHandItem);
+                return;
+            }
+        }else{
+            if (toggle.consumeClick() ) {
+                ((MageStaff)mainHandItem.getItem()).cycleRune(mainHandItem, player);
+                return;
+            }
         }
 
+
     }
-    @SubscribeEvent
-    public static void onWakeUp(PlayerWakeUpEvent event){
-        event.getPlayer().reviveCaps();
-        LazyOptional<IPlayerAbility> playerflux = event.getPlayer().getCapability(PlayerAbilityProvider.PLAYER_ABILITY_CAPABILITY, null);
-        playerflux.ifPresent(h -> h.setFlux(h.getFlux() + (h.getMaxFlux()/2)));
-        event.getPlayer().invalidateCaps();
-    }
+
     @SubscribeEvent
     public static void onDamage(LivingDamageEvent event){
-
+        if (event.getSource().isExplosion() &&
+                event.getEntityLiving() instanceof Player player &&
+                event.getSource().getEntity() instanceof TreckingCreeperEntity treckingCreeperEntity &&
+                treckingCreeperEntity.isTamed() &&
+                treckingCreeperEntity.getOwnerUUID().equals(player.getUUID())){
+            event.setCanceled(true);
+        }
     }
 
     @SubscribeEvent
@@ -96,6 +104,7 @@ public class WorldEventHandler {
         event.getSpawns().getSpawner(MobCategory.MONSTER).add(new MobSpawnSettings.SpawnerData(Registration.TRECKING_CREEPER.get(), TRECKING_CREEPER_WEIGHT.get(), TRECKING_CREEPER_MIN_GROUP.get(), TRECKING_CREEPER_MAX_GROUP.get()));
         if (biomecat == Biome.BiomeCategory.NETHER){
             event.getSpawns().getSpawner(MobCategory.MONSTER).add(new MobSpawnSettings.SpawnerData(Registration.BABY_GHAST.get(), BABY_GHAST_WEIGHT.get(), BABY_GHAST_MIN_GROUP.get(), BABY_GHAST_MAX_GROUP.get()));
+            event.getSpawns().getSpawner(MobCategory.MONSTER).add(new MobSpawnSettings.SpawnerData(Registration.CHAINED_BLAZE.get(), CHAINED_BLAZE_WEIGHT.get(), CHAINED_BLAZE_MIN_GROUP.get(), CHAINED_BLAZE_MAX_GROUP.get()));
         }
         if (biomecat == Biome.BiomeCategory.THEEND){
             event.getSpawns().getSpawner(MobCategory.MONSTER).add(new MobSpawnSettings.SpawnerData(Registration.FLUXED_CREEP.get(), FLUXED_CREEP_WEIGHT.get(), FLUXED_CREEP_MIN_GROUP.get(), FLUXED_CREEP_MAX_GROUP.get()));

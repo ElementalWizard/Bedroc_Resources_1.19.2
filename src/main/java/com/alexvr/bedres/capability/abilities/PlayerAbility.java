@@ -86,7 +86,7 @@ public class PlayerAbility implements  IPlayerAbility{
 
     @Override
     public void addFlux(Double amount) {
-        flux+=getFlux()+amount<=getMaxFlux()?amount:0;
+        flux+=getFlux()+amount<=getMaxFlux()?amount:getMaxFlux()-getFlux();
     }
 
     @Override

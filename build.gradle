@@ -18,7 +18,9 @@ apply plugin: 'org.parchmentmc.librarian.forgegradle'
 apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
 
-version = '3'
+var time = "${new Date().format("yyyy-MM-dd")}"
+int ver = 3
+version = "${ver}.${time}" as Object
 group = 'com.alexvr.bedres' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = 'bedres'
 
@@ -158,7 +160,7 @@ dependencies {
     // Specify the version of Minecraft to use. If this is any group other than 'net.minecraft', it is assumed
     // that the dep is a ForgeGradle 'patcher' dependency, and its patches will be applied.
     // The userdev artifact is a special name and will get all sorts of transformations applied to it.
-    minecraft 'net.minecraftforge:forge:1.18.1-39.0.63'
+    minecraft 'net.minecraftforge:forge:1.18.1-39.0.66'
 
     compileOnly fg.deobf("mezz.jei:jei-1.18.1:9.1.1.48:api") // Adds JEI API as a compile dependency
     implementation fg.deobf("mezz.jei:jei-1.18.1:9.1.1.48") // Adds registrate as a dependency

@@ -1,0 +1,34 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "minecraft:purple_dye"
+    ]
+  },
+  "criteria": {
+    "has_ender_hush": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "bedres:ender_hush"
+            ]
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "minecraft:purple_dye"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_ender_hush",
+      "has_the_recipe"
+    ]
+  ]
+}

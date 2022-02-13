@@ -1,6 +1,7 @@
 package com.alexvr.bedres.world.features;
 
 import com.alexvr.bedres.BedrockResources;
+import com.alexvr.bedres.setup.ModBiomes;
 import com.alexvr.bedres.setup.Registration;
 import com.alexvr.bedres.world.dimension.ModDimensions;
 import com.google.common.collect.HashMultimap;
@@ -143,6 +144,9 @@ public class ModStructures {
 
             // Create a mutable map we will use for easier adding to biomes
             var structureToMultimap = new HashMap<StructureFeature<?>, HashMultimap<ConfiguredStructureFeature<?, ?>, ResourceKey<Biome>>>();
+
+            associateBiomeToConfiguredStructure(structureToMultimap, BuiltinRegistries.CONFIGURED_STRUCTURE_FEATURE.get(new ResourceLocation("ruined_portal")), ModBiomes.FLUXED_PLAINS);
+            associateBiomeToConfiguredStructure(structureToMultimap, BuiltinRegistries.CONFIGURED_STRUCTURE_FEATURE.get(new ResourceLocation("village_plains")), ModBiomes.FLUXED_PLAINS);
 
             // Add the resourcekey of all biomes that this Configured Structure can spawn in.
             for (var biomeEntry : serverLevel.registryAccess().ownedRegistryOrThrow(Registry.BIOME_REGISTRY).entrySet()) {

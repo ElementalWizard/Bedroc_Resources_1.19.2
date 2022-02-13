@@ -42,38 +42,29 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Random;
 
+import static com.alexvr.bedres.items.MageStaff.TYPES.*;
 import static java.lang.Math.cos;
 import static java.lang.Math.sin;
 
 public class MageStaff extends Item implements IDisplayFlux {
 
-    public MageStaff(Properties pProperties) {
-        super(pProperties);
-    }
     private static final double LIGHTNINGRANGE = 16;
     private static final int LIFESTEALCOUNTERMAX = 10;
     private static final int POISONCOUNTERMAX = 60;
     private static final int BONEMEALCOUNTERMAX = 20;
     private static final int GREENTICKCOUNTERMAX = 5;
-    String particlDirection = "up";
-    int height = 2;
-    double yIncrement = 0.2;
-    double radius = 1.5;
-    double a = 0;
-    double x = 0;
-    double y = 0;
-    double z = 0;
-    public String type = "alpha";
-    public int lifeStealCounter = 0;
-    public int poisonCounter = 0;
-    public int greenTickCounter = 0;
+
+    public MageStaff(Properties pProperties) {
+        super(pProperties);
+    }
+
 
     @Override
     public InteractionResultHolder<ItemStack> use(Level pLevel, Player pPlayer, InteractionHand pUsedHand) {
         ItemStack itemstack = pPlayer.getItemInHand(pUsedHand);
         Minecraft.getInstance().player.reviveCaps();
         LazyOptional<IPlayerAbility> playerFlux = Minecraft.getInstance().player.getCapability(PlayerAbilityProvider.PLAYER_ABILITY_CAPABILITY, null);
-        if (type.equals("zeta") && !pLevel.isClientSide()){
+        if (getType(itemstack).equals(ZETA.name) && !pLevel.isClientSide()){
             playerFlux.ifPresent(k -> {
                 if (k.getFlux() > 2){
                     k.removeFlux(2D);
@@ -97,11 +88,11 @@ public class MageStaff extends Item implements IDisplayFlux {
         Minecraft.getInstance().player.reviveCaps();
         LazyOptional<IPlayerAbility> playerFlux = Minecraft.getInstance().player.getCapability(PlayerAbilityProvider.PLAYER_ABILITY_CAPABILITY, null);
         playerFlux.ifPresent(k -> {
-            if (type.equals("alpha")){
+            if (getType(pStack).equals(ALPHA.name)){
                 getAlphaEffect(player,getForce(pStack, pTimeCharged) / 3F,player.getLookAngle(),k);
-            }else if (type.equals("beta")){
+            }else if (getType(pStack).equals(BETA.name)){
                 getBetaEffect(player,getLightningForce(pStack,pTimeCharged),k);
-            }else if (type.equals("delta")){
+            }else if (getType(pStack).equals(DELTA.name)){
                 getDeltaEffect(player, getTieredForce(pStack,pTimeCharged),k);
             }
         });
@@ -121,50 +112,37 @@ public class MageStaff extends Item implements IDisplayFlux {
             }
             Minecraft.getInstance().player.reviveCaps();
             LazyOptional<IPlayerAbility> playerFlux = Minecraft.getInstance().player.getCapability(PlayerAbilityProvider.PLAYER_ABILITY_CAPABILITY, null);
-
-            if (type.equals("epsilon")){
-                if (lifeStealCounter <= 0){
+            if (getCooldown(pStack) <= 0){
+                if (getType(pStack).equals(EPSILON.name)){
                     playerFlux.ifPresent(k -> {
                         if (k.getFlux() > 2){
                             getEpsilonEffect(player,k);
                         }
                     });
-                    lifeStealCounter = LIFESTEALCOUNTERMAX;
-                }else{
-                    lifeStealCounter --;
+                    setCooldown(pStack,LIFESTEALCOUNTERMAX);
                 }
-            }
-
-            if (type.equals("gama")){
-                if (poisonCounter <= 0){
+                if (getType(pStack).equals(GAMA.name)){
                     playerFlux.ifPresent(k -> {
                         if (k.getFlux() > 2){
                             getGamaEffect(player,k);
 
                         }
                     });
-
-                    poisonCounter = POISONCOUNTERMAX;
-                }else{
-                    poisonCounter --;
+                    setCooldown(pStack,POISONCOUNTERMAX);
                 }
-            }
-
-            if (pLevel instanceof ServerLevel serverLevel){
-                if (type.equals("theta")){
-                    if (greenTickCounter <= 0){
+                if (pLevel instanceof ServerLevel serverLevel){
+                    if (getType(pStack).equals(THETA.name)){
                         playerFlux.ifPresent(k -> getThetaGreenTickEffect(player, serverLevel, player.isShiftKeyDown(),k));
                         player.causeFoodExhaustion(0.2F);
-
                         if (player.isShiftKeyDown()){
-                            greenTickCounter = BONEMEALCOUNTERMAX;
+                            setCooldown(pStack,BONEMEALCOUNTERMAX);
                         }else{
-                            greenTickCounter = GREENTICKCOUNTERMAX;
+                            setCooldown(pStack,GREENTICKCOUNTERMAX);
                         }
-                    }else{
-                        greenTickCounter --;
                     }
                 }
+            }else{
+                tickCooldown(pStack);
             }
             Minecraft.getInstance().player.invalidateCaps();
         }
@@ -172,11 +150,9 @@ public class MageStaff extends Item implements IDisplayFlux {
     }
 
     private void getZetaEffect(Player player, Level level) {
-
         var projectile = new LightProjectileEntity(Registration.LIGHT_PROJ_ENTITY.get(), player, level);
         projectile.shootFromRotation(player, player.getXRot(), player.getYRot(), 0, 1.5F, 0);
         level.addFreshEntity(projectile);
-
     }
 
     private void getThetaGreenTickEffect(Player pPlayer, ServerLevel level, boolean isShiftDown, IPlayerAbility flux) {
@@ -336,15 +312,20 @@ public class MageStaff extends Item implements IDisplayFlux {
     private void summonParticles(Level pLevel, Entity pEntity) {
         if (pEntity instanceof Player player ){
             if (player.getMainHandItem().is(Registration.MAGE_STAFF_ITEM.get()) || player.getOffhandItem().is(Registration.MAGE_STAFF_ITEM.get())){
+                double yIncrement = 0.2;
+                double radius = 1.5;
+                ItemStack stack = player.getMainHandItem();
+                double y = getParticleY(stack);
+                double a = getParticleA(stack);
+                String particlDirection = getParticleDirection(stack);
 
-
-                x = (cos(a) * radius);
-                z = sin(a) * radius;
+                double x = (cos(a) * radius);
+                double z = sin(a) * radius;
                 pLevel.addParticle(ParticleTypes.REVERSE_PORTAL,player.getX() + x,player.getY() + y,player.getZ() + z,0,0,0);
                 a++;
                 if(particlDirection.equals("up"))
                 {
-                    if(y >= height)
+                    if(y >= 2)
                     {
                         particlDirection = "down";
                         y -= yIncrement;
@@ -368,6 +349,7 @@ public class MageStaff extends Item implements IDisplayFlux {
                 }
 
                 if(a >= 360){a = 0;} //reset a to stop it getting too large
+                setParticleInfo(stack,y,a,particlDirection);
             }
         }
     }
@@ -375,7 +357,7 @@ public class MageStaff extends Item implements IDisplayFlux {
     public int getColor(ItemStack stack){
         int color = 0x000000;
         if (stack.getItem() instanceof MageStaff mageStaff){
-            switch (mageStaff.type) {
+            switch (mageStaff.getType(stack)) {
                 case "alpha" -> color = 0x693A67;
                 case "beta" -> color = 0xA4A152;
                 case "delta" -> color = 0x2A4043;
@@ -394,29 +376,21 @@ public class MageStaff extends Item implements IDisplayFlux {
         if (player.getCooldowns().isOnCooldown(stack.getItem())){
             return;
         }
-        TYPES currentRune = TYPES.fromString(type);
+        String type = getType(stack);
+        TYPES currentRune = TYPES.fromString(type.isEmpty()? "alpha" : type);
         if (currentRune.ordinal() == TYPES.values().length-1){
             type = TYPES.values()[0].name;
         }else{
             type = TYPES.values()[currentRune.ordinal()+1].name;
         }
-
-        NBTHelper.setString(stack,"rune",type);
+        setType(stack,type);
         player.getCooldowns().addCooldown(stack.getItem(), 10);
-    }
-
-    @Override
-    public void verifyTagAfterLoad(CompoundTag pCompoundTag) {
-        if (pCompoundTag.contains("rune")){
-            type = pCompoundTag.getString("rune");
-        }
-        super.verifyTagAfterLoad(pCompoundTag);
     }
 
     @Override
     public void appendHoverText(ItemStack pStack, @Nullable Level pLevel, java.util.List<net.minecraft.network.chat.Component> pTooltipComponents, TooltipFlag pIsAdvanced) {
         pTooltipComponents.add(new TextComponent("Staff Mode: "));
-        pTooltipComponents.add(new TranslatableComponent("mage_staff.rune.type." + type).withStyle(ChatFormatting.DARK_PURPLE));
+        pTooltipComponents.add(new TranslatableComponent("mage_staff.rune.type." + getType(pStack)).withStyle(ChatFormatting.DARK_PURPLE));
         super.appendHoverText(pStack, pLevel, pTooltipComponents, pIsAdvanced);
     }
 
@@ -432,6 +406,65 @@ public class MageStaff extends Item implements IDisplayFlux {
     @Override
     public boolean shouldDisplay(ItemStack offHand) {
         return true;
+    }
+
+    public String getType(ItemStack stack){
+        return NBTHelper.getStirng(stack,"rune");
+    }
+
+    public void setType(ItemStack stack, String type){
+        NBTHelper.setString(stack,"rune", type);
+    }
+
+    public int getCooldown(ItemStack stack){
+        return NBTHelper.getInt(stack,"cooldown");
+    }
+
+    public void setCooldown(ItemStack stack, int type){
+        NBTHelper.setInteger(stack,"cooldown", type);
+    }
+    public void tickCooldown(ItemStack stack){
+        NBTHelper.addInteger(stack,"cooldown", -1);
+    }
+
+    public void setParticleInfo(ItemStack stack, double y, double a, String direction){
+        setParticleY(stack,y);
+        setParticleA(stack,a);
+        setParticleDirection(stack,direction);
+    }
+
+    private double getParticleA(ItemStack stack) {
+        return NBTHelper.getDouble(stack,"particle_a");
+    }
+
+    private double getParticleY(ItemStack stack) {
+        return NBTHelper.getDouble(stack,"particle_y");
+    }
+
+    private void setParticleA(ItemStack stack, double amount) {
+        NBTHelper.setDouble(stack,"particle_a",amount);
+    }
+
+    private void setParticleY(ItemStack stack, double amount) {
+        NBTHelper.setDouble(stack,"particle_y",amount);
+    }
+
+    private String getParticleDirection(ItemStack stack) {
+        return NBTHelper.getStirng(stack,"particle_dir");
+    }
+    private void setParticleDirection(ItemStack stack, String dir) {
+        NBTHelper.setString(stack,"particle_dir", dir);
+    }
+    @Override
+    public void verifyTagAfterLoad(CompoundTag pCompoundTag) {
+        if (!pCompoundTag.contains("rune")){
+            pCompoundTag.putString("rune","alpha");
+            pCompoundTag.putDouble("particle_a",0);
+            pCompoundTag.putDouble("particle_y",0);
+            pCompoundTag.putInt("cooldown",0);
+            pCompoundTag.putString("particle_dir","up");
+        }
+        super.verifyTagAfterLoad(pCompoundTag);
     }
 
     public enum TYPES{

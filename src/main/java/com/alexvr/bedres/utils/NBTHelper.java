@@ -10,10 +10,16 @@ public class NBTHelper {
         nbt.putInt(key,amount);
     }
 
+    public static void addInteger(ItemStack stack,String key, int amount) {
+        CompoundTag nbt = stack.getOrCreateTag();
+        nbt.putInt(key,nbt.getInt(key) + amount);
+    }
+
     public static int getInt(ItemStack stack,String key) {
         CompoundTag nbt = stack.getOrCreateTag();
         return nbt.getInt(key);
     }
+
     public static void setString(ItemStack stack,String key, String string) {
         CompoundTag nbt = stack.getOrCreateTag();
         nbt.putString(key,string);
@@ -37,6 +43,21 @@ public class NBTHelper {
     public static void flipBoolean(ItemStack stack,String key) {
         CompoundTag nbt = stack.getOrCreateTag();
         nbt.putBoolean(key,!nbt.getBoolean(key));
+    }
+
+    public static void setDouble(ItemStack stack,String key, double amount) {
+        CompoundTag nbt = stack.getOrCreateTag();
+        nbt.putDouble(key,amount);
+    }
+
+    public static void addDouble(ItemStack stack,String key, double amount) {
+        CompoundTag nbt = stack.getOrCreateTag();
+        nbt.putDouble(key,nbt.getInt(key) + amount);
+    }
+
+    public static double getDouble(ItemStack stack,String key) {
+        CompoundTag nbt = stack.getOrCreateTag();
+        return nbt.getDouble(key);
     }
 
 }

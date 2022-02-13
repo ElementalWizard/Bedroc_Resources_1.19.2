@@ -40,7 +40,7 @@ public class ChainedBlazeEntity extends Blaze {
     }
     @Override
     protected float getStandingEyeHeight(Pose pPose, EntityDimensions pSize) {
-        return 0.75f;
+        return 1.5f;
     }
 
     @Override

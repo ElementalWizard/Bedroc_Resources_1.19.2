@@ -64,6 +64,9 @@ public class ModConfig {
     public static ForgeConfigSpec.IntValue FLUXED_CREEP_WEIGHT;
     public static ForgeConfigSpec.IntValue FLUXED_CREEP_MIN_GROUP;
     public static ForgeConfigSpec.IntValue FLUXED_CREEP_MAX_GROUP;
+    public static ForgeConfigSpec.IntValue CHAINED_BLAZE_WEIGHT;
+    public static ForgeConfigSpec.IntValue CHAINED_BLAZE_MIN_GROUP;
+    public static ForgeConfigSpec.IntValue CHAINED_BLAZE_MAX_GROUP;
 
     public static ForgeConfigSpec.ConfigValue<String> DEF_PICK;
     public static ForgeConfigSpec.ConfigValue<String> DEF_AXE;
@@ -116,25 +119,33 @@ public class ModConfig {
     private static void setupMobInfo() {
         SERVER_BUILDER.comment("Mob Settings").push(MOB);
         TRECKING_CREEPER_WEIGHT = SERVER_BUILDER.comment("Weight for Trecking Creepers to spawn.")
-                .defineInRange("trecking_weight", 5, 1, 30);
+                .defineInRange("trecking_weight", 12, 0, 100);
         TRECKING_CREEPER_MIN_GROUP = SERVER_BUILDER.comment("Min group number for Trecking Creepers spawn.")
-                .defineInRange("trecking_min", 1, 0, 30);
+                .defineInRange("trecking_min", 2, 0, 30);
         TRECKING_CREEPER_MAX_GROUP = SERVER_BUILDER.comment("Max group number for Trecking Creepers spawn.")
-                .defineInRange("trecking_max", 4, 1, 30);
+                .defineInRange("trecking_max", 8, 1, 30);
 
         BABY_GHAST_WEIGHT = SERVER_BUILDER.comment("Weight for Baby Ghast to spawn.")
-                .defineInRange("baby_ghast_weight", 7, 1, 30);
+                .defineInRange("baby_ghast_weight", 20, 0, 100);
         BABY_GHAST_MIN_GROUP = SERVER_BUILDER.comment("Min group number for Baby Ghast spawn.")
                 .defineInRange("baby_ghast_min", 1, 0, 30);
         BABY_GHAST_MAX_GROUP = SERVER_BUILDER.comment("Max group number for Baby Ghast spawn.")
-                .defineInRange("baby_ghast_max", 4, 1, 30);
+                .defineInRange("baby_ghast_max", 3, 1, 30);
 
         FLUXED_CREEP_WEIGHT = SERVER_BUILDER.comment("Weight for Fluxed Creep to spawn.")
-                .defineInRange("fluxed_creep_weight", 7, 1, 30);
+                .defineInRange("fluxed_creep_weight", 25, 0, 100);
         FLUXED_CREEP_MIN_GROUP = SERVER_BUILDER.comment("Min group number for Trecking Creepers spawn.")
                 .defineInRange("fluxed_creep_min", 1, 0, 30);
         FLUXED_CREEP_MAX_GROUP = SERVER_BUILDER.comment("Max group number for Trecking Creepers spawn.")
-                .defineInRange("fluxed_creep_max", 4, 1, 30);
+                .defineInRange("fluxed_creep_max", 1, 1, 30);
+
+        CHAINED_BLAZE_WEIGHT = SERVER_BUILDER.comment("Weight for Chained Blaze to spawn.")
+                .defineInRange("chained_blaze_weight", 25, 0, 100);
+        CHAINED_BLAZE_MIN_GROUP = SERVER_BUILDER.comment("Min group number for Chained Blaze spawn.")
+                .defineInRange("chained_blaze_min", 1, 0, 30);
+        CHAINED_BLAZE_MAX_GROUP = SERVER_BUILDER.comment("Max group number for Chained Blaze spawn.")
+                .defineInRange("chained_blaze_max", 2, 1, 30);
+
         SERVER_BUILDER.pop();
     }
 
@@ -142,11 +153,11 @@ public class ModConfig {
         SERVER_BUILDER.comment("World Gen settings").push(WORLD_GEN);
 
         SUNDAIZE_CHANCE = SERVER_BUILDER.comment("Chance for Sun Daize to spawn")
-                .defineInRange("sun_chance", 15, 0, 100);
+                .defineInRange("sun_chance", 35, 0, 100);
         ENDERHUSH_CHANCE = SERVER_BUILDER.comment("Chance for Ender Hush to spawn")
-                .defineInRange("ender_chance", 35, 0, 100);
+                .defineInRange("ender_chance", 45, 0, 100);
         BLAIZE_CHANCE = SERVER_BUILDER.comment("Chance for Blazium to spawn")
-                .defineInRange("blazium_chance", 25, 0, 100);
+                .defineInRange("blazium_chance", 35, 0, 100);
 
         ALTAR_SPACING = SERVER_BUILDER.comment("Chunks spacing between Altars")
                 .defineInRange("altar_space", 10, 3, 1000);

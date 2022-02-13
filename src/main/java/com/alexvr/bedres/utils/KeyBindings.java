@@ -8,7 +8,7 @@ import net.minecraftforge.client.settings.KeyConflictContext;
 import org.lwjgl.glfw.GLFW;
 
 public class KeyBindings {
-    public static KeyMapping toggleWang;
+    public static KeyMapping toggleMode;
 
     private static KeyMapping createBinding(String name, int key) {
         KeyMapping keyBinding = new KeyMapping(getKey(name),KeyConflictContext.IN_GAME , InputConstants.Type.KEYSYM.getOrCreate(key), getKey("category"));
@@ -20,6 +20,6 @@ public class KeyBindings {
     }
 
     public static void init() {
-        toggleWang = createBinding("toggle_wand", GLFW.GLFW_KEY_K);
+        toggleMode = createBinding("toggle_mode", GLFW.GLFW_KEY_K);
     }
 }

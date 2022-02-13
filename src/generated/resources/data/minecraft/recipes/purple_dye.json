@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "bedres:ender_hush"
+    }
+  ],
+  "result": {
+    "item": "minecraft:purple_dye"
+  }
+}

@@ -27,7 +27,7 @@ public class BabyGhastEntity extends Ghast {
 
     @Override
     protected float getStandingEyeHeight(Pose pPose, EntityDimensions pSize) {
-        return 0.35f;
+        return 0.40f;
     }
 
 }

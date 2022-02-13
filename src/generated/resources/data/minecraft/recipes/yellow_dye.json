@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "bedres:sun_daize"
+    }
+  ],
+  "result": {
+    "item": "minecraft:yellow_dye"
+  }
+}

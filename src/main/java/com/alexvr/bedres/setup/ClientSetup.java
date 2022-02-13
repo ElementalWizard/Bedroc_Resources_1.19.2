@@ -16,10 +16,12 @@ import com.alexvr.bedres.entities.treckingcreeper.TreckingCreeperModel;
 import com.alexvr.bedres.entities.treckingcreeper.TreckingCreeperRenderer;
 import com.alexvr.bedres.items.MageStaff;
 import com.alexvr.bedres.utils.KeyBindings;
+import com.alexvr.bedres.utils.NBTHelper;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
+import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.world.item.DyeColor;
 import net.minecraftforge.api.distmarker.Dist;
@@ -31,6 +33,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 
+import static com.alexvr.bedres.items.XPMedallion.MODE;
 import static com.alexvr.bedres.utils.RenderHelper.*;
 
 @Mod.EventBusSubscriber(modid = BedrockResources.MODID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.MOD)
@@ -76,6 +79,7 @@ public class ClientSetup {
             BlockEntityRenderers.register(Registration.PEDESTAL_TILE.get(), BedrociumPedestalRenderer::new);
             BlockEntityRenderers.register(Registration.ENDERIAN_RITUAL_PEDESTAL_TILE.get(), EnderianRitualPedestalRenderer::new);
             BlockEntityRenderers.register(Registration.FLUXED_GRAVITY_BUBBLE_TILE.get(), FluxedGravityBubbleRenderer::new);
+            ItemProperties.register(Registration.XP_MEDALLION_ITEM.get(), MODE, (itemStack,clientLevel,livingEntity, id) -> livingEntity != null ? NBTHelper.getInt(itemStack, "mode"): 0);
         });
         MinecraftForge.EVENT_BUS.register(ClientEvents.class);
     }

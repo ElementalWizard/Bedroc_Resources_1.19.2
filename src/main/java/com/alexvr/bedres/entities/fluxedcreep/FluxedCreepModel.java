@@ -9,6 +9,7 @@ import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 
@@ -18,6 +19,7 @@ public class FluxedCreepModel<T extends Entity> extends EntityModel<T> {
 	private final ModelPart bb_main;
 
 	public FluxedCreepModel(ModelPart root) {
+		super(RenderType::entityTranslucent);
 		this.bb_main = root.getChild("bb_main");
 	}
 

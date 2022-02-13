@@ -23,7 +23,7 @@ public class ClientEvents {
     static void renderWorldLastEvent(RenderLevelLastEvent evt) {
         Player player = Minecraft.getInstance().player;
         if (player.getMainHandItem().getItem() instanceof MageStaff mageStaff && player.isUsingItem()){
-            RenderHelper.renderRune(evt.getPoseStack(),player, Minecraft.getInstance().getFrameTime(),mageStaff.type);
+            RenderHelper.renderRune(evt.getPoseStack(),player, Minecraft.getInstance().getFrameTime(),mageStaff.getType(player.getMainHandItem()));
         }
     }
 }

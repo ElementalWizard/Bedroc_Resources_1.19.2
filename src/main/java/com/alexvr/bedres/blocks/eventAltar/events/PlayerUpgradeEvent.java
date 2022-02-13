@@ -46,6 +46,28 @@ public class PlayerUpgradeEvent implements IEvent{
 
     }
 
+    public static void empower(Player player) {
+        player.reviveCaps();
+        LazyOptional<IPlayerAbility> abilities = player.getCapability(PlayerAbilityProvider.PLAYER_ABILITY_CAPABILITY, null);
+        abilities.ifPresent(iPlayerAbility -> {
+            if (iPlayerAbility.getMaxFlux() < 500){
+                iPlayerAbility.setMaxFlux(iPlayerAbility.getMaxFlux() * 1.3);
+            }else if (iPlayerAbility.getMaxFlux() < 1000){
+                iPlayerAbility.setMaxFlux(iPlayerAbility.getMaxFlux() * 1.2);
+            }else if (iPlayerAbility.getMaxFlux() < 1250){
+                iPlayerAbility.setMaxFlux(iPlayerAbility.getMaxFlux() * 1.15);
+            }else if (iPlayerAbility.getMaxFlux() < 1300){
+                iPlayerAbility.setMaxFlux(iPlayerAbility.getMaxFlux() * 1.1);
+            }else{
+                iPlayerAbility.setMaxFlux(iPlayerAbility.getMaxFlux() * 1.05);
+            }
+            iPlayerAbility.addFlux(iPlayerAbility.getMaxFlux() - iPlayerAbility.getFlux());
+        });
+        player.invalidateCaps();
+    }
+
+
+
     public static void speed(Player player, ItemStack stack) {
         //1/4 units increase, 2 max
         player.reviveCaps();
@@ -96,6 +118,7 @@ public class PlayerUpgradeEvent implements IEvent{
         if (stack.is(Items.CHAIN)) return "Returns player Jump to default";
         if (stack.is(Items.SLIME_BALL)) return "Removes fall damage.";
         if (stack.is(Items.HONEY_BLOCK)) return "Player will take fall damage again.";
+        if (stack.is(Registration.BEDROCK_COMPRESSED_WIRE_ITEM.get())) return "Raise the players max flux";
         return "";
     }
 }

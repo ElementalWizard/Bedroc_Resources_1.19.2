@@ -3,6 +3,7 @@ package com.alexvr.bedres.datagen;
 import com.alexvr.bedres.BedrockResources;
 import com.alexvr.bedres.setup.Registration;
 import net.minecraft.data.DataGenerator;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.client.model.generators.ItemModelProvider;
 import net.minecraftforge.common.data.ExistingFileHelper;
 
@@ -38,9 +39,16 @@ public class ModItemModels extends ItemModelProvider {
         singleTexture(Registration.SCRAPER_MESH_ITEM.get().getRegistryName().getPath(),
                 mcLoc("item/generated"),
                 "layer0",modLoc("block/frame"));
-        singleTexture(Registration.XP_MEDALLION_ITEM.get().getRegistryName().getPath(),
-                mcLoc("item/generated"),
-                "layer0",modLoc("item/xp_medallion"));
+
+        withExistingParent(Registration.XP_MEDALLION_ITEM.get().getRegistryName().getPath(),mcLoc("item/generated")).texture("layer0",modLoc("item/xp_medallion")).override()
+                .predicate(new ResourceLocation(BedrockResources.MODID,"mode"),1).model(singleTexture(Registration.XP_MEDALLION_ITEM.get().getRegistryName().getPath() + "_a",
+                        mcLoc("item/generated"),
+                        "layer0",modLoc("item/xp_medallion_a")));
+
+        singleTexture(Registration.XP_MEDALLION_ITEM.get().getRegistryName().getPath() + "_a",
+                modLoc("item/xp_medallion"),"layer0",modLoc("item/xp_medallion_a"));
+
+
         withExistingParent(Registration.SPORE_DEITY_EGG_ITEM.get().getRegistryName().getPath(), mcLoc("item/template_spawn_egg"));
         withExistingParent(Registration.FLUXED_CREEP_EGG_ITEM.get().getRegistryName().getPath(), mcLoc("item/template_spawn_egg"));
         withExistingParent(Registration.CHAINED_BLAZE_EGG_ITEM.get().getRegistryName().getPath(), mcLoc("item/template_spawn_egg"));

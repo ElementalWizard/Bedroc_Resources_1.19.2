@@ -137,6 +137,8 @@ public class EventAltarTile extends BlockEntity {
                     PlayerUpgradeEvent.jump(playerInside,recipe.getResultItem());
                 }else if (recipe.getResultItem().is(Items.SLIME_BALL) || recipe.getResultItem().is(Items.HONEY_BLOCK)) {
                     PlayerUpgradeEvent.fallDamage(playerInside,recipe.getResultItem());
+                }else if (recipe.getResultItem().is(Registration.BEDROCK_WIRE_ITEM.get())) {
+                    PlayerUpgradeEvent.empower(playerInside);
                 }
                 break;
         }

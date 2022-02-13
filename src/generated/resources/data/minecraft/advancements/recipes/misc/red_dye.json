@@ -1,0 +1,34 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "minecraft:red_dye"
+    ]
+  },
+  "criteria": {
+    "has_blazium": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "bedres:blazium"
+            ]
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "minecraft:red_dye"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_blazium",
+      "has_the_recipe"
+    ]
+  ]
+}

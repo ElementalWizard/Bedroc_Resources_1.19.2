@@ -112,14 +112,14 @@ public class Registration {
     public static final RegistryObject<Item> SPORE_DEITY_EGG_ITEM = ITEMS.register(BedrockReferences.SPORE_DEITY_REGNAME, () -> new ForgeSpawnEggItem(SPORE_DEITY, 0x000000, 0xffffff, new Item.Properties().tab(ModSetup.GROUP)));
 
     public static final RegistryObject<EntityType<FluxedCreepEntity>> FLUXED_CREEP = ENTITIES.register(BedrockReferences.FLUXED_CREEP_REGNAME, () -> EntityType.Builder.of(FluxedCreepEntity::new, MobCategory.MONSTER)
-            .sized(0.8f, 1.95f)
+            .sized(0.8f, 1f)
             .clientTrackingRange(8)
             .setShouldReceiveVelocityUpdates(false)
             .build(BedrockReferences.FLUXED_CREEP_REGNAME));
     public static final RegistryObject<Item> FLUXED_CREEP_EGG_ITEM = ITEMS.register(BedrockReferences.FLUXED_CREEP_REGNAME, () -> new ForgeSpawnEggItem(FLUXED_CREEP, 0x8e7cc3, 0x000000, new Item.Properties().tab(ModSetup.GROUP)));
 
     public static final RegistryObject<EntityType<ChainedBlazeEntity>> CHAINED_BLAZE = ENTITIES.register(BedrockReferences.CHAINED_BLAZE_REGNAME, () -> EntityType.Builder.of(ChainedBlazeEntity::new, MobCategory.MONSTER)
-            .sized(0.8f, 1.95f)
+            .sized(0.7f, 1.5f)
             .clientTrackingRange(8)
             .setShouldReceiveVelocityUpdates(false)
             .build(BedrockReferences.CHAINED_BLAZE_REGNAME));
@@ -133,7 +133,7 @@ public class Registration {
     public static final RegistryObject<Item> TRECKING_CREEPER_EGG_ITEM = ITEMS.register(BedrockReferences.TRECKING_CREEPER_REGNAME, () -> new ForgeSpawnEggItem(TRECKING_CREEPER, 0x6aa84f, 0x000000, new Item.Properties().tab(ModSetup.GROUP)));
 
     public static final RegistryObject<EntityType<BabyGhastEntity>> BABY_GHAST = ENTITIES.register(BedrockReferences.BABY_GHAST_REGNAME, () -> EntityType.Builder.of(BabyGhastEntity::new, MobCategory.MONSTER)
-            .sized(0.6f, 0.75f)
+            .sized(0.6f, 0.6f)
             .clientTrackingRange(16)
             .setShouldReceiveVelocityUpdates(false)
             .build(BedrockReferences.BABY_GHAST_REGNAME));
@@ -273,7 +273,6 @@ public class Registration {
     public static final RegistryObject<StructureFeature<JigsawConfiguration>> ALTAR_OVERWORLD = STRUCTURES.register("altar_overworld", () -> new AltarStructure(true));
 
     public static final RegistryObject<StructureFeature<JigsawConfiguration>> DUNGEON = STRUCTURES.register("dungeon", () -> new DungeonStructure(false));
-
 
     public static <B extends  Block>RegistryObject<Item> fromBlock(RegistryObject<B> block) {
         return ITEMS.register(block.getId().getPath(), () -> new BlockItem(block.get(),(new Item.Properties()).tab(ModSetup.GROUP)));

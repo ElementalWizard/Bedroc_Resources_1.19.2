@@ -109,6 +109,8 @@ public class ModLanguageProvider extends LanguageProvider {
         add("container.event.player_upgrade.slime_ball", "Fall Damage Upgrade" );
         add("container.event.player_upgrade.honey_block", "Fall Damage Reset" );
 
+        add("container.event.player_upgrade.bedrock_compressed_wire", "Flux Storage Upgrade" );
+
         add("mage_staff.rune.type.alpha", "Slingshot" );
         add("mage_staff.rune.type.beta", "Heaven Smite" );
         add("mage_staff.rune.type.delta", "Clear Effects/Regen" );
@@ -119,10 +121,12 @@ public class ModLanguageProvider extends LanguageProvider {
         add("mage_staff.rune.type.zeta", "Light Projectile" );
 
         add("bedres.key.category", "Bedrock Resources Keybindings" );
-        add("bedres.key.toggle_wand", "Toggle Mage Staff Ability" );
+        add("bedres.key.toggle_mode", "Toggle Item Mode" );
 
         add("bedres.mage_staff.green_thumb.fail", "Block cant be bonemealed" );
         add("bedres.mage_staff.lightning.fail", "Target entity or block not air" );
+
+        add("bedres:fluxed_plains", "Desolated Fluxed Plains" );
 
         add(BedrockReferences.CREATIVE_TAB_NAME, "Bedrock Resources Tab" );
         add(BedrockReferences.SCREEN_SCRAPE_TANK, "Scrape Tank" );
