@@ -23,6 +23,9 @@ public class TreckingCreeperModel<T extends Entity> extends EntityModel<T> {
 	private final ModelPart left_hind_leg;
 	private final ModelPart right_hind_leg;
 	private final ModelPart right_front_leg;
+	private final float original_X;
+	private final float original_Y;
+	private final float original_Z;
 	private DyeColor color = DyeColor.BROWN;
 
 
@@ -34,6 +37,9 @@ public class TreckingCreeperModel<T extends Entity> extends EntityModel<T> {
 		this.left_hind_leg = root.getChild("left_hind_leg");
 		this.right_hind_leg = root.getChild("right_hind_leg");
 		this.right_front_leg = root.getChild("right_front_leg");
+		this.original_X = this.backpack.x;
+		this.original_Y = this.backpack.y;
+		this.original_Z = this.backpack.z;
 	}
 
 	public static LayerDefinition createBodyLayer() {
@@ -87,6 +93,16 @@ public class TreckingCreeperModel<T extends Entity> extends EntityModel<T> {
 		if (pEntity instanceof TreckingCreeperEntity treckingCreeperEntity){
 			this.backpack.visible = treckingCreeperEntity.isTamed();
 			this.color = treckingCreeperEntity.getBackpackColor();
+			if (treckingCreeperEntity.isInSittingPose()){
+				this.backpack.x = (float) (original_X + 2.1 );
+				this.backpack.y = original_Y + 1.7f;
+				this.backpack.z = (float) (original_Z- 1.7);
+			}else{
+				this.backpack.x = original_X;
+				this.backpack.y = original_Y;
+				this.backpack.z = original_Z;
+			}
+
 		}
 	}
 

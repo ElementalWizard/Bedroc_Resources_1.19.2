@@ -1,5 +1,8 @@
 package com.alexvr.bedres.entities.treckingcreeper;
 
+import com.alexvr.bedres.setup.Registration;
+import net.minecraft.client.Minecraft;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
@@ -20,6 +23,9 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.*;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
+import net.minecraft.world.entity.ai.navigation.FlyingPathNavigation;
+import net.minecraft.world.entity.ai.navigation.GroundPathNavigation;
+import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.DyeColor;
@@ -30,9 +36,13 @@ import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.biome.Biome;
-import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.LeavesBlock;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
+import net.minecraft.world.level.pathfinder.BlockPathTypes;
+import net.minecraft.world.level.pathfinder.WalkNodeEvaluator;
 
 import javax.annotation.Nullable;
 import java.util.*;
@@ -50,7 +60,7 @@ public class TreckingCreeperEntity extends Monster implements ContainerListener,
     public Dictionary<Biome.BiomeCategory,int[]> BIOME_FILTERS = new Hashtable<>();
     public static final int INV_CHEST_COUNT = 58;
     protected SimpleContainer inventory;
-    private static final Ingredient FOOD_ITEMS = Ingredient.of(Items.WHEAT, Items.SUGAR, Blocks.HAY_BLOCK.asItem(), Items.APPLE, Items.GOLDEN_CARROT, Items.GOLDEN_APPLE, Items.ENCHANTED_GOLDEN_APPLE);
+    private static final Ingredient FOOD_ITEMS = Ingredient.of(Items.GUNPOWDER, Items.TNT, Registration.BEDROCK_WIRE_ITEM.get());
 
     private static final int FLAG_TAME = 2;
     private static final int FLAG_EATING = 16;
@@ -61,6 +71,7 @@ public class TreckingCreeperEntity extends Monster implements ContainerListener,
     private int oldSwell;
     private int swell;
     private int maxSwell = 30;
+    private boolean orderedToSit;
 
     public TreckingCreeperEntity(EntityType<? extends TreckingCreeperEntity> p_i50206_1_, Level p_i50206_2_) {
         super(p_i50206_1_, p_i50206_2_);
@@ -88,48 +99,58 @@ public class TreckingCreeperEntity extends Monster implements ContainerListener,
         this.goalSelector.addGoal(1, new FloatGoal(this));
         this.goalSelector.addGoal(2, new SwellGoal(this));
         this.goalSelector.addGoal(4, new MeleeAttackGoal(this, 1.0D, false));
-        this.goalSelector.addGoal(5, new WaterAvoidingRandomStrollGoal(this, 0.8D));
+        this.goalSelector.addGoal(8, new WaterAvoidingRandomStrollGoal(this, 0.8D));
         this.goalSelector.addGoal(6, new LookAtPlayerGoal(this, Player.class, 8.0F));
         this.goalSelector.addGoal(3, new LookAtPlayerGoal(this, Monster.class, 16.0F));
         this.goalSelector.addGoal(6, new RandomLookAroundGoal(this));
         this.targetSelector.addGoal(2, new HurtByTargetGoal(this));
         this.targetSelector.addGoal(1, new NearestAttackableTargetGoal<>(this, Monster.class, true, (p_199899_) -> !(p_199899_ instanceof TreckingCreeperEntity)));
+        this.goalSelector.addGoal(6, new FollowOwnerGoal(this, 1.0D, 5.0F, 2.0F, false));
+        this.goalSelector.addGoal(2, new SitWhenOrderedToGoal(this));
+
     }
 
     @Override
     protected InteractionResult mobInteract(Player pPlayer, InteractionHand pHand) {
         ItemStack itemstack = pPlayer.getItemInHand(pHand);
-        if (!itemstack.isEmpty()) {
-            if (itemstack.is(Items.FLINT_AND_STEEL)) {
-                this.level.playSound(pPlayer, this.getX(), this.getY(), this.getZ(), SoundEvents.FLINTANDSTEEL_USE, this.getSoundSource(), 1.0F, this.random.nextFloat() * 0.4F + 0.8F);
-                if (!this.level.isClientSide) {
-                    this.ignite();
-                    itemstack.hurtAndBreak(1, pPlayer, (p_32290_) -> {
-                        p_32290_.broadcastBreakEvent(pHand);
-                    });
-                }
-
-                return InteractionResult.sidedSuccess(this.level.isClientSide);
-            }else if (itemstack.getItem() instanceof DyeItem dyeItem) {
-                this.level.playSound(pPlayer, this.getX(), this.getY(), this.getZ(), SoundEvents.DYE_USE, this.getSoundSource(), 1.0F, this.random.nextFloat() * 0.4F + 0.8F);
-                setBackpackColor(dyeItem.getDyeColor());
-                if (!pPlayer.getAbilities().instabuild) {
-                    itemstack.shrink(1);
-                }
-                if (this.level.isClientSide) {
-                    return InteractionResult.CONSUME;
-                }else {
-                    return InteractionResult.SUCCESS ;
-                }
-            }else if (this.isFood(itemstack)) {
-                return this.fedFood(pPlayer, itemstack);
-            }
-            if (!this.isTamed()) {
-                this.playSound(SoundEvents.HORSE_ANGRY, this.getSoundVolume(), this.getVoicePitch());
-                return InteractionResult.sidedSuccess(this.level.isClientSide);
+        if (itemstack.is(Items.FLINT_AND_STEEL)) {
+            this.level.playSound(pPlayer, this.getX(), this.getY(), this.getZ(), SoundEvents.FLINTANDSTEEL_USE, this.getSoundSource(), 1.0F, this.random.nextFloat() * 0.4F + 0.8F);
+            if (!this.level.isClientSide) {
+                this.ignite();
+                itemstack.hurtAndBreak(1, pPlayer, (p_32290_) -> {
+                    p_32290_.broadcastBreakEvent(pHand);
+                });
             }
 
+            return InteractionResult.sidedSuccess(this.level.isClientSide);
+        }else if (itemstack.getItem() instanceof DyeItem dyeItem) {
+            this.level.playSound(pPlayer, this.getX(), this.getY(), this.getZ(), SoundEvents.DYE_USE, this.getSoundSource(), 1.0F, this.random.nextFloat() * 0.4F + 0.8F);
+            setBackpackColor(dyeItem.getDyeColor());
+            if (!pPlayer.getAbilities().instabuild) {
+                itemstack.shrink(1);
+            }
+            if (this.level.isClientSide) {
+                return InteractionResult.CONSUME;
+            }else {
+                return InteractionResult.SUCCESS ;
+            }
+        }else if (this.isFood(itemstack)) {
+            return this.fedFood(pPlayer, itemstack);
+        }else if (!(itemstack.getItem() instanceof DyeItem)) {
+            InteractionResult interactionresult = super.mobInteract(pPlayer, pHand);
+            if ((!interactionresult.consumesAction()) && this.getOwnerUUID().equals(pPlayer.getUUID())) {
+                this.setOrderedToSit(!this.isOrderedToSit());
+                this.jumping = false;
+                this.navigation.stop();
+                this.setTarget(null);
+                return InteractionResult.SUCCESS;
+            }
         }
+        if (!this.isTamed()) {
+            this.playSound(SoundEvents.HORSE_ANGRY, this.getSoundVolume(), this.getVoicePitch());
+            return InteractionResult.sidedSuccess(this.level.isClientSide);
+        }
+
         return super.mobInteract(pPlayer, pHand);
     }
 
@@ -166,7 +187,8 @@ public class TreckingCreeperEntity extends Monster implements ContainerListener,
             float f = this.isPowered() ? 2.0F : 1.0F;
             this.level.explode(this, this.getX(), this.getY(), this.getZ(), (float)this.explosionRadius * f, explosion$blockinteraction);
             spawnLingeringCloud();
-            setSwellDir(0);
+            setSwellDir(-1);
+            this.swell = 0;
             setTarget(null);
             unignite();
             unPower();
@@ -281,6 +303,7 @@ public class TreckingCreeperEntity extends Monster implements ContainerListener,
         if (this.entityData.get(DATA_IS_POWERED)) {
             pCompound.putBoolean("powered", true);
         }
+        pCompound.putBoolean("Sitting", this.orderedToSit);
 
         pCompound.putShort("Fuse", (short)this.maxSwell);
         pCompound.putByte("ExplosionRadius", (byte)this.explosionRadius);
@@ -322,6 +345,9 @@ public class TreckingCreeperEntity extends Monster implements ContainerListener,
         if (pCompound.getBoolean("ignited")) {
             this.ignite();
         }
+        this.orderedToSit = pCompound.getBoolean("Sitting");
+        this.setInSittingPose(this.orderedToSit);
+
         this.setBackpackColor(DyeColor.byId(pCompound.getInt("color")));
         this.setEating(pCompound.getBoolean("EatingHaystack"));
         this.setTemper(pCompound.getInt("Temper"));
@@ -351,7 +377,26 @@ public class TreckingCreeperEntity extends Monster implements ContainerListener,
 
         this.updateContainerEquipment();
     }
+    public boolean isInSittingPose() {
+        return (this.entityData.get(DATA_ID_FLAGS) & 1) != 0;
+    }
 
+    public void setInSittingPose(boolean p_21838_) {
+        byte b0 = this.entityData.get(DATA_ID_FLAGS);
+        if (p_21838_) {
+            this.entityData.set(DATA_ID_FLAGS, (byte)(b0 | 1));
+        } else {
+            this.entityData.set(DATA_ID_FLAGS, (byte)(b0 & -2));
+        }
+
+    }
+    public boolean isOrderedToSit() {
+        return this.orderedToSit;
+    }
+
+    public void setOrderedToSit(boolean p_21840_) {
+        this.orderedToSit = p_21840_;
+    }
     protected boolean getFlag(int p_30648_) {
         return (this.entityData.get(DATA_ID_FLAGS) & p_30648_) != 0;
     }
@@ -384,34 +429,27 @@ public class TreckingCreeperEntity extends Monster implements ContainerListener,
         boolean flag = false;
         float f = 0.0F;
         int i = 0;
-        int j = 0;
-        if (pStack.is(Items.WHEAT)) {
+        if (pStack.is(Registration.BEDROCK_WIRE_ITEM.get())) {
+            f = 4.0F;
+            i = 10;
+        } else if (pStack.is(Items.GUNPOWDER)) {
             f = 2.0F;
-            i = 20;
-            j = 3;
-        } else if (pStack.is(Items.SUGAR)) {
-            f = 1.0F;
-            i = 30;
-            j = 3;
-        } else if (pStack.is(Blocks.HAY_BLOCK.asItem())) {
-            f = 20.0F;
-            i = 180;
-        } else if (pStack.is(Items.APPLE)) {
-            f = 3.0F;
-            i = 60;
-            j = 3;
+            i = 16;
+        } else if (pStack.is(Items.TNT)) {
+            f = 10.0F;
+            i = 2 ;
         }
 
         if (this.getHealth() < this.getMaxHealth() && f > 0.0F) {
             this.heal(f);
             flag = true;
         }
-        if (!isTamed()){
-            if (this.random.nextInt(3) == 0) {
+        if (!isTamed() && f > 0.0F){
+            if (this.random.nextInt(i) == 1) {
                 this.tameWithName(pPlayer);
-                level.addParticle(ParticleTypes.HEART,getX(),getY() + 0.5f,getZ(),this.getRandom().nextFloat()-0.5f,this.getRandom().nextFloat(),this.getRandom().nextFloat()-0.5f);            this.navigation.stop();
                 this.navigation.stop();
-                this.setTarget((LivingEntity)null);
+                this.setTarget(null);
+                this.playSound(SoundEvents.CREEPER_PRIMED, 1.0F, 0.5F);
                 this.level.broadcastEntityEvent(this, (byte)7);
                 return true;
             } else {
@@ -650,6 +688,208 @@ public class TreckingCreeperEntity extends Monster implements ContainerListener,
             } else {
                 this.creeper.setSwellDir(1);
             }
+        }
+    }
+
+    public class FollowOwnerGoal extends Goal {
+        public static final int TELEPORT_WHEN_DISTANCE_IS = 12;
+        private static final int MIN_HORIZONTAL_DISTANCE_FROM_PLAYER_WHEN_TELEPORTING = 2;
+        private static final int MAX_HORIZONTAL_DISTANCE_FROM_PLAYER_WHEN_TELEPORTING = 3;
+        private static final int MAX_VERTICAL_DISTANCE_FROM_PLAYER_WHEN_TELEPORTING = 1;
+        private final TreckingCreeperEntity tamable;
+        private LivingEntity owner;
+        private final LevelReader level;
+        private final double speedModifier;
+        private final PathNavigation navigation;
+        private int timeToRecalcPath;
+        private final float stopDistance;
+        private final float startDistance;
+        private float oldWaterCost;
+        private final boolean canFly;
+
+        public FollowOwnerGoal(TreckingCreeperEntity pTamable, double pSpeedModifier, float pStartDistance, float pStopDistance, boolean pCanFly) {
+            this.tamable = pTamable;
+            this.level = pTamable.level;
+            this.speedModifier = pSpeedModifier;
+            this.navigation = pTamable.getNavigation();
+            this.startDistance = pStartDistance;
+            this.stopDistance = pStopDistance;
+            this.canFly = pCanFly;
+            this.setFlags(EnumSet.of(Goal.Flag.MOVE, Goal.Flag.LOOK));
+            if (!(pTamable.getNavigation() instanceof GroundPathNavigation) && !(pTamable.getNavigation() instanceof FlyingPathNavigation)) {
+                throw new IllegalArgumentException("Unsupported mob type for FollowOwnerGoal");
+            }
+        }
+
+        /**
+         * Returns whether execution should begin. You can also read and cache any state necessary for execution in this
+         * method as well.
+         */
+        public boolean canUse() {
+            if (!tamable.isTamed() || Minecraft.getInstance().level == null){
+                return false;
+            }
+            LivingEntity livingentity = Minecraft.getInstance().level.getPlayerByUUID(tamable.getOwnerUUID());
+            if (livingentity == null) {
+                return false;
+            } else if (livingentity.isSpectator()) {
+                return false;
+            }else if (this.tamable.isOrderedToSit()) {
+                return false;
+            } else if (this.tamable.distanceToSqr(livingentity) < (double)(this.startDistance * this.startDistance)) {
+                return false;
+            } else {
+                this.owner = livingentity;
+                return true;
+            }
+
+        }
+
+        /**
+         * Returns whether an in-progress EntityAIBase should continue executing
+         */
+        public boolean canContinueToUse() {
+            if (this.navigation.isDone()) {
+                return false;
+            } else if (this.tamable.isOrderedToSit()) {
+                return false;
+            } else {
+                return !(this.tamable.distanceToSqr(this.owner) <= (double)(this.stopDistance * this.stopDistance));
+            }
+        }
+
+        /**
+         * Execute a one shot task or start executing a continuous task
+         */
+        public void start() {
+            this.timeToRecalcPath = 0;
+            this.oldWaterCost = this.tamable.getPathfindingMalus(BlockPathTypes.WATER);
+            this.tamable.setPathfindingMalus(BlockPathTypes.WATER, 0.0F);
+        }
+
+        /**
+         * Reset the task's internal state. Called when this task is interrupted by another one
+         */
+        public void stop() {
+            this.owner = null;
+            this.navigation.stop();
+            this.tamable.setPathfindingMalus(BlockPathTypes.WATER, this.oldWaterCost);
+        }
+
+        /**
+         * Keep ticking a continuous task that has already been started
+         */
+        public void tick() {
+            this.tamable.getLookControl().setLookAt(this.owner, 10.0F, (float)this.tamable.getMaxHeadXRot());
+            if (--this.timeToRecalcPath <= 0) {
+                this.timeToRecalcPath = this.adjustedTickDelay(10);
+                if (!this.tamable.isLeashed() && !this.tamable.isPassenger()) {
+                    if (this.tamable.distanceToSqr(this.owner) >= 144.0D) {
+                        this.teleportToOwner();
+                    } else {
+                        this.navigation.moveTo(this.owner, this.speedModifier);
+                    }
+
+                }
+            }
+        }
+
+        private void teleportToOwner() {
+            BlockPos blockpos = this.owner.blockPosition();
+
+            for(int i = 0; i < 10; ++i) {
+                int j = this.randomIntInclusive(-3, 3);
+                int k = this.randomIntInclusive(-1, 1);
+                int l = this.randomIntInclusive(-3, 3);
+                boolean flag = this.maybeTeleportTo(blockpos.getX() + j, blockpos.getY() + k, blockpos.getZ() + l);
+                if (flag) {
+                    return;
+                }
+            }
+
+        }
+
+        private boolean maybeTeleportTo(int pX, int pY, int pZ) {
+            if (Math.abs((double)pX - this.owner.getX()) < 2.0D && Math.abs((double)pZ - this.owner.getZ()) < 2.0D) {
+                return false;
+            } else if (!this.canTeleportTo(new BlockPos(pX, pY, pZ))) {
+                return false;
+            } else {
+                this.tamable.moveTo((double)pX + 0.5D, (double)pY, (double)pZ + 0.5D, this.tamable.getYRot(), this.tamable.getXRot());
+                this.navigation.stop();
+                return true;
+            }
+        }
+
+        private boolean canTeleportTo(BlockPos pPos) {
+            BlockPathTypes blockpathtypes = WalkNodeEvaluator.getBlockPathTypeStatic(this.level, pPos.mutable());
+            if (blockpathtypes != BlockPathTypes.WALKABLE) {
+                return false;
+            } else {
+                BlockState blockstate = this.level.getBlockState(pPos.below());
+                if (!this.canFly && blockstate.getBlock() instanceof LeavesBlock) {
+                    return false;
+                } else {
+                    BlockPos blockpos = pPos.subtract(this.tamable.blockPosition());
+                    return this.level.noCollision(this.tamable, this.tamable.getBoundingBox().move(blockpos));
+                }
+            }
+        }
+
+        private int randomIntInclusive(int pMin, int pMax) {
+            return this.tamable.getRandom().nextInt(pMax - pMin + 1) + pMin;
+        }
+    }
+
+    public class SitWhenOrderedToGoal extends Goal {
+        private final TreckingCreeperEntity mob;
+
+        public SitWhenOrderedToGoal(TreckingCreeperEntity pMob) {
+            this.mob = pMob;
+            this.setFlags(EnumSet.of(Goal.Flag.JUMP, Goal.Flag.MOVE));
+        }
+
+        /**
+         * Returns whether an in-progress EntityAIBase should continue executing
+         */
+        public boolean canContinueToUse() {
+            return this.mob.isOrderedToSit();
+        }
+
+        /**
+         * Returns whether execution should begin. You can also read and cache any state necessary for execution in this
+         * method as well.
+         */
+        public boolean canUse() {
+            if (!this.mob.isTamed() || Minecraft.getInstance().level == null) {
+                return false;
+            } else if (this.mob.isInWaterOrBubble()) {
+                return false;
+            } else if (!this.mob.isOnGround()) {
+                return false;
+            } else {
+                LivingEntity livingentity = Minecraft.getInstance().level.getPlayerByUUID(mob.getOwnerUUID());
+                if (livingentity == null) {
+                    return false;
+                } else {
+                    return this.mob.distanceToSqr(livingentity) < 144.0D && this.mob.isOrderedToSit();
+                }
+            }
+        }
+
+        /**
+         * Execute a one shot task or start executing a continuous task
+         */
+        public void start() {
+            this.mob.getNavigation().stop();
+            this.mob.setInSittingPose(true);
+        }
+
+        /**
+         * Reset the task's internal state. Called when this task is interrupted by another one
+         */
+        public void stop() {
+            this.mob.setInSittingPose(false);
         }
     }
 }
