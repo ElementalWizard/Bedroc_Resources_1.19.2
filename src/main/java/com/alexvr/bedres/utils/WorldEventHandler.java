@@ -3,6 +3,7 @@ package com.alexvr.bedres.utils;
 import com.alexvr.bedres.BedrockResources;
 import com.alexvr.bedres.capability.abilities.IPlayerAbility;
 import com.alexvr.bedres.capability.abilities.PlayerAbilityProvider;
+import com.alexvr.bedres.client.screen.FluxOracleScreenGui;
 import com.alexvr.bedres.entities.treckingcreeper.TreckingCreeperEntity;
 import com.alexvr.bedres.items.MageStaff;
 import com.alexvr.bedres.items.XPMedallion;
@@ -11,7 +12,6 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
@@ -42,7 +42,7 @@ import static com.alexvr.bedres.setup.ModConfig.*;
 
 @Mod.EventBusSubscriber(modid = BedrockResources.MODID)
 public class WorldEventHandler {
-
+    public static FluxOracleScreenGui fxG = new FluxOracleScreenGui();
     @SubscribeEvent
     public static void onPlayerTick(TickEvent.PlayerTickEvent event) {
         Player player = event.player;
@@ -116,24 +116,6 @@ public class WorldEventHandler {
         if (event.getEntity() instanceof TreckingCreeperEntity treckingCreeperEntity){
             treckingCreeperEntity.setType(event.getWorld().getBiome(treckingCreeperEntity.getOnPos()).getBiomeCategory());
         }
-    }
-
-    @SubscribeEvent
-    public static void onPlayerLogIn(PlayerEvent.PlayerLoggedInEvent event) {
-        Player player = event.getPlayer();
-        player.getCapability(PlayerAbilityProvider.PLAYER_ABILITY_CAPABILITY, null).ifPresent(h -> {
-            player.sendMessage(new TextComponent("Sword Level: " + h.getSword()),player.getUUID());
-            player.sendMessage(new TextComponent("Pick Level: " + h.getPick()),player.getUUID());
-            player.sendMessage(new TextComponent("Hoe Level: " + h.getHoe()),player.getUUID());
-            player.sendMessage(new TextComponent("Shovel Level: " + h.getPick()),player.getUUID());
-            player.sendMessage(new TextComponent("Axe Level: " + h.getPick()),player.getUUID());
-            player.sendMessage(new TextComponent("Mining Speed Level: " + h.getMiningSpeedBoost()),player.getUUID());
-            player.sendMessage(new TextComponent("Jump Level: " + h.getJumpBoost()),player.getUUID());
-            player.sendMessage(new TextComponent("Fall damage Status: " + h.takesFalldamage()),player.getUUID());
-            player.sendMessage(new TextComponent("Flux Level: " + h.getFlux() + "/" + h.getMaxFlux()),player.getUUID());
-
-        });
-
     }
 
     @SubscribeEvent

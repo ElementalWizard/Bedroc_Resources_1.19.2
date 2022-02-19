@@ -1,6 +1,9 @@
 package com.alexvr.bedres.items;
 
 import com.alexvr.bedres.utils.IDisplayFlux;
+import com.alexvr.bedres.utils.NBTHelper;
+import com.alexvr.bedres.utils.WorldEventHandler;
+import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -34,19 +37,10 @@ public class FluxedOracle extends Item implements IDisplayFlux {
     @Override
     public InteractionResultHolder<ItemStack> use(Level worldIn, Player playerIn, InteractionHand handIn) {
         ItemStack stack = playerIn.getItemInHand(handIn);
-        if (!worldIn.isClientSide) {
-//            if (playerIn.isShiftKeyDown()){
-//                playerIn.getCapability(PlayerAbilityProvider.PLAYER_ABILITY_CAPABILITY).ifPresent(h->{
-//                    h.setFluxOverlayScreen(new FluxOverlay(new TextComponent("Overlay"),h));
-//
-//                });
-//            }
+        if (worldIn.isClientSide) {
+            NBTHelper.flipBoolean(playerIn.getMainHandItem(),"active");
+            Minecraft.getInstance().setScreen(WorldEventHandler.fxG);
         }
-
-//        if (playerIn instanceof ServerPlayer player) {
-//            PatchouliAPI.get().openBookGUI((ServerPlayer) playerIn, Registry.ITEM.getKey(this));
-//        }
-
         return new InteractionResultHolder<>(InteractionResult.SUCCESS, stack);
     }
 

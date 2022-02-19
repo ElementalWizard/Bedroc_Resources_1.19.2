@@ -1,17 +1,20 @@
 package com.alexvr.bedres.utils;
 
 import com.alexvr.bedres.BedrockResources;
+import com.mojang.blaze3d.platform.Lighting;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Matrix4f;
 import com.mojang.math.Quaternion;
 import com.mojang.math.Vector3f;
+import mcjty.theoneprobe.network.ThrowableIdentity;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.model.ItemTransforms;
+import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
@@ -21,7 +24,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.client.model.data.EmptyModelData;
@@ -82,19 +84,29 @@ public class RenderHelper {
         poseStack.popPose();
     }
 
-    public static void RenderBlock(PoseStack poseStack, Block block, MultiBufferSource bufferSource, int combinedLight, int combinedOverlay,
-                                   float xTranslate, float yTranslate, float zTranslate, float xScale, float yScale, float zScale, boolean rotate){
-        poseStack.pushPose();
-        poseStack.translate(xTranslate, yTranslate, zTranslate);
-        poseStack.scale(xScale, yScale, zScale);
+    public static boolean renderGUIItemStack(ItemRenderer itemRender, ItemStack itm, PoseStack matrixStack, int x, int y) {
+        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+        boolean rc = true;
+        if (!itm.isEmpty() && itm.getItem() != null) {
+            matrixStack.pushPose();
+            matrixStack.translate(0.0D, 0.0D, 32.0D);
 
-        if (rotate){
-            Quaternion rotations = Minecraft.getInstance().gameRenderer.getMainCamera().rotation();
-            rotations.set(0,rotations.j(),0,rotations.r());
-            poseStack.mulPose(rotations);
+            RenderSystem.applyModelViewMatrix();
+            RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+            Lighting.setupFor3DItems();
+
+            try {
+                itemRender.renderAndDecorateItem(itm, x, y);
+            } catch (Exception var11) {
+                ThrowableIdentity.registerThrowable(var11);
+                rc = false;
+            }
+
+            matrixStack.popPose();
+            RenderSystem.applyModelViewMatrix();
         }
-        Minecraft.getInstance().getBlockRenderer().renderSingleBlock(block.defaultBlockState(), poseStack,bufferSource, combinedLight, combinedOverlay);
-        poseStack.popPose();
+
+        return rc;
     }
 
     public static void renderRune(PoseStack poseStack, Player player, float ticks, String runeType) {

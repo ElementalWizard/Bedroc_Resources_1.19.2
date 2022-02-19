@@ -128,6 +128,26 @@ public class ModLanguageProvider extends LanguageProvider {
 
         add("bedres:fluxed_plains", "Desolated Fluxed Plains" );
 
+        add("bedres.page_name.flux", "Fluxed Abilities" );
+        add("bedres.page_name.altar", "Item Infusion Altar" );
+        add("bedres.page_name.scrape", "Bedrock Scrapes" );
+        add("bedres.page_name.knife", "Scraping Knife" );
+        add("bedres.page_name.ender_hush", "Ender Hush" );
+        add("bedres.page_name.daize", "Sun Daize" );
+        add("bedres.page_name.blazium", "Blazium" );
+        add("bedres.page_name.e_ore", "Enderian Ore" );
+        add("bedres.page_name.e_ingot", "Enderian Ingot" );
+        add("bedres.page_name.tank", "Scrape Tank" );
+        add("bedres.page_name.item_platform", "Item Platform" );
+        add("bedres.page_name.e_item_platform", "Ritual Item Platform" );
+        add("bedres.page_name.event_ritual", "Event Ritual Pedestal" );
+        add("bedres.page_name.spore_mush", "Fluxed Spores" );
+        add("bedres.page_name.cupcake", "Fluxed Cupcake" );
+        add("bedres.page_name.g_bubble", "Gravity Bubble" );
+        add("bedres.page_name.g_staff", "Gravity Staff" );
+        add("bedres.page_name.m_staff", "Mage Staff" );
+        add("bedres.page_name.nebula", "Nebula" );
+
         add(BedrockReferences.CREATIVE_TAB_NAME, "Bedrock Resources Tab" );
         add(BedrockReferences.SCREEN_SCRAPE_TANK, "Scrape Tank" );
         add(Registration.SPORE_DEITY_EGG_ITEM.get(), "Spore Deity Spawn Egg");

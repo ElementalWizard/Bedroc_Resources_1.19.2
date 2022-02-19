@@ -1,9 +1,6 @@
 package com.alexvr.bedres.utils.compat112.jei;
 
 import com.alexvr.bedres.BedrockResources;
-import com.alexvr.bedres.blocks.eventAltar.events.PlayerUpgradeEvent;
-import com.alexvr.bedres.blocks.eventAltar.events.ToolUpgradeEvent;
-import com.alexvr.bedres.blocks.eventAltar.events.WorldEvent;
 import com.alexvr.bedres.recipes.eventRituals.EventRitualsRecipes;
 import com.alexvr.bedres.setup.Registration;
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -23,6 +20,7 @@ import net.minecraft.world.item.ItemStack;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.alexvr.bedres.recipes.eventRituals.EventRitualsRecipes.getDescription;
 import static com.alexvr.bedres.utils.compat112.jei.JEIHelper.EVENT_RITUAL;
 
 public class EventAltarCategory implements IRecipeCategory<EventRitualsRecipes> {
@@ -85,18 +83,7 @@ public class EventAltarCategory implements IRecipeCategory<EventRitualsRecipes> 
     public List<Component> getTooltipStrings(EventRitualsRecipes recipe, double mouseX, double mouseY) {
         List<Component> list = new ArrayList<>();
         if ((mouseX>0 &&mouseX <128) && (mouseY>-22 &&mouseY <6) ){
-            String des = "";
-            switch (recipe.getEvent()){
-                case "world":
-                    des = WorldEvent.getDescriptions(recipe.getResultItem());
-                    break;
-                case "player_upgrade":
-                    des = PlayerUpgradeEvent.getDescriptions(recipe.getResultItem());
-                    break;
-                case "tool":
-                    des = ToolUpgradeEvent.getDescriptions(recipe.getResultItem());
-                    break;
-            }
+            String des = getDescription(recipe);
             list.add(new TextComponent(des));
             return list;
         }else if ((mouseX>142 &&mouseX <157) && (mouseY>-87 &&mouseY <99) ){

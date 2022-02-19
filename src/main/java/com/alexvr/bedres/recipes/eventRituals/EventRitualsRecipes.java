@@ -1,6 +1,9 @@
 package com.alexvr.bedres.recipes.eventRituals;
 
 import com.alexvr.bedres.blocks.enderianRitualPedestal.EnderianRitualPedestalTile;
+import com.alexvr.bedres.blocks.eventAltar.events.PlayerUpgradeEvent;
+import com.alexvr.bedres.blocks.eventAltar.events.ToolUpgradeEvent;
+import com.alexvr.bedres.blocks.eventAltar.events.WorldEvent;
 import com.alexvr.bedres.recipes.ModRecipeRegistry;
 import com.alexvr.bedres.setup.Registration;
 import net.minecraft.core.BlockPos;
@@ -85,7 +88,22 @@ public class EventRitualsRecipes implements Recipe<EventRitualsContext> {
         }
         return items;
     }
-
+    public static String getDescription(EventRitualsRecipes recipe) {
+        switch (recipe.getEvent()) {
+            case "world" -> {
+                return WorldEvent.getDescriptions(recipe.getResultItem());
+            }
+            case "player_upgrade" -> {
+                return PlayerUpgradeEvent.getDescriptions(recipe.getResultItem());
+            }
+            case "tool" -> {
+                return  ToolUpgradeEvent.getDescriptions(recipe.getResultItem());
+            }
+            default -> {
+                return "";
+            }
+        }
+    }
     public static List<String> getPatterForRecipeFromWorld(Level level, BlockPos position, int xRadius, int zRadius){
         List<String> patter = new ArrayList<>((zRadius*2)+1);
         for (int z = position.getZ() - zRadius; z <= position.getZ() + zRadius; z++){

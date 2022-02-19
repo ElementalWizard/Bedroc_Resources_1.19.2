@@ -41,11 +41,6 @@ public class ScrapeTankScreen extends AbstractContainerScreen<ScrapeTankMenu> {
         int relX = (this.width - this.imageWidth)/2;
         int relY = (this.height - this.imageHeight)/2;
         this.blit(pMatrixStack, relX, relY, 0, 0, this.getXSize(), this.getYSize());
-
-
         this.blit(pMatrixStack, relX + 142, relY + 14, 179, 14, 16, (int) (52 * (128 / 256)));
-        //System.out.println(container.tile.getItem(0).getCount());
-
-
     }
 }
