@@ -82,7 +82,7 @@ public class BedrociumPedestal extends Block implements EntityBlock {
     @Override
     public void neighborChanged(BlockState pState, Level pLevel, BlockPos pPos, Block pBlock, BlockPos pFromPos, boolean pIsMoving) {
         if (pLevel.isClientSide()) return;
-        if (pLevel.getBlockEntity(pPos) instanceof  BedrociumPedestalTile pedestalTile && pLevel.getBlockEntity(pPos).getBlockState().getValue(VALIDRECIPE)){
+        if (pLevel.getBlockEntity(pPos) instanceof  BedrociumPedestalTile pedestalTile && pLevel.hasNeighborSignal(pPos) && pLevel.getBlockEntity(pPos).getBlockState().getValue(VALIDRECIPE)){
             pedestalTile.updateCrafting(true);
         }
         super.neighborChanged(pState, pLevel, pPos, pBlock, pFromPos, pIsMoving);

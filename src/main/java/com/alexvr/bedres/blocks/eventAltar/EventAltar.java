@@ -2,9 +2,12 @@ package com.alexvr.bedres.blocks.eventAltar;
 
 import com.alexvr.bedres.blocks.enderianRitualPedestal.EnderianRitualPedestalTile;
 import com.alexvr.bedres.recipes.eventRituals.EventRitualsRecipes;
+import net.minecraft.client.KeyMapping;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.particles.SimpleParticleType;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.BlockGetter;
@@ -51,11 +54,12 @@ public class EventAltar extends Block implements EntityBlock {
 
     @Override
     public void entityInside(BlockState pState, Level pLevel, BlockPos pPos, Entity pEntity) {
-        if (pEntity instanceof Player player && pLevel.getBlockEntity(pPos) instanceof EventAltarTile tile){
+        if (pLevel.isClientSide()) return;
+        if (pEntity instanceof Player player && pLevel.getBlockEntity(pPos) instanceof EventAltarTile tile ){
             List<EnderianRitualPedestalTile> extensions = EventRitualsRecipes.getTilesForRecipeFromWorld(pLevel,pPos,EventRitualsRecipes.patternRadius,EventRitualsRecipes.patternRadius);
             if(!tile.getBlockState().getValue(CRAFTING)) {
                 if (!tile.getBlockState().getValue(VALIDRECIPE)){
-                    List<EventRitualsRecipes> recipe = EventRitualsRecipes.findRecipeFromPattern(EventRitualsRecipes.getPatterForRecipeFromWorld(player.level,player.blockPosition(),EventRitualsRecipes.patternRadius,EventRitualsRecipes.patternRadius));
+                    List<EventRitualsRecipes> recipe = EventRitualsRecipes.findRecipeFromPattern(EventRitualsRecipes.getPatterForRecipeFromWorld(player.level,pPos,EventRitualsRecipes.patternRadius,EventRitualsRecipes.patternRadius));
                     EventRitualsRecipes recipe2 = EventRitualsRecipes.findRecipeFromIngrent(EventRitualsRecipes.getItemsFromTiles(extensions));
                     if (!recipe.isEmpty() && recipe2 != null && recipe.contains(recipe2)){
                         tile.tiles = extensions;
@@ -66,8 +70,18 @@ public class EventAltar extends Block implements EntityBlock {
                 }else if (tile.getBlockState().getValue(VALIDRECIPE) && player.isShiftKeyDown()){
                     tile.playerInside = player;
                     tile.updateCrafting(true);
+//                    Minecraft.getInstance().gameSettings.thirdPersonView = 2;
+//                    Minecraft.getInstance().gameSettings.hideGUI = true;
+//                    Minecraft.getInstance().gameSettings.fov = 195;
+//                    Minecraft.getInstance().gameSettings.mouseSensitivity = -1F/3F;
                 }
 
+            }else{
+                player.setDeltaMovement(0,0,0);
+                player.setJumping(false);
+                KeyMapping.releaseAll();
+                player.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN,2,5,true,false,false));
+                player.releaseUsingItem();
             }
         }
         super.entityInside(pState, pLevel, pPos, pEntity);
@@ -80,7 +94,13 @@ public class EventAltar extends Block implements EntityBlock {
     @Override
     public void animateTick(BlockState pState, Level pLevel, BlockPos pPos, Random pRandom) {
         if (pState.getValue(CRAFTING)){
-            summonParticles(pLevel,pPos.above(),ParticleTypes.LARGE_SMOKE);
+            for (int i = 0; i < 16; i++) {
+                if (i%2==0){
+                    summonParticles(pLevel,pPos.above(),ParticleTypes.LARGE_SMOKE);
+                }else{
+                    summonParticles(pLevel,pPos.above(),ParticleTypes.SQUID_INK);
+                }
+            }
         }else if (pState.getValue(VALIDRECIPE)){
             summonParticles(pLevel,pPos.above(),ParticleTypes.REVERSE_PORTAL);
         }

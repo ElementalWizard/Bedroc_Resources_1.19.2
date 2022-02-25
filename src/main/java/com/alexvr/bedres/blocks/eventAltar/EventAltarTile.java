@@ -9,6 +9,7 @@ import com.alexvr.bedres.recipes.ModRecipeRegistry;
 import com.alexvr.bedres.recipes.eventRituals.EventRitualsRecipes;
 import com.alexvr.bedres.setup.Registration;
 import com.alexvr.bedres.utils.ParticleHelper;
+import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -40,7 +41,6 @@ public class EventAltarTile extends BlockEntity {
     }
 
     public void tick() {
-
         if (getBlockState().getValue(CRAFTING)) {
             List<ItemStack> removed = new ArrayList<>();
             if (!tiles.isEmpty() && target > -1 && target < tiles.size()) {
@@ -68,9 +68,7 @@ public class EventAltarTile extends BlockEntity {
                             return;
                         }
                     }
-
                 });
-
                 if (found.get()){
                     return;
                 }
@@ -128,17 +126,17 @@ public class EventAltarTile extends BlockEntity {
                 }
                 break;
             case "tool":
-                ToolUpgradeEvent.start(playerInside, recipe.getResultItem());
+                ToolUpgradeEvent.start(Minecraft.getInstance().player, recipe.getResultItem());
                 break;
             case "player_upgrade":
                 if (recipe.getResultItem().is(Items.REDSTONE) || recipe.getResultItem().is(Registration.BEDROCK_WIRE_ITEM.get()) || recipe.getResultItem().is(Registration.ROPE_ITEM.get())) {
-                    PlayerUpgradeEvent.speed(playerInside,recipe.getResultItem());
+                    PlayerUpgradeEvent.speed(Minecraft.getInstance().player,recipe.getResultItem());
                 }else if (recipe.getResultItem().is(Items.RABBIT_FOOT) || recipe.getResultItem().is(Items.RABBIT_HIDE) || recipe.getResultItem().is(Items.CHAIN)) {
-                    PlayerUpgradeEvent.jump(playerInside,recipe.getResultItem());
+                    PlayerUpgradeEvent.jump(Minecraft.getInstance().player,recipe.getResultItem());
                 }else if (recipe.getResultItem().is(Items.SLIME_BALL) || recipe.getResultItem().is(Items.HONEY_BLOCK)) {
-                    PlayerUpgradeEvent.fallDamage(playerInside,recipe.getResultItem());
+                    PlayerUpgradeEvent.fallDamage(Minecraft.getInstance().player,recipe.getResultItem());
                 }else if (recipe.getResultItem().is(Registration.BEDROCK_WIRE_ITEM.get())) {
-                    PlayerUpgradeEvent.empower(playerInside);
+                    PlayerUpgradeEvent.empower(Minecraft.getInstance().player);
                 }
                 break;
         }

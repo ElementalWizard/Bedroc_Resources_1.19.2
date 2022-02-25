@@ -69,7 +69,6 @@ public class PlayerUpgradeEvent implements IEvent{
 
 
     public static void speed(Player player, ItemStack stack) {
-        //1/4 units increase, 2 max
         player.reviveCaps();
         LazyOptional<IPlayerAbility> abilities = player.getCapability(PlayerAbilityProvider.PLAYER_ABILITY_CAPABILITY, null);
         abilities.ifPresent(iPlayerAbility -> {
@@ -84,6 +83,8 @@ public class PlayerUpgradeEvent implements IEvent{
             }else{
                 iPlayerAbility.setMiningSpeedBoost(0f);
             }
+            player.sendMessage(new TextComponent("New mining speed boost is: "+iPlayerAbility.getMiningSpeedBoost()),player.getUUID());
+
         });
         player.invalidateCaps();
 
@@ -96,10 +97,13 @@ public class PlayerUpgradeEvent implements IEvent{
         abilities.ifPresent(iPlayerAbility -> {
             if (stack.is(Items.SLIME_BALL)){
                 iPlayerAbility.setTakesFallDamage(false);
+                player.sendMessage(new TextComponent("Fall Damage Negated"),player.getUUID());
 
             }else{
                 iPlayerAbility.setTakesFallDamage(true);
+                player.sendMessage(new TextComponent("Fall Damage back to normal"),player.getUUID());
             }
+
         });
         player.invalidateCaps();
 

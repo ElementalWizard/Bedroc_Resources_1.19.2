@@ -147,23 +147,16 @@ public class EventRitualsRecipes implements Recipe<EventRitualsContext> {
         List<EventRitualsRecipes> validRecipes = new ArrayList<>();
         for (EventRitualsRecipes recipe : ModRecipeRegistry.getEventRitualRecipes()) {
             boolean validRec = true;
-            List<String> ingCopy = new ArrayList<>(pat);
-
-            for (String row: recipe.getPattern()){
-                boolean valid = false;
-                for (String row2: pat){
-                    if (row2.equals(row)){
-                        valid = true;
-                        ingCopy.remove(row2);
-                        break;
-                    }
-                }
-                if (!valid){
-                    validRec = false;
-                    break;
-                }
+            if (recipe.getPattern().size() != pat.size()){
+                continue;
             }
-            if (validRec && ingCopy.isEmpty()){
+            for (int i = 0;i< recipe.getPattern().size();i++){
+               if (!recipe.getPattern().get(i).equals(pat.get(i))){
+                   validRec = false;
+                   break;
+               }
+            }
+            if (validRec){
                 validRecipes.add(recipe);
             }
 
@@ -174,6 +167,9 @@ public class EventRitualsRecipes implements Recipe<EventRitualsContext> {
     public static EventRitualsRecipes findRecipeFromIngrent(List<ItemStack> ing) {
         for (EventRitualsRecipes recipe : ModRecipeRegistry.getEventRitualRecipes()) {
             boolean validRec = true;
+            if (ing.size() != recipe.getIngredientList().size()){
+                continue;
+            }
             List<ItemStack> ingCopy = new ArrayList<>(ing);
 
             for (ItemStack stack: recipe.getIngredientList()){

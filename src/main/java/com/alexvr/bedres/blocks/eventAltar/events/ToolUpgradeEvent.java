@@ -2,6 +2,7 @@ package com.alexvr.bedres.blocks.eventAltar.events;
 
 import com.alexvr.bedres.capability.abilities.IPlayerAbility;
 import com.alexvr.bedres.capability.abilities.PlayerAbilityProvider;
+import net.minecraft.network.chat.TextComponent;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
 import net.minecraftforge.common.util.LazyOptional;
@@ -12,19 +13,26 @@ public class ToolUpgradeEvent implements IEvent{
         player.reviveCaps();
         LazyOptional<IPlayerAbility> abilities = player.getCapability(PlayerAbilityProvider.PLAYER_ABILITY_CAPABILITY, null);
         abilities.ifPresent(iPlayerAbility -> {
+            String message = "Upgraded ";
             if (stack.getItem() instanceof TieredItem tieredItem){
                 String tier = getType(tieredItem);
                 if (tieredItem instanceof SwordItem ){
+                    message += "Sword Skill from: " + iPlayerAbility.getSword() + " to: " + tier;
                     iPlayerAbility.setSword(tier);
                 }else if (tieredItem instanceof HoeItem ){
+                    message += "Hoe Skill from: " + iPlayerAbility.getHoe() + " to: " + tier;
                     iPlayerAbility.setHoe(tier);
                 }else if (tieredItem instanceof AxeItem ){
+                    message += "Axe Skill from: " + iPlayerAbility.getAxe() + " to: " + tier;
                     iPlayerAbility.setAxe(tier);
                 }else if (tieredItem instanceof ShovelItem ){
+                    message += "Shovel Skill from: " + iPlayerAbility.getShovel() + " to: " + tier;
                     iPlayerAbility.setShovel(tier);
                 }else if (tieredItem instanceof PickaxeItem ){
+                    message += "Pickaxe Skill from: " + iPlayerAbility.getPick() + " to: " + tier;
                     iPlayerAbility.setPick(tier);
                 }
+                player.sendMessage(new TextComponent(message),player.getUUID());
             }
         });
         player.invalidateCaps();
