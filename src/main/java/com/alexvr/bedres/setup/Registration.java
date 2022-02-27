@@ -264,6 +264,7 @@ public class Registration {
     public static final RegistryObject<XPMedallion> XP_MEDALLION_ITEM = ITEMS.register(BedrockReferences.XP_MEDALLION_REGNAME, () -> new XPMedallion((new Item.Properties()).tab(ModSetup.GROUP)));
     public static final RegistryObject<MageStaff> MAGE_STAFF_ITEM = ITEMS.register(BedrockReferences.MAGE_STAFF_REGNAME, () -> new MageStaff((new Item.Properties().stacksTo(1)).tab(ModSetup.GROUP)));
     public static final RegistryObject<FluxedOracle> FLUX_ORACLE_ITEM = ITEMS.register(BedrockReferences.FLUX_ORACLE_REGNAME, () -> new FluxedOracle((new Item.Properties().stacksTo(1)).tab(ModSetup.GROUP)));
+    public static final RegistryObject<CreeperCharm> CREEPER_CHARM_ITEM = ITEMS.register(BedrockReferences.CREEPER_CHARM_REGNAME, () -> new CreeperCharm((new Item.Properties().stacksTo(1)).tab(ModSetup.GROUP)));
 
     public  static final Tags.IOptionalNamedTag<Block> ENDERIAN_ORE = BlockTags.createOptional(new ResourceLocation(MODID,"enderian_ore"));
     public  static final Tags.IOptionalNamedTag<Block> DF_LOG = BlockTags.createOptional(new ResourceLocation(MODID,BedrockReferences.DF_OAK_LOG_REGNAME));

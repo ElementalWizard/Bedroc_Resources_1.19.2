@@ -3,6 +3,8 @@ package com.alexvr.bedres.utils;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.ItemStack;
 
+import java.util.UUID;
+
 public class NBTHelper {
 
     public static void setInteger(ItemStack stack,String key, int amount) {
@@ -59,5 +61,13 @@ public class NBTHelper {
         CompoundTag nbt = stack.getOrCreateTag();
         return nbt.getDouble(key);
     }
+    public static void setUUID(ItemStack stack,String key, UUID uuid) {
+        CompoundTag nbt = stack.getOrCreateTag();
+        nbt.putUUID(key,uuid);
+    }
 
+    public static UUID getUUID(ItemStack stack,String key) {
+        CompoundTag nbt = stack.getOrCreateTag();
+        return nbt.getUUID(key);
+    }
 }

@@ -48,7 +48,6 @@ public class ModItemModels extends ItemModelProvider {
         singleTexture(Registration.XP_MEDALLION_ITEM.get().getRegistryName().getPath() + "_a",
                 modLoc("item/xp_medallion"),"layer0",modLoc("item/xp_medallion_a"));
 
-
         withExistingParent(Registration.SPORE_DEITY_EGG_ITEM.get().getRegistryName().getPath(), mcLoc("item/template_spawn_egg"));
         withExistingParent(Registration.FLUXED_CREEP_EGG_ITEM.get().getRegistryName().getPath(), mcLoc("item/template_spawn_egg"));
         withExistingParent(Registration.CHAINED_BLAZE_EGG_ITEM.get().getRegistryName().getPath(), mcLoc("item/template_spawn_egg"));

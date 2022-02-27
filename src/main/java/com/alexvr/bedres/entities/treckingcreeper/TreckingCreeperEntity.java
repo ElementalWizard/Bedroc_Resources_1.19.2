@@ -1,6 +1,7 @@
 package com.alexvr.bedres.entities.treckingcreeper;
 
 import com.alexvr.bedres.setup.Registration;
+import com.alexvr.bedres.utils.NBTHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleOptions;
@@ -26,6 +27,7 @@ import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.ai.navigation.FlyingPathNavigation;
 import net.minecraft.world.entity.ai.navigation.GroundPathNavigation;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.DyeColor;
@@ -62,9 +64,6 @@ public class TreckingCreeperEntity extends Monster implements ContainerListener,
     protected SimpleContainer inventory;
     private static final Ingredient FOOD_ITEMS = Ingredient.of(Items.GUNPOWDER, Items.TNT, Registration.BEDROCK_WIRE_ITEM.get());
 
-    private static final int FLAG_TAME = 2;
-    private static final int FLAG_EATING = 16;
-    private int eatingCounter;
     protected int temper;
     private net.minecraftforge.common.util.LazyOptional<?> itemHandler = null;
     private int explosionRadius = 2;
@@ -197,7 +196,7 @@ public class TreckingCreeperEntity extends Monster implements ContainerListener,
 
     @Override
     public boolean isInvulnerableTo(DamageSource pSource) {
-        return pSource.isExplosion() || pSource.equals(DamageSource.LIGHTNING_BOLT);
+        return pSource.isExplosion() || pSource.equals(DamageSource.LIGHTNING_BOLT) || (pSource.getEntity() instanceof Player player && isTamed() && player.getUUID().equals(getOwnerUUID()));
     }
 
     private void spawnLingeringCloud() {
@@ -377,6 +376,27 @@ public class TreckingCreeperEntity extends Monster implements ContainerListener,
 
         this.updateContainerEquipment();
     }
+
+    @Override
+    protected void dropCustomDeathLoot(DamageSource pSource, int pLooting, boolean pRecentlyHit) {
+        super.dropCustomDeathLoot(pSource, pLooting, pRecentlyHit);
+        if (isTamed()){
+            ItemStack stack = new ItemStack(Registration.CREEPER_CHARM_ITEM.get(),1);
+            NBTHelper.setString(stack,"color",this.entityData.get(DATA_ID_BACKPPACK_COLOR));
+            NBTHelper.setInteger(stack,"type",getTypeDir());
+            NBTHelper.setUUID(stack,"uuid",getOwnerUUID());
+            NBTHelper.setBoolean(stack,"generated",true);
+            if (hasCustomName()){
+                NBTHelper.setString(stack,"name",getCustomName().getString());
+            }else{
+                NBTHelper.setString(stack,"name","Not Given");
+
+            }
+            ItemEntity drop = new ItemEntity(level, getX(),getY(),getZ(),stack);
+            level.addFreshEntity(drop);
+        }
+    }
+
     public boolean isInSittingPose() {
         return (this.entityData.get(DATA_ID_FLAGS) & 1) != 0;
     }
@@ -415,7 +435,7 @@ public class TreckingCreeperEntity extends Monster implements ContainerListener,
     }
     public InteractionResult fedFood(Player p_30581_, ItemStack p_30582_) {
         boolean flag = this.handleEating(p_30581_, p_30582_);
-        if (!p_30581_.getAbilities().instabuild) {
+        if (flag && !p_30581_.getAbilities().instabuild) {
             p_30582_.shrink(1);
         }
 
@@ -446,14 +466,15 @@ public class TreckingCreeperEntity extends Monster implements ContainerListener,
         }
         if (!isTamed() && f > 0.0F){
             if (this.random.nextInt(i) == 1) {
+                this.setTarget(null);
                 this.tameWithName(pPlayer);
                 this.navigation.stop();
-                this.setTarget(null);
+                this.heal(this.getHealth());
                 this.playSound(SoundEvents.CREEPER_PRIMED, 1.0F, 0.5F);
-                this.level.broadcastEntityEvent(this, (byte)7);
                 return true;
             } else {
                 this.level.broadcastEntityEvent(this, (byte)6);
+                return false;
             }
         }
 
@@ -542,6 +563,7 @@ public class TreckingCreeperEntity extends Monster implements ContainerListener,
     public boolean getTypeAssignedDir() {
         return this.entityData.get(TYPEASSIGNED);
     }
+
     public void setTypeAssignedDir(boolean pState) {
         this.entityData.set(TYPEASSIGNED, pState);
     }

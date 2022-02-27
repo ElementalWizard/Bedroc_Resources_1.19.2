@@ -34,6 +34,7 @@ public class BedrockReferences {
     public static final String BEDROCK_SCRAPE_REGNAME = "bedrock_scrapes";
     public static final String SCRAPE_KNIFE_REGNAME = "scrape_knife";
     public static final String FLUX_ORACLE_REGNAME = "flux_oracle";
+    public static final String CREEPER_CHARM_REGNAME = "creeper_charm";
     public static final String ENDERIAN_INGOT_REGNAME = "enderian_ingot";
     public static final String SCRAPER_MESH_REGNAME = "scraper_mesh";
     public static final String ITEM_PLATFORM_REGNAME = "item_platform";

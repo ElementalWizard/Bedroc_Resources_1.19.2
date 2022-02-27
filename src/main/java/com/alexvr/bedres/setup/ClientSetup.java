@@ -14,6 +14,7 @@ import com.alexvr.bedres.entities.sporedeity.SporeDeityModel;
 import com.alexvr.bedres.entities.sporedeity.SporeDeityRenderer;
 import com.alexvr.bedres.entities.treckingcreeper.TreckingCreeperModel;
 import com.alexvr.bedres.entities.treckingcreeper.TreckingCreeperRenderer;
+import com.alexvr.bedres.items.CreeperCharm;
 import com.alexvr.bedres.items.MageStaff;
 import com.alexvr.bedres.utils.KeyBindings;
 import com.alexvr.bedres.utils.NBTHelper;
@@ -43,6 +44,7 @@ public class ClientSetup {
     public static void onItemColor(ColorHandlerEvent.Item event) {
         event.getItemColors().register((stack, i) -> ((MageStaff)stack.getItem()).getColor(stack), Registration.MAGE_STAFF_ITEM.get());
         event.getItemColors().register((stack, i) -> DyeColor.MAGENTA.getMaterialColor().col, Registration.HEXTILE_ITEM.get());
+        event.getItemColors().register((stack, i) -> ((CreeperCharm)stack.getItem()).getColor(stack), Registration.CREEPER_CHARM_ITEM.get());
     }
 
     @SubscribeEvent

@@ -1,5 +1,6 @@
 package com.alexvr.bedres.items;
 
+import com.alexvr.bedres.capability.abilities.PlayerAbilityProvider;
 import com.alexvr.bedres.utils.IDisplayFlux;
 import com.alexvr.bedres.utils.NBTHelper;
 import com.alexvr.bedres.utils.WorldEventHandler;
@@ -16,6 +17,7 @@ import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
 
 import javax.annotation.Nonnull;
+import java.util.Objects;
 
 public class FluxedOracle extends Item implements IDisplayFlux {
 
@@ -30,7 +32,31 @@ public class FluxedOracle extends Item implements IDisplayFlux {
 
     @Override
     public void appendHoverText(ItemStack pStack, @Nullable Level pLevel, java.util.List<net.minecraft.network.chat.Component> pTooltipComponents, TooltipFlag pIsAdvanced) {
-        pTooltipComponents.add(new TextComponent("Nice Book"));
+        pTooltipComponents.add(new TextComponent("Book for this mod"));
+        pTooltipComponents.add(new TextComponent("Shift for ability Info"));
+        if (Minecraft.getInstance().player != null && Minecraft.getInstance().player.isShiftKeyDown()){
+            Minecraft.getInstance().player.reviveCaps();
+            Minecraft.getInstance().player.getCapability(PlayerAbilityProvider.PLAYER_ABILITY_CAPABILITY).ifPresent(playerAbility -> {
+                pTooltipComponents.add(new TextComponent("Flux: " + playerAbility.getFlux() +"/" + playerAbility.getMaxFlux()));
+                if (!Objects.equals(playerAbility.getSword(), "no")){
+                    pTooltipComponents.add(new TextComponent("Sword: " + playerAbility.getSword()));
+                }
+                if (!Objects.equals(playerAbility.getPick(), "no")){
+                    pTooltipComponents.add(new TextComponent("Pickaxe: " + playerAbility.getPick()));
+                }
+                if (!Objects.equals(playerAbility.getAxe(), "no")){
+                    pTooltipComponents.add(new TextComponent("Axe: " + playerAbility.getAxe()));
+                }
+                if (!Objects.equals(playerAbility.getShovel(), "no")){
+                    pTooltipComponents.add(new TextComponent("Shovel: " + playerAbility.getShovel()));
+                }
+                if (!Objects.equals(playerAbility.getHoe(), "no")){
+                    pTooltipComponents.add(new TextComponent("Hoe: " + playerAbility.getHoe()));
+                }
+            });
+            Minecraft.getInstance().player.invalidateCaps();
+
+        }
     }
 
     @Nonnull
