@@ -113,7 +113,7 @@ public class WorldEventHandler {
 
     @SubscribeEvent
     public static void onEntitySpawn(LivingSpawnEvent event) {
-        if (event.getEntity() instanceof TreckingCreeperEntity treckingCreeperEntity){
+        if (event.getEntity() instanceof TreckingCreeperEntity treckingCreeperEntity && !treckingCreeperEntity.getTypeAssignedDir()){
             treckingCreeperEntity.setType(event.getWorld().getBiome(treckingCreeperEntity.getOnPos()).getBiomeCategory());
         }
     }

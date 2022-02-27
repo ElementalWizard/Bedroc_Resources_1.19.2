@@ -44,7 +44,7 @@ public class ClientSetup {
     public static void onItemColor(ColorHandlerEvent.Item event) {
         event.getItemColors().register((stack, i) -> ((MageStaff)stack.getItem()).getColor(stack), Registration.MAGE_STAFF_ITEM.get());
         event.getItemColors().register((stack, i) -> DyeColor.MAGENTA.getMaterialColor().col, Registration.HEXTILE_ITEM.get());
-        event.getItemColors().register((stack, i) -> ((CreeperCharm)stack.getItem()).getColor(stack), Registration.CREEPER_CHARM_ITEM.get());
+        event.getItemColors().register((stack, i) -> ((CreeperCharm)stack.getItem()).getColor(stack,i), Registration.CREEPER_CHARM_ITEM.get());
     }
 
     @SubscribeEvent

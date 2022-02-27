@@ -112,15 +112,18 @@ public class TreckingCreeperEntity extends Monster implements ContainerListener,
     @Override
     protected InteractionResult mobInteract(Player pPlayer, InteractionHand pHand) {
         ItemStack itemstack = pPlayer.getItemInHand(pHand);
-        if (itemstack.is(Items.FLINT_AND_STEEL)) {
+        if (isTamed() && pPlayer.getUUID().equals(getOwnerUUID()) && itemstack.is(Registration.SCRAPE_KNIFE_ITEM.get())) {
+            this.level.playSound(pPlayer, this.getX(), this.getY(), this.getZ(), SoundEvents.FLINTANDSTEEL_USE, this.getSoundSource(), 1.0F, this.random.nextFloat() * 0.4F + 0.8F);
+            if (!this.level.isClientSide) {
+                this.kill();
+            }
+            return InteractionResult.sidedSuccess(this.level.isClientSide);
+        }if (itemstack.is(Items.FLINT_AND_STEEL)) {
             this.level.playSound(pPlayer, this.getX(), this.getY(), this.getZ(), SoundEvents.FLINTANDSTEEL_USE, this.getSoundSource(), 1.0F, this.random.nextFloat() * 0.4F + 0.8F);
             if (!this.level.isClientSide) {
                 this.ignite();
-                itemstack.hurtAndBreak(1, pPlayer, (p_32290_) -> {
-                    p_32290_.broadcastBreakEvent(pHand);
-                });
+                itemstack.hurtAndBreak(1, pPlayer, (p_32290_) -> p_32290_.broadcastBreakEvent(pHand));
             }
-
             return InteractionResult.sidedSuccess(this.level.isClientSide);
         }else if (itemstack.getItem() instanceof DyeItem dyeItem) {
             this.level.playSound(pPlayer, this.getX(), this.getY(), this.getZ(), SoundEvents.DYE_USE, this.getSoundSource(), 1.0F, this.random.nextFloat() * 0.4F + 0.8F);
@@ -135,7 +138,7 @@ public class TreckingCreeperEntity extends Monster implements ContainerListener,
             }
         }else if (this.isFood(itemstack)) {
             return this.fedFood(pPlayer, itemstack);
-        }else if (!(itemstack.getItem() instanceof DyeItem)) {
+        }else if (!(itemstack.getItem() instanceof DyeItem) && isTamed()) {
             InteractionResult interactionresult = super.mobInteract(pPlayer, pHand);
             if ((!interactionresult.consumesAction()) && this.getOwnerUUID().equals(pPlayer.getUUID())) {
                 this.setOrderedToSit(!this.isOrderedToSit());
@@ -144,10 +147,6 @@ public class TreckingCreeperEntity extends Monster implements ContainerListener,
                 this.setTarget(null);
                 return InteractionResult.SUCCESS;
             }
-        }
-        if (!this.isTamed()) {
-            this.playSound(SoundEvents.HORSE_ANGRY, this.getSoundVolume(), this.getVoicePitch());
-            return InteractionResult.sidedSuccess(this.level.isClientSide);
         }
 
         return super.mobInteract(pPlayer, pHand);
@@ -196,7 +195,7 @@ public class TreckingCreeperEntity extends Monster implements ContainerListener,
 
     @Override
     public boolean isInvulnerableTo(DamageSource pSource) {
-        return pSource.isExplosion() || pSource.equals(DamageSource.LIGHTNING_BOLT) || (pSource.getEntity() instanceof Player player && isTamed() && player.getUUID().equals(getOwnerUUID()));
+        return pSource.isExplosion() || pSource.equals(DamageSource.LIGHTNING_BOLT);
     }
 
     private void spawnLingeringCloud() {
@@ -278,8 +277,8 @@ public class TreckingCreeperEntity extends Monster implements ContainerListener,
 
     protected void defineSynchedData() {
         super.defineSynchedData();
-        this.entityData.define(TYPE, 0);
         this.entityData.define(TYPEASSIGNED, false);
+        this.entityData.define(TYPE, 0);
         this.entityData.define(DATA_ID_BACKPPACK_COLOR, String.valueOf(DyeColor.BROWN.getId()));
         this.entityData.define(DATA_ID_FLAGS, (byte)0);
         this.entityData.define(DATA_ID_OWNER_UUID, Optional.empty());
@@ -311,6 +310,8 @@ public class TreckingCreeperEntity extends Monster implements ContainerListener,
         pCompound.putBoolean("EatingHaystack", this.isEating());
         pCompound.putInt("Temper", this.getTemper());
         pCompound.putBoolean("Tame", this.isTamed());
+        pCompound.putBoolean("type_assign", getTypeAssignedDir());
+        pCompound.putInt("type", getTypeDir());
         if (this.getOwnerUUID() != null) {
             pCompound.putUUID("Owner", this.getOwnerUUID());
         }
@@ -332,6 +333,7 @@ public class TreckingCreeperEntity extends Monster implements ContainerListener,
 
     public void readAdditionalSaveData(CompoundTag pCompound) {
         super.readAdditionalSaveData(pCompound);
+
         this.entityData.set(DATA_IS_POWERED, pCompound.getBoolean("powered"));
         if (pCompound.contains("Fuse", 99)) {
             this.maxSwell = pCompound.getShort("Fuse");
@@ -347,6 +349,7 @@ public class TreckingCreeperEntity extends Monster implements ContainerListener,
         this.orderedToSit = pCompound.getBoolean("Sitting");
         this.setInSittingPose(this.orderedToSit);
 
+        this.setTypeDir(pCompound.getInt("type"));
         this.setBackpackColor(DyeColor.byId(pCompound.getInt("color")));
         this.setEating(pCompound.getBoolean("EatingHaystack"));
         this.setTemper(pCompound.getInt("Temper"));
@@ -433,17 +436,14 @@ public class TreckingCreeperEntity extends Monster implements ContainerListener,
     public boolean isEating() {
         return this.getFlag(16);
     }
+
     public InteractionResult fedFood(Player p_30581_, ItemStack p_30582_) {
         boolean flag = this.handleEating(p_30581_, p_30582_);
-        if (flag && !p_30581_.getAbilities().instabuild) {
-            p_30582_.shrink(1);
-        }
-
         if (this.level.isClientSide) {
             return InteractionResult.CONSUME;
-        } else {
-            return flag ? InteractionResult.SUCCESS : InteractionResult.PASS;
         }
+        return flag ? InteractionResult.SUCCESS : InteractionResult.PASS;
+
     }
     protected boolean handleEating(Player pPlayer, ItemStack pStack) {
         boolean flag = false;
@@ -459,7 +459,7 @@ public class TreckingCreeperEntity extends Monster implements ContainerListener,
             f = 10.0F;
             i = 2 ;
         }
-
+        pStack.shrink(1);
         if (this.getHealth() < this.getMaxHealth() && f > 0.0F) {
             this.heal(f);
             flag = true;
@@ -550,7 +550,10 @@ public class TreckingCreeperEntity extends Monster implements ContainerListener,
         return this.entityData.get(TYPE);
     }
     public void setTypeDir(int pState) {
-        this.entityData.set(TYPE, pState);
+        if(!getTypeAssignedDir()){
+            this.entityData.set(TYPE, pState);
+            this.setTypeAssignedDir(true);
+        }
     }
 
     public DyeColor getBackpackColor() {
@@ -623,12 +626,10 @@ public class TreckingCreeperEntity extends Monster implements ContainerListener,
                 for (int i = 0;i< BIOME_FILTERS.get(biomeCategory).length;i++){
                     if (random.nextInt(BIOME_FILTERS.get(biomeCategory).length) == 1){
                         setTypeDir(BIOME_FILTERS.get(biomeCategory)[i]);
-                        setTypeAssignedDir(true);
                         return;
                     }
                 }
                 setTypeDir(BIOME_FILTERS.get(biomeCategory)[0]);
-                setTypeAssignedDir(true);
             }
         }
 

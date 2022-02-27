@@ -80,6 +80,8 @@ public class FluxOracleScreenGui extends Screen {
             book_pages.add(new FluxedOraclePages.MageStaffPage(this));
             book_pages.add(new FluxedOraclePages.EventRitualPage(this));
             book_pages.add(new FluxedOraclePages.KnifePage(this));
+            book_pages.add(new FluxedOraclePages.CreeperPage(this));
+            book_pages.add(new FluxedOraclePages.HextPage(this));
         }
         renderBackground(pPoseStack, (int) (xOffset/2), (int) (yOffset/2),width/4,8,MOVINGBACKGROUND);
         if(isMainPage()) {
@@ -285,6 +287,19 @@ public class FluxOracleScreenGui extends Screen {
                     changePage(18);
                 }
             }));
+            add(new ImageButton((int)xOffset+128+ (int)scaleX+((Minecraft.getInstance().getWindow().getGuiScaledWidth()-64)/8), (int)yOffset+176+ (int)scaleY+((Minecraft.getInstance().getWindow().getGuiScaledHeight()-64)/6),32+ (int)scaleX,32+ (int)scaleY,0,0,0,
+                    new ResourceLocation(BedrockResources.MODID,"textures/item/creeper_charm.png"),32+ (int)scaleX,32+ (int)scaleY, (button) -> {
+                if(isMainPage()) {
+                    changePage(19);
+                }
+            }));
+            add(new ImageButton((int)xOffset+22+ (int)scaleX+((Minecraft.getInstance().getWindow().getGuiScaledWidth()-64)/8), (int)yOffset+176+ (int)scaleY+((Minecraft.getInstance().getWindow().getGuiScaledHeight()-64)/6),32+ (int)scaleX,32+ (int)scaleY,0,0,0,
+                    new ResourceLocation(BedrockResources.MODID,"textures/block/hex_tile.png"),32+ (int)scaleX,32+ (int)scaleY, (button) -> {
+                if(isMainPage()) {
+                    changePage(20);
+                }
+            }));
+
             add(next);
             add(back);
 

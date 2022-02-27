@@ -148,6 +148,8 @@ public class ModLanguageProvider extends LanguageProvider {
         add("bedres.page_name.g_staff", "Gravity Staff" );
         add("bedres.page_name.m_staff", "Mage Staff" );
         add("bedres.page_name.nebula", "Nebula" );
+        add("bedres.page_name.creeper", "Trecking Tiny Creepers" );
+        add("bedres.page_name.hex", "HexTiles" );
 
         add(BedrockReferences.CREATIVE_TAB_NAME, "Bedrock Resources Tab" );
         add(BedrockReferences.SCREEN_SCRAPE_TANK, "Scrape Tank" );

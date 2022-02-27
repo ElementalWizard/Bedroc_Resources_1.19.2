@@ -653,4 +653,46 @@ public class FluxedOraclePages {
             }
         }
     }
+    public static class CreeperPage extends FluxedOraclePages{
+        public CreeperPage(FluxOracleScreenGui screen){
+            this.name = "bedres.page_name.creeper";
+            this.description = "These Tiny Creepers con in all sorts of color based on biome." +
+                    " You can tame and heal them with gunnpowder, bedrock scrapes, and TNT." +
+                    " On death they will spawn a charm that can be used to re summon them." +
+                    " Taming them will give them a backpack you can dye any color." +
+                    " They will attack any mob they see or player that attacks them. Inventory is WIP";
+            this.parentScreen = screen;
+        }
+
+        @Override
+        public void render(PoseStack pPoseStack, int pMouseX, int pMouseY, float pPartialTick) {
+            switch (pageNumber){
+                case 1:
+                    parentScreen.renderString(parentScreen.width/2,parentScreen.height/4,new TranslatableComponent(name),pPoseStack,pPartialTick,true, DyeColor.WHITE.getTextColor());
+                    Minecraft.getInstance().font.drawWordWrap(FormattedText.composite(new TextComponent(description)),parentScreen.width/3,parentScreen.height/3,175,DyeColor.GRAY.getTextColor());
+                    RenderHelper.renderGUIItemStack(Minecraft.getInstance().getItemRenderer(),
+                            new ItemStack(Registration.TRECKING_CREEPER_EGG_ITEM.get()),pPoseStack,(parentScreen.width/3) ,(parentScreen.height/4));
+                    break;
+            }
+        }
+    }
+    public static class HextPage extends FluxedOraclePages{
+        public HextPage(FluxOracleScreenGui screen){
+            this.name = "bedres.page_name.hex";
+            this.description = "HexTiles are decoration Tiles that can change color with the right click of a dye. If you hold the same dye in both hands color will spread to adjacent hextiles.";
+            this.parentScreen = screen;
+        }
+
+        @Override
+        public void render(PoseStack pPoseStack, int pMouseX, int pMouseY, float pPartialTick) {
+            switch (pageNumber){
+                case 1:
+                    parentScreen.renderString(parentScreen.width/2,parentScreen.height/4,new TranslatableComponent(name),pPoseStack,pPartialTick,true, DyeColor.WHITE.getTextColor());
+                    Minecraft.getInstance().font.drawWordWrap(FormattedText.composite(new TextComponent(description)),parentScreen.width/3,parentScreen.height/3,175,DyeColor.GRAY.getTextColor());
+                    RenderHelper.renderGUIItemStack(Minecraft.getInstance().getItemRenderer(),
+                            new ItemStack(Registration.HEXTILE_ITEM.get()),pPoseStack,(parentScreen.width/3) ,(parentScreen.height/4));
+                    break;
+            }
+        }
+    }
 }

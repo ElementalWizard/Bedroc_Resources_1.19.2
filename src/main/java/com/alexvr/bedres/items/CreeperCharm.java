@@ -3,6 +3,7 @@ package com.alexvr.bedres.items;
 import com.alexvr.bedres.entities.treckingcreeper.TreckingCreeperEntity;
 import com.alexvr.bedres.setup.Registration;
 import com.alexvr.bedres.utils.NBTHelper;
+import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Style;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.world.InteractionResult;
@@ -32,7 +33,6 @@ public class CreeperCharm extends Item {
             creeperEntity.setBackpackColor(DyeColor.byId(Integer.parseInt(NBTHelper.getStirng(stack,"color"))));
             creeperEntity.setOwnerUUID(NBTHelper.getUUID(stack,"uuid"));
             creeperEntity.setTypeDir(NBTHelper.getInt(stack,"type"));
-            creeperEntity.setTypeAssignedDir(true);
             String name = NBTHelper.getStirng(stack,"name");
             if(!name.equals("Not Given")){
                 creeperEntity.setCustomName(new TextComponent(name));
@@ -48,7 +48,8 @@ public class CreeperCharm extends Item {
 
     @Override
     public void appendHoverText(ItemStack pStack, @Nullable Level pLevel, java.util.List<net.minecraft.network.chat.Component> pTooltipComponents, TooltipFlag pIsAdvanced) {
-        pTooltipComponents.add(new TextComponent("A char to re-summon your Creeper friend"));
+        pTooltipComponents.add(new TextComponent("A charm to re-summon your Creeper friend"));
+        pTooltipComponents.add(new TextComponent("You can tame the tiny creepers!").withStyle(ChatFormatting.DARK_GREEN));
         if (NBTHelper.getBoolean(pStack,"generated")){
             pTooltipComponents.add(new TextComponent("Custom Name: " + NBTHelper.getStirng(pStack,"name")));
             int colorID=Integer.parseInt(NBTHelper.getStirng(pStack,"color"));
@@ -58,27 +59,6 @@ public class CreeperCharm extends Item {
             pTooltipComponents.add(new TextComponent("Type: " + getCreeperType(NBTHelper.getInt(pStack,"type"))));
         }
     }
-//    private ChatFormatting getBackpackColor(int colorID) {
-//        ChatFormatting formatting = ChatFormatting.GREEN;
-//        switch (DyeColor.byId(colorID)) {
-//            case WHITE-> formatting = ChatFormatting.WHITE;
-//            case GRAY-> formatting = ChatFormatting.WHITE;
-//            case MAGENTA-> formatting = ChatFormatting.WHITE;
-//            case BLACK-> formatting = ChatFormatting.WHITE;
-//            case BLUE-> formatting = ChatFormatting.WHITE;
-//            case CYAN-> formatting = ChatFormatting.WHITE;
-//            case GREEN-> formatting = ChatFormatting.WHITE;
-//            case LIGHT_BLUE-> formatting = ChatFormatting.WHITE;
-//            case LIGHT_GRAY-> formatting = ChatFormatting.WHITE;
-//            case LIME-> formatting = ChatFormatting.WHITE;
-//            case ORANGE-> formatting = ChatFormatting.RED;
-//            case PINK-> formatting = ChatFormatting.RED;
-//            case PURPLE-> formatting = ChatFormatting.DARK_PURPLE;
-//            case RED-> formatting = ChatFormatting.DARK_RED;
-//            default -> formatting = ChatFormatting.YELLOW;
-//        }
-//        return formatting;
-//    }
 
     private String getCreeperType(int type) {
         return switch (type) {
@@ -94,11 +74,34 @@ public class CreeperCharm extends Item {
         };
     }
 
-    public int getColor(ItemStack stack) {
+    public int getColor(ItemStack stack, int layer) {
         int colorID=DyeColor.GREEN.getMaterialColor().col;
-        if (NBTHelper.getBoolean(stack,"generated")){
-            colorID=DyeColor.byId(Integer.parseInt(NBTHelper.getStirng(stack,"color"))).getMaterialColor().col;
+        if (layer == 0){
+            if (NBTHelper.getBoolean(stack,"generated")){
+                colorID=DyeColor.byId(Integer.parseInt(NBTHelper.getStirng(stack,"color"))).getMaterialColor().col;
+            }
+        }else{
+            if (NBTHelper.getBoolean(stack,"generated")){
+                colorID=getCreeperTyperColor(stack);
+            }
         }
+
         return colorID;
+    }
+
+    private int getCreeperTyperColor(ItemStack stack) {
+
+        int type = NBTHelper.getInt(stack,"type");
+        return switch (type) {
+            case 0 -> 0x41B736;
+            case 1 -> 0x32BFBA;
+            case 2 -> 0x515151;
+            case 3 -> 0xA156A8;
+            case 4 -> 0x5D32BF;
+            case 5 -> 0xA85656;
+            case 6 -> 0x978574;
+            case 7 -> 0xBE48C9;
+            default -> 0xBFBD32;
+        };
     }
 }
