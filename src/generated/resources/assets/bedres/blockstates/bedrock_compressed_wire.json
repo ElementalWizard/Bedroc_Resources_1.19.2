@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "": {
+      "model": "bedres:block/bedrock_compressed_wire"
+    }
+  }
+}

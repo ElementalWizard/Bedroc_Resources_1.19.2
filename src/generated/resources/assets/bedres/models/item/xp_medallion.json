@@ -1,0 +1,14 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "bedres:item/xp_medallion"
+  },
+  "overrides": [
+    {
+      "predicate": {
+        "bedres:mode": 1.0
+      },
+      "model": "bedres:item/xp_medallion_a"
+    }
+  ]
+}

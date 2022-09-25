@@ -1,0 +1,62 @@
+{
+	"credit": "Made with Blockbench",
+	"parent": "bedres:block/bedrock_scraper_controller",
+	"display": {
+		"thirdperson_righthand": {
+			"rotation": [0, 89, 0],
+			"translation": [0.25, 0.75, -3.75],
+			"scale": [0.5, 0.5, 0.5]
+		},
+		"thirdperson_lefthand": {
+			"rotation": [0, -91, 0],
+			"translation": [1, 0.75, -3.75],
+			"scale": [0.5, 0.5, 0.5]
+		},
+		"firstperson_righthand": {
+			"rotation": [0, 80, 0],
+			"translation": [0, 2, 0.5],
+			"scale": [0.25, 0.25, 0.25]
+		},
+		"firstperson_lefthand": {
+			"rotation": [4, -93, 0],
+			"translation": [0, 2, 0.5],
+			"scale": [0.25, 0.25, 0.25]
+		},
+		"ground": {
+			"translation": [0, 0.25, 0],
+			"scale": [0.5, 0.5, 0.5]
+		},
+		"gui": {
+			"rotation": [17, 147, 0],
+			"translation": [-2.25, 1, -7.75],
+			"scale": [0.42, 0.42, 0.42]
+		},
+		"fixed": {
+			"rotation": [-21, -65, 0],
+			"translation": [2.25, 1, -7.75],
+			"scale": [0.5, 0.5, 0.5]
+		}
+	},
+	"groups": [
+		{
+			"name": "glass",
+			"origin": [8, 8, 8],
+			"children": [0, 1, 2]
+		},
+		{
+			"name": "Top Panel",
+			"origin": [8, 8, 8],
+			"children": [3, 4]
+		},
+		{
+			"name": "Shaft",
+			"origin": [8, 8, 8],
+			"children": [5, 6, 7, 8, 9, 10, 11]
+		},
+		{
+			"name": "top",
+			"origin": [8, 8, 8],
+			"children": [12, 13]
+		}
+	]
+}

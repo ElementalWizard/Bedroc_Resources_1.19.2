@@ -1,0 +1,8 @@
+{
+  "parent": "block/cube_all",
+  "render_type": "minecraft:translucent",
+  "textures": {
+    "particle": "bedres:block/decaying_fluxed_oak_leave",
+    "all": "bedres:block/decaying_fluxed_oak_leave"
+  }
+}

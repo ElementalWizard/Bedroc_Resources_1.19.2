@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "BIB",
+    "IBI",
+    "BIB"
+  ],
+  "key": {
+    "I": {
+      "item": "bedres:enderian_ingot"
+    },
+    "B": {
+      "tag": "minecraft:stone_bricks"
+    }
+  },
+  "result": {
+    "item": "bedres:enderian_brick",
+    "count": 16
+  }
+}

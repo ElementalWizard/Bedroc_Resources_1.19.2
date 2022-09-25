@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "type=bottom": { "model": "bedres:block/decaying_fluxed_oak_slab" },
+    "type=top": { "model": "bedres:block/decaying_fluxed_oak_slab_top" },
+    "type=double": { "model": "bedres:block/decaying_fluxed_oak_planks" }
+  }
+}

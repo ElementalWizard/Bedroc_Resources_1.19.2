@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "ILI",
+    "ERE",
+    "ILI"
+  ],
+  "key": {
+    "I": {
+      "tag": "forge:ingots/iron"
+    },
+    "R": {
+      "item": "bedres:enderian_ingot"
+    },
+    "L": {
+      "tag": "forge:gems/lapis"
+    },
+    "E": {
+      "item": "bedres:bedrock_wire"
+    }
+  },
+  "result": {
+    "item": "bedres:scrape_tank"
+  }
+}

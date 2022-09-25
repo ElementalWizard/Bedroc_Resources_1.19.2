@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "IHI",
+    "HEH",
+    "IHI"
+  ],
+  "key": {
+    "I": {
+      "item": "bedres:enderian_ingot"
+    },
+    "H": {
+      "item": "bedres:ender_hush"
+    },
+    "E": {
+      "item": "minecraft:ender_eye"
+    }
+  },
+  "result": {
+    "item": "bedres:xp_medallion"
+  }
+}

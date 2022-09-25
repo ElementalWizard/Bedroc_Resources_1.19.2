@@ -1,0 +1,34 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "minecraft:bedrock_wire"
+    ]
+  },
+  "criteria": {
+    "has_bedrock_compressed_wire": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "bedres:bedrock_compressed_wire"
+            ]
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "minecraft:bedrock_wire"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_bedrock_compressed_wire",
+      "has_the_recipe"
+    ]
+  ]
+}

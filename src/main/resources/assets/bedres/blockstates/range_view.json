@@ -1,0 +1,5 @@
+{
+    "variants": {
+        "": { "model": "bedres:block/range_view" }
+    }
+}

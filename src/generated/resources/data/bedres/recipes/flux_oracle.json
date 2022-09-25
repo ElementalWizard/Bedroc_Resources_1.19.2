@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "IEI",
+    "ESE",
+    "IEI"
+  ],
+  "key": {
+    "S": {
+      "item": "minecraft:ender_eye"
+    },
+    "I": {
+      "item": "bedres:enderian_ingot"
+    },
+    "E": {
+      "item": "bedres:bedrock_wire"
+    }
+  },
+  "result": {
+    "item": "bedres:flux_oracle"
+  }
+}

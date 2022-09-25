@@ -1,0 +1,6 @@
+{
+  "parent": "bedres:item/xp_medallion",
+  "textures": {
+    "layer0": "bedres:item/xp_medallion_a"
+  }
+}

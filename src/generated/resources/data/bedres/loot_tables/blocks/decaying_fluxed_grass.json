@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "name": "decaying_fluxed_grass",
+      "rolls": 1.0,
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "bedres:decaying_fluxed_grass"
+        }
+      ]
+    }
+  ]
+}

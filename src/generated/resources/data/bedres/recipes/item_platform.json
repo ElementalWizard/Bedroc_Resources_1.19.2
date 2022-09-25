@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " I ",
+    "ILI",
+    " I "
+  ],
+  "key": {
+    "I": {
+      "tag": "forge:ingots/gold"
+    },
+    "L": {
+      "tag": "forge:storage_blocks/gold"
+    }
+  },
+  "result": {
+    "item": "bedres:item_platform"
+  }
+}

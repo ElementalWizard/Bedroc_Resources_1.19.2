@@ -1,0 +1,7 @@
+{
+	"parent": "block/cross",
+	"render_type": "minecraft:translucent",
+	"textures": {
+		"cross": "bedres:block/fluxed_spores"
+	}
+}
