@@ -2,15 +2,47 @@
   "type": "minecraft:block",
   "pools": [
     {
-      "name": "ritual_pedestal",
-      "rolls": 1.0,
       "bonus_rolls": 0.0,
+      "conditions": [
+        {
+          "condition": "minecraft:survives_explosion"
+        }
+      ],
       "entries": [
         {
           "type": "minecraft:item",
+          "functions": [
+            {
+              "function": "minecraft:copy_name",
+              "source": "block_entity"
+            },
+            {
+              "function": "minecraft:copy_nbt",
+              "ops": [
+                {
+                  "op": "replace",
+                  "source": "inv",
+                  "target": "BlockEntityTag.inv"
+                }
+              ],
+              "source": "block_entity"
+            },
+            {
+              "type": "bedres:ritual_pedestal",
+              "entries": [
+                {
+                  "type": "minecraft:dynamic",
+                  "name": "minecraft:contents"
+                }
+              ],
+              "function": "minecraft:set_contents"
+            }
+          ],
           "name": "bedres:ritual_pedestal"
         }
-      ]
+      ],
+      "rolls": 1.0
     }
-  ]
+  ],
+  "random_sequence": "bedres:blocks/ritual_pedestal"
 }

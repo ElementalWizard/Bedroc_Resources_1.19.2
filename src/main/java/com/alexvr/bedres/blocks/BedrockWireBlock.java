@@ -3,10 +3,12 @@ package com.alexvr.bedres.blocks;
 import com.alexvr.bedres.setup.Registration;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
-import com.mojang.math.Vector3f;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.DustParticleOptions;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
@@ -21,10 +23,11 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.level.block.state.properties.RedstoneSide;
-import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import org.joml.Vector3f;
 
 import java.util.Map;
 import java.util.Random;
@@ -39,7 +42,7 @@ public class BedrockWireBlock extends Block {
     private static final Map<Direction, VoxelShape> SHAPES_FLOOR = Maps.newEnumMap(ImmutableMap.of(Direction.NORTH, Block.box(3.0D, 0.0D, 0.0D, 13.0D, 1.0D, 13.0D), Direction.SOUTH, Block.box(3.0D, 0.0D, 3.0D, 13.0D, 1.0D, 16.0D), Direction.EAST, Block.box(3.0D, 0.0D, 3.0D, 16.0D, 1.0D, 13.0D), Direction.WEST, Block.box(0.0D, 0.0D, 3.0D, 13.0D, 1.0D, 13.0D)));
     private static final Map<Direction, VoxelShape> SHAPES_UP = Maps.newEnumMap(ImmutableMap.of(Direction.NORTH, Shapes.or(SHAPES_FLOOR.get(Direction.NORTH), Block.box(3.0D, 0.0D, 0.0D, 13.0D, 16.0D, 1.0D)), Direction.SOUTH, Shapes.or(SHAPES_FLOOR.get(Direction.SOUTH), Block.box(3.0D, 0.0D, 15.0D, 13.0D, 16.0D, 16.0D)), Direction.EAST, Shapes.or(SHAPES_FLOOR.get(Direction.EAST), Block.box(15.0D, 0.0D, 3.0D, 16.0D, 16.0D, 13.0D)), Direction.WEST, Shapes.or(SHAPES_FLOOR.get(Direction.WEST), Block.box(0.0D, 0.0D, 3.0D, 1.0D, 16.0D, 13.0D))));
     private static final Map<BlockState, VoxelShape> SHAPES_CACHE = Maps.newHashMap();
-    private static final Vec3 COLORS = new Vec3(.5, .5, .5);
+    private static final Vector3f COLORS = new Vector3f(.5f, .5f, .5f);
     private final BlockState crossState;
 
     public BedrockWireBlock(Properties props) {
@@ -49,6 +52,7 @@ public class BedrockWireBlock extends Block {
                 .setValue(SOUTH, RedstoneSide.NONE)
                 .setValue(WEST, RedstoneSide.NONE));
         this.crossState = this.defaultBlockState().setValue(NORTH, RedstoneSide.SIDE).setValue(EAST, RedstoneSide.SIDE).setValue(SOUTH, RedstoneSide.SIDE).setValue(WEST, RedstoneSide.SIDE);
+
         for(BlockState blockstate : this.getStateDefinition().getPossibleStates()) {
             SHAPES_CACHE.put(blockstate, this.calculateShape(blockstate));
         }
@@ -176,13 +180,17 @@ public class BedrockWireBlock extends Block {
             if (redstoneside != RedstoneSide.NONE && !pLevel.getBlockState(blockpos$mutableblockpos.setWithOffset(pPos, direction)).is(this)) {
                 blockpos$mutableblockpos.move(Direction.DOWN);
                 BlockState blockstate = pLevel.getBlockState(blockpos$mutableblockpos);
-                if (!blockstate.is(Blocks.OBSERVER)) {
+                if (blockstate.is(this)) {
                     BlockPos blockpos = blockpos$mutableblockpos.relative(direction.getOpposite());
-                    BlockState blockstate1 = blockstate.updateShape(direction.getOpposite(), pLevel.getBlockState(blockpos), pLevel, blockpos$mutableblockpos, blockpos);
-                    updateOrDestroy(blockstate, blockstate1, pLevel, blockpos$mutableblockpos, pFlags, pRecursionLeft);
+                    pLevel.neighborShapeChanged(direction.getOpposite(), pLevel.getBlockState(blockpos), blockpos$mutableblockpos, blockpos, pFlags, pRecursionLeft);
                 }
-                blockpos$mutableblockpos.setWithOffset(pPos, direction).move(Direction.UP);
 
+                blockpos$mutableblockpos.setWithOffset(pPos, direction).move(Direction.UP);
+                BlockState blockstate1 = pLevel.getBlockState(blockpos$mutableblockpos);
+                if (blockstate1.is(this)) {
+                    BlockPos blockpos1 = blockpos$mutableblockpos.relative(direction.getOpposite());
+                    pLevel.neighborShapeChanged(direction.getOpposite(), pLevel.getBlockState(blockpos1), blockpos$mutableblockpos, blockpos1, pFlags, pRecursionLeft);
+                }
             }
         }
     }
@@ -250,7 +258,7 @@ public class BedrockWireBlock extends Block {
     }
 
 
-    private void spawnParticlesAlongLine(Level p_154310_, Random p_154311_, BlockPos p_154312_, Vec3 p_154313_, Direction p_154314_, Direction p_154315_, float p_154316_, float p_154317_) {
+    private void spawnParticlesAlongLine(Level p_154310_, Random p_154311_, BlockPos p_154312_, Vector3f p_154313_, Direction p_154314_, Direction p_154315_, float p_154316_, float p_154317_) {
         float f = p_154317_ - p_154316_;
         if (!(p_154311_.nextFloat() >= 0.2F * f)) {
             float f1 = 0.4375F;
@@ -315,6 +323,33 @@ public class BedrockWireBlock extends Block {
         }
     }
 
+    @Override
+    public InteractionResult use(BlockState pState, Level pLevel, BlockPos pPos, Player pPlayer, InteractionHand pHand, BlockHitResult pHit) {
+        if (!pPlayer.getAbilities().mayBuild) {
+            return InteractionResult.PASS;
+        } else {
+            if (isCross(pState) || isDot(pState)) {
+                BlockState blockstate = isCross(pState) ? this.defaultBlockState() : this.crossState;
+                blockstate = this.getConnectionState(pLevel, blockstate, pPos);
+                if (blockstate != pState) {
+                    pLevel.setBlock(pPos, blockstate, 3);
+                    this.updatesOnShapeChange(pLevel, pPos, pState, blockstate);
+                    return InteractionResult.SUCCESS;
+                }
+            }
+
+            return InteractionResult.PASS;
+        }
+    }
+    private void updatesOnShapeChange(Level pLevel, BlockPos pPos, BlockState pOldState, BlockState pNewState) {
+        for(Direction direction : Direction.Plane.HORIZONTAL) {
+            BlockPos blockpos = pPos.relative(direction);
+            if (pOldState.getValue(PROPERTY_BY_DIRECTION.get(direction)).isConnected() != pNewState.getValue(PROPERTY_BY_DIRECTION.get(direction)).isConnected() && pLevel.getBlockState(blockpos).isRedstoneConductor(pLevel, blockpos)) {
+                pLevel.updateNeighborsAtExceptFromFacing(blockpos, pNewState.getBlock(), direction.getOpposite());
+            }
+        }
+
+    }
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> pBuilder) {
         pBuilder.add(NORTH, EAST, SOUTH, WEST);
     }

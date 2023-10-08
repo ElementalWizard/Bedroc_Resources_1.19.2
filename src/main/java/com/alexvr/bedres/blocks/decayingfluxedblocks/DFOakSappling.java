@@ -6,6 +6,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.BonemealableBlock;
 import net.minecraft.world.level.block.BushBlock;
@@ -13,10 +14,7 @@ import net.minecraft.world.level.block.SaplingBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraftforge.common.PlantType;
-import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.eventbus.api.Event;
-
-import java.util.Random;
 
 import static net.minecraftforge.event.ForgeEventFactory.blockGrowFeature;
 
@@ -44,11 +42,6 @@ public class DFOakSappling  extends BushBlock implements BonemealableBlock{
     }
 
     @Override
-    public boolean isValidBonemealTarget(BlockGetter p_50897_, BlockPos p_50898_, BlockState p_50899_, boolean p_50900_) {
-        return true;
-    }
-
-    @Override
     public PlantType getPlantType(BlockGetter world, BlockPos pos) {
         return PlantType.PLAINS;
     }
@@ -57,6 +50,12 @@ public class DFOakSappling  extends BushBlock implements BonemealableBlock{
     protected boolean mayPlaceOn(BlockState pState, BlockGetter pLevel, BlockPos pPos) {
         return super.mayPlaceOn(pState, pLevel, pPos) || pState.is(Registration.DF_DIRT_BLOCK.get()) || pState.is(Registration.DF_GRASS_BLOCK.get());
     }
+
+    @Override
+    public boolean isValidBonemealTarget(LevelReader pLevel, BlockPos pPos, BlockState pState, boolean pIsClient) {
+        return true;
+    }
+
     @Override
     public boolean isBonemealSuccess(Level level, RandomSource rand, BlockPos pos, BlockState state) {
         return level.random.nextFloat() < 0.45F;

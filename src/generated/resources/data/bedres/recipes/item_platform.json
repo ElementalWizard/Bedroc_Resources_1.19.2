@@ -1,10 +1,6 @@
 {
   "type": "minecraft:crafting_shaped",
-  "pattern": [
-    " I ",
-    "ILI",
-    " I "
-  ],
+  "category": "misc",
   "key": {
     "I": {
       "tag": "forge:ingots/gold"
@@ -13,7 +9,13 @@
       "tag": "forge:storage_blocks/gold"
     }
   },
+  "pattern": [
+    " I ",
+    "ILI",
+    " I "
+  ],
   "result": {
     "item": "bedres:item_platform"
-  }
+  },
+  "show_notification": true
 }

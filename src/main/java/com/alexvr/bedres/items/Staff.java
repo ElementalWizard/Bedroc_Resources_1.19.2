@@ -3,7 +3,6 @@ package com.alexvr.bedres.items;
 import com.alexvr.bedres.capability.abilities.IPlayerAbility;
 import com.alexvr.bedres.capability.abilities.PlayerAbilityProvider;
 import com.alexvr.bedres.utils.IDisplayFlux;
-import com.mojang.math.Vector3f;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.network.chat.Component;
@@ -19,6 +18,7 @@ import net.minecraft.world.level.Level;
 import net.minecraftforge.common.ForgeMod;
 import net.minecraftforge.common.util.LazyOptional;
 import org.jetbrains.annotations.Nullable;
+import org.joml.Vector3f;
 
 import java.util.List;
 import java.util.UUID;
@@ -54,7 +54,7 @@ public class Staff extends TieredItem implements IDisplayFlux {
                     grav.addTransientModifier(REDUCED_GRAVITY);
                     k.setGivenGravity(true);
                 }
-                if (k.getFlux() >= 0.01 && !player.isOnGround()){
+                if (k.getFlux() >= 0.01 && !player.onGround()){
                     k.removeFlux(.01);
                     player.resetFallDistance();
                     player.fallDistance = 0;

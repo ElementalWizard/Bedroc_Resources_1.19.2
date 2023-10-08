@@ -1,22 +1,24 @@
 {
   "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "E": {
+      "item": "minecraft:ender_eye"
+    },
+    "H": {
+      "item": "bedres:ender_hush"
+    },
+    "I": {
+      "item": "bedres:enderian_ingot"
+    }
+  },
   "pattern": [
     "IHI",
     "HEH",
     "IHI"
   ],
-  "key": {
-    "I": {
-      "item": "bedres:enderian_ingot"
-    },
-    "H": {
-      "item": "bedres:ender_hush"
-    },
-    "E": {
-      "item": "minecraft:ender_eye"
-    }
-  },
   "result": {
     "item": "bedres:xp_medallion"
-  }
+  },
+  "show_notification": true
 }

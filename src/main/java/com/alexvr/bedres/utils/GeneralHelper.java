@@ -23,7 +23,7 @@ public class GeneralHelper {
 
     public static BlockHitResult selectBlock(Player player) {
         // Used to find which block the player is looking at, and store it in NBT on the tool.
-        Level world = player.level;
+        Level world = player.level();
         BlockHitResult lookingAt = getLookingAt(player, ClipContext.Fluid.NONE);
         if (world.getBlockState(getLookingAt(player).getBlockPos()) == Blocks.AIR.defaultBlockState()) return null;
         return lookingAt;

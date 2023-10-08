@@ -3,7 +3,7 @@
     "render_type": "minecraft:translucent",
 	"textures": {
 		"0": "bedres:block/aura",
-		"1": "bedres:gui/flux_oracle_book_info_gui",
+		"1": "bedres:block/noise",
 		"particle": "bedres:block/aura"
 	},
 	"elements": [

@@ -7,7 +7,7 @@
 		"3": "bedres:item/fire_staff/pastel_red",
 		"4": "bedres:item/fire_staff/orange",
 		"5": "bedres:item/fire_staff/soul",
-		"7": "bedres:gui/flux_oracle_book_info_gui",
+		"7": "bedres:block/noise",
 		"9": "bedres:item/fire_staff/gold_block_creep",
 		"particle": "bedres:item/fire_staff/blood_orange"
 	},

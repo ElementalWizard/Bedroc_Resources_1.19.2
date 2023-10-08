@@ -1,36 +1,10 @@
 package com.alexvr.bedres.worldgen.world;
 
-import com.alexvr.bedres.BedrockResources;
-import com.alexvr.bedres.setup.ModConfig;
-import com.alexvr.bedres.setup.Registration;
-import com.alexvr.bedres.utils.BedrockReferences;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
-import net.minecraft.core.Registry;
-import net.minecraft.data.BuiltinRegistries;
-import net.minecraft.data.worldgen.features.OreFeatures;
-import net.minecraft.data.worldgen.placement.NetherPlacements;
-import net.minecraft.data.worldgen.placement.PlacementUtils;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.level.biome.Biome;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.levelgen.GenerationStep;
-import net.minecraft.world.level.levelgen.VerticalAnchor;
-import net.minecraft.world.level.levelgen.blockpredicates.BlockPredicate;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
-import net.minecraft.world.level.levelgen.feature.Feature;
-import net.minecraft.world.level.levelgen.feature.configurations.*;
-import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvider;
-import net.minecraft.world.level.levelgen.feature.stateproviders.NoiseProvider;
-import net.minecraft.world.level.levelgen.placement.*;
-import net.minecraft.world.level.levelgen.synth.NormalNoise;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.world.BiomeGenerationSettingsBuilder;
-import net.minecraftforge.eventbus.api.EventPriority;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-
-import java.util.List;
+import net.minecraft.world.level.levelgen.feature.configurations.RandomPatchConfiguration;
+import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 
 public class ModFlowerGen {
 
@@ -65,7 +39,7 @@ public class ModFlowerGen {
     }
 
 
-    static Holder<PlacedFeature> registerPlacement(ResourceLocation id, Holder<? extends ConfiguredFeature<?, ?>> feature, PlacementModifier... modifiers) {
+/*    static Holder<PlacedFeature> registerPlacement(ResourceLocation id, Holder<? extends ConfiguredFeature<?, ?>> feature, PlacementModifier... modifiers) {
         return BuiltinRegistries.register(BuiltinRegistries.PLACED_FEATURE, id, new PlacedFeature(Holder.hackyErase(feature), List.of(modifiers)));
     }
 
@@ -79,7 +53,7 @@ public class ModFlowerGen {
         return new RandomPatchConfiguration(tries, xzSpread, 3, PlacementUtils.filtered(
                 Feature.SIMPLE_BLOCK, new SimpleBlockConfiguration(BlockStateProvider.simple(block)),
                 BlockPredicate.allOf(BlockPredicate.ONLY_IN_AIR_PREDICATE, plantedOn)));
-    }
+    }*/
 //    @SubscribeEvent
 //    public static void onBiomeLoadingEvent(BiomeLoadingEvent event) {
 //        BiomeGenerationSettingsBuilder builder = event.getGeneration();

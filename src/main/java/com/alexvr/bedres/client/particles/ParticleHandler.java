@@ -3,7 +3,6 @@ package com.alexvr.bedres.client.particles;
 import com.alexvr.bedres.BedrockResources;
 import com.alexvr.bedres.client.particles.lightParticle.LightParticleType;
 import com.alexvr.bedres.setup.Registration;
-import net.minecraft.client.Minecraft;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.RegisterParticleProvidersEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -14,7 +13,7 @@ public final class ParticleHandler {
 
     @SubscribeEvent
     public static void registerFactories(RegisterParticleProvidersEvent evt) {
-        evt.register(Registration.LIGHT_PARTICLE_TYPE.get(), LightParticleType.LightParticleFactory::new);
+        evt.registerSpriteSet(Registration.LIGHT_PARTICLE_TYPE.get(), LightParticleType.LightParticleFactory::new);
     }
 
 }

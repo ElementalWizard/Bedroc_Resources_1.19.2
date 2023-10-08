@@ -87,8 +87,8 @@ package com.alexvr.bedres.recipes.eventRituals;
 //
 //    @Override
 //    public void toNetwork(FriendlyByteBuf buffer, EventRitualsRecipes recipe) {
-//        buffer.writeUtf(recipe.getResultItem().getItem().getRegistryName().toString());
-//        buffer.writeInt(recipe.getResultItem().getCount());
+//        buffer.writeUtf(recipe.getResultItem(level.registryAccess()).getItem().getRegistryName().toString());
+//        buffer.writeInt(recipe.getResultItem(level.registryAccess()).getCount());
 //        buffer.writeUtf(recipe.getEvent());
 //
 //        List<ItemStack> list = recipe.getIngredientList();

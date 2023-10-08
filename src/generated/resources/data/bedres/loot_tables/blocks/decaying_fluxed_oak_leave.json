@@ -2,37 +2,25 @@
   "type": "minecraft:block",
   "pools": [
     {
-      "name": "decaying_fluxed_oak_leave",
-      "rolls": 1.0,
       "bonus_rolls": 0.0,
+      "conditions": [
+        {
+          "condition": "minecraft:match_tool",
+          "predicate": {
+            "items": [
+              "minecraft:shears"
+            ]
+          }
+        }
+      ],
       "entries": [
         {
-          "type": "minecraft:alternatives",
-          "children": [
-            {
-              "type": "minecraft:item",
-              "conditions": [
-                {
-                  "condition": "minecraft:match_tool",
-                  "predicate": {
-                    "tag": "forge:shears"
-                  }
-                }
-              ],
-              "name": "bedres:decaying_fluxed_oak_leave"
-            },
-            {
-              "type": "minecraft:item",
-              "functions": [
-                {
-                  "function": "minecraft:explosion_decay"
-                }
-              ],
-              "name": "minecraft:air"
-            }
-          ]
+          "type": "minecraft:item",
+          "name": "bedres:decaying_fluxed_oak_leave"
         }
-      ]
+      ],
+      "rolls": 1.0
     }
-  ]
+  ],
+  "random_sequence": "bedres:blocks/decaying_fluxed_oak_leave"
 }

@@ -3,12 +3,12 @@ package com.alexvr.bedres.datagen;
 import com.alexvr.bedres.BedrockResources;
 import com.alexvr.bedres.setup.Registration;
 import com.alexvr.bedres.utils.BedrockReferences;
-import net.minecraft.data.DataGenerator;
+import net.minecraft.data.PackOutput;
 import net.minecraftforge.common.data.LanguageProvider;
 
 public class ModLanguageProvider extends LanguageProvider {
 
-    public ModLanguageProvider(DataGenerator generator, String language) {
+    public ModLanguageProvider(PackOutput generator, String language) {
         super(generator, BedrockResources.MODID,language);
 
     }
@@ -20,7 +20,6 @@ public class ModLanguageProvider extends LanguageProvider {
         add(Registration.ENDERIAN_ORE_END.get(),"Enderian Ore" );
         add(Registration.ENDERIAN_ORE_DEEPSLATE.get(),"Enderian Ore" );
 
-        add(Registration.SCRAPE_TANK_BLOCK.get(),"Scrape Tank" );
         add(Registration.ENDERIAN_BLOCK_BLOCK.get(),"Enderian Block" );
         add(Registration.BLAZIUM_BLOCK.get(),"Blazium" );
         add(Registration.ENDER_HUSH_BLOCK.get(),"Ender Hush" );
@@ -32,7 +31,6 @@ public class ModLanguageProvider extends LanguageProvider {
         add(Registration.ENDERIAN_BRICK_BLOCK.get(),"Bedrockium Brick" );
         add(Registration.BEDROCK_COMPRESSED_WIRE_BLOCK.get(),"Bedrock Compressed Wire" );
         add(Registration.ENDERIAN_RITUAL_PEDESTAL_BLOCK.get(),"Enderian Ritual Pedestal" );
-        add(Registration.SCRAPER_MOTOR_BLOCK.get(),"Scraper Motor" );
         add(Registration.ROPE_BLOCK.get(),"Rope" );
         add(Registration.EVENT_ALTAR_BLOCK.get(),"Event Ritual Altar" );
         add(Registration.LIGHT_BLOCK.get(),"Light Block" );
@@ -58,13 +56,11 @@ public class ModLanguageProvider extends LanguageProvider {
         add(Registration.BEDROCK_WIRE_BLOCK.get(), "Bedrock Scrapes" );
         add(Registration.SCRAPE_KNIFE_ITEM.get(), "Scrape Knife" );
         add(Registration.STAFF_ITEM.get(), "Gravity Staff" );
-        add(Registration.SCRAPER_MESH_ITEM.get(), "Scraper Mesh" );
         add(Registration.NEBULA_HEART_ITEM.get(), "Nebula Heart" );
         add(Registration.FLUX_ORACLE_ITEM.get(), "Fluxed Oracle" );
         add(Registration.FLUXED_CUPCAKE_ITEM.get(), "Fluxed Cupcake" );
         add(Registration.MAGE_STAFF_ITEM.get(), "Mage Staff" );
         add(Registration.XP_MEDALLION_ITEM.get(), "Xp Medallion" );
-        add(Registration.CREEPER_CHARM_ITEM.get(), "Creeper Charm" );
 
         add(BedrockReferences.SCRAPE_TANK_TOOLTIP, "Bedrock Scrape Tank, can hold up to 256" );
         add(BedrockReferences.ITEM_PLATFORM_TOOLTIP, "Can hold up to a stack of an item and display it." );
@@ -116,16 +112,26 @@ public class ModLanguageProvider extends LanguageProvider {
         add("mage_staff.rune.type.beta", "Heaven Smite" );
         add("mage_staff.rune.type.delta", "Clear Effects/Regen" );
         add("mage_staff.rune.type.epsilon", "Life Steal" );
-        add("mage_staff.rune.type.eta", "TBD" );
+        add("mage_staff.rune.type.eta", "Mine" );
         add("mage_staff.rune.type.gama", "Poison" );
         add("mage_staff.rune.type.theta", "Green Thumb" );
         add("mage_staff.rune.type.zeta", "Light Projectile" );
 
         add("bedres.key.category", "Bedrock Resources Keybindings" );
+        add("bedres.key.staff", "Change Staff Rune" );
         add("bedres.key.toggle_mode", "Toggle Item Mode" );
+        add("bedres.key.alpha_switch", "Yeet" );
+        add("bedres.key.beta_switch", "Heaving Smite" );
+        add("bedres.key.delta_switch", "Clear Effect/Regen" );
+        add("bedres.key.epsilon_switch", "Life Steal" );
+        add("bedres.key.eta_switch", "Mine" );
+        add("bedres.key.gama_switch", "Poison" );
+        add("bedres.key.theta_switch", "Green Thumb" );
+        add("bedres.key.zeta_switch", "Light Projectile" );
 
         add("bedres.mage_staff.green_thumb.fail", "Block cant be bonemealed" );
         add("bedres.mage_staff.lightning.fail", "Target entity or block not air" );
+        add("bedres.mage_staff.cooldown.fail", "Staff on cooldown." );
 
         add("bedres:fluxed_plains", "Desolated Fluxed Plains" );
 
@@ -156,14 +162,10 @@ public class ModLanguageProvider extends LanguageProvider {
         add(Registration.SPORE_DEITY_EGG_ITEM.get(), "Spore Deity Spawn Egg");
         add(Registration.FLUXED_CREEP_EGG_ITEM.get(), "Fluxed Creep Spawn Egg");
         add(Registration.CHAINED_BLAZE_EGG_ITEM.get(), "Chained Blaze Spawn Egg");
-        add(Registration.TRECKING_CREEPER_EGG_ITEM.get(), "Trecking Creeper Spawn Egg");
-        add(Registration.BABY_GHAST_EGG_ITEM.get(), "Baby Ghast Spawn Egg");
 
         add(Registration.FLUXED_CREEP.get(), "Fluxed Creep");
         add(Registration.SPORE_DEITY.get(), "Spore Deity");
         add(Registration.CHAINED_BLAZE.get(), "Chained Blaze");
-        add(Registration.TRECKING_CREEPER.get(), "Trecking Creeper");
-        add(Registration.BABY_GHAST.get(), "Baby Ghast");
 //        add(Registration.LIGHT_PROJ_ENTITY.get(), "Light Projectile");
     }
 

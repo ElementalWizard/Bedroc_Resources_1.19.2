@@ -2,7 +2,7 @@
 	"credit": "Made with Blockbench",
 	"textures": {
 		"0": "block/gold_block",
-		"1": "bedres:gui/flux_oracle_book_info_gui",
+		"1": "bedres:block/noise",
 		"2": "block/bedrock",
 		"particle": "block/bedrock"
 	},

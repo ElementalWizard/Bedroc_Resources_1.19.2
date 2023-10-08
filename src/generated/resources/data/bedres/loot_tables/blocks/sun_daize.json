@@ -2,15 +2,20 @@
   "type": "minecraft:block",
   "pools": [
     {
-      "name": "sun_daize",
-      "rolls": 1.0,
       "bonus_rolls": 0.0,
+      "conditions": [
+        {
+          "condition": "minecraft:survives_explosion"
+        }
+      ],
       "entries": [
         {
           "type": "minecraft:item",
           "name": "bedres:sun_daize"
         }
-      ]
+      ],
+      "rolls": 1.0
     }
-  ]
+  ],
+  "random_sequence": "bedres:blocks/sun_daize"
 }

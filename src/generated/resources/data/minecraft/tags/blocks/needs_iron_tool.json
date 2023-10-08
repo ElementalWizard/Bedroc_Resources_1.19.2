@@ -1,5 +1,4 @@
 {
-  "replace": false,
   "values": [
     "bedres:spike",
     "bedres:item_platform",
@@ -9,8 +8,6 @@
     "bedres:fluxed_gravity_bubble",
     "bedres:pedestal",
     "bedres:ritual_pedestal",
-    "bedres:scrape_tank",
-    "bedres:scraper_motor",
     "bedres:void_tears",
     "bedres:bedrock_stairs"
   ]

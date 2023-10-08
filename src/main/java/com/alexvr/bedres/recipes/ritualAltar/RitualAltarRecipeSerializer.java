@@ -70,8 +70,8 @@ package com.alexvr.bedres.recipes.ritualAltar;
 //
 //    @Override
 //    public void toNetwork(FriendlyByteBuf buffer, RitualAltarRecipes recipe) {
-//        buffer.writeUtf(recipe.getResultItem().getItem().getRegistryName().toString());
-//        buffer.writeInt(recipe.getResultItem().getCount());
+//        buffer.writeUtf(recipe.getResultItem(level.registryAccess()).getItem().getRegistryName().toString());
+//        buffer.writeInt(recipe.getResultItem(level.registryAccess()).getCount());
 //        List<ItemStack> list = recipe.getIngredientList();
 //        buffer.writeInt(list.size());
 //        for (ItemStack stack : list) {

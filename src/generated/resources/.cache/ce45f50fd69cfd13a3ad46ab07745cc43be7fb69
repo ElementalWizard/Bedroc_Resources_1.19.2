@@ -1,0 +1,18 @@
+// 1.20.1	2023-10-03T20:07:05.0425362	Tags for minecraft:block mod id bedres
+482901b9a41172187ce6a247ecd07af9086633d0 data/bedres/tags/blocks/decaying_fluxed_oak_log.json
+372547e6b9136fbeda43308e3abfaf9f64f32b72 data/bedres/tags/blocks/enderian_ore.json
+c536c49c8e1f572ef4bc0499781337d02a351de8 data/forge/tags/blocks/cobblestone.json
+372547e6b9136fbeda43308e3abfaf9f64f32b72 data/forge/tags/blocks/ores.json
+a4bc5062b35094318458adcf0b55ef58caccd17b data/minecraft/tags/blocks/climbable.json
+afbdacab23ec3c22d531fee1bb2b7d7273a0bc31 data/minecraft/tags/blocks/dirt.json
+e2d12578b54a57cc19015b38c182648c9da1a3be data/minecraft/tags/blocks/flowers.json
+bfb109c1a91dcfd9fa8907e2d7009915d844c1a5 data/minecraft/tags/blocks/leaves.json
+4b8acd87ca435131de32f18f800471e8b35ec00b data/minecraft/tags/blocks/mineable/pickaxe.json
+ac471b2c42727dea078a1e75a15d8d85d9c5b36d data/minecraft/tags/blocks/needs_diamond_tool.json
+8b47cd7b69509d292dc839350878a81f5a5f9634 data/minecraft/tags/blocks/needs_iron_tool.json
+fa7b1451f36e871b895abca2e7b8f823aba1882d data/minecraft/tags/blocks/needs_stone_tool.json
+b87b086341330a67c425b3c477087fc094524d1b data/minecraft/tags/blocks/oak_logs.json
+a89da0e4f2edd81b9225c58a901b4b217c6399eb data/minecraft/tags/blocks/planks.json
+01e20fc98ebb335125290867896f41d37f41f6d8 data/minecraft/tags/blocks/saplings.json
+ff72703f640a28ffa0bdae66be4055b299d53f18 data/minecraft/tags/blocks/slabs.json
+93019328e783b331fb5423830f574db0a52ade27 data/minecraft/tags/blocks/stairs.json

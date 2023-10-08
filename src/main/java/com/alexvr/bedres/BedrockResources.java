@@ -1,16 +1,12 @@
 package com.alexvr.bedres;
 
-import com.alexvr.bedres.recipes.ModRecipeRegistry;
-import com.alexvr.bedres.setup.ClientSetup;
-import com.alexvr.bedres.setup.ModConfig;
-import com.alexvr.bedres.setup.ModSetup;
-import com.alexvr.bedres.setup.Registration;
-import com.alexvr.bedres.worldgen.world.ModFlowerGen;
-import com.alexvr.bedres.worldgen.world.ModOreGen;
+import com.alexvr.bedres.setup.*;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.common.Mod;
@@ -41,6 +37,7 @@ public class BedrockResources {
         ModSetup.setup();
         ModConfig.register();
         Registration.init();
+        ModTabs.init();
         //ModRecipeRegistry.register();
 
         IEventBus event = FMLJavaModLoadingContext.get().getModEventBus();
@@ -49,11 +46,20 @@ public class BedrockResources {
         DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> event.addListener(ClientSetup::init));
 
         IEventBus forgeBus = MinecraftForge.EVENT_BUS;
-        forgeBus.register(new ModOreGen());
-        forgeBus.register(new ModFlowerGen());
+
+        event.addListener(this::addCreative);
+
         ModConfig.loadConfig(ModConfig.CLIENT_CONFIG, FMLPaths.CONFIGDIR.get().resolve("bedres-client.toml"));
         ModConfig.loadConfig(ModConfig.SERVER_CONFIG, FMLPaths.CONFIGDIR.get().resolve("bedres-common.toml"));
 
+    }
+
+    private void addCreative(BuildCreativeModeTabContentsEvent event) {
+        if(event.getTabKey() == CreativeModeTabs.SPAWN_EGGS) {
+            event.accept(Registration.SPORE_DEITY_EGG_ITEM);
+            event.accept(Registration.FLUXED_CREEP_EGG_ITEM);
+            event.accept(Registration.CHAINED_BLAZE_EGG_ITEM);
+        }
     }
 
     public static <T> void addNetworkMessage(Class<T> messageType, BiConsumer<T, FriendlyByteBuf> encoder, Function<FriendlyByteBuf, T> decoder,

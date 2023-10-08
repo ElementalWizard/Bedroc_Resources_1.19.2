@@ -19,7 +19,7 @@ public class ChainedBlazeEntity extends Blaze {
 
     public void tick() {
         super.tick();
-        if (!this.level.isClientSide() && this.level.getDifficulty() == Difficulty.PEACEFUL) {
+        if (!this.level().isClientSide() && this.level().getDifficulty() == Difficulty.PEACEFUL) {
             this.remove(RemovalReason.DISCARDED);
         }
         //this.level.addParticle(ParticleTypes.LARGE_SMOKE, this.getRandomX(0.5D), this.getRandomY(), this.getRandomZ(0.5D), 0.0D, 0.0D, 0.0D);

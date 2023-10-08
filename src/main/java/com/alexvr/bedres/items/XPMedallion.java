@@ -4,6 +4,7 @@ import com.alexvr.bedres.BedrockResources;
 import com.alexvr.bedres.utils.IDisplayFlux;
 import com.alexvr.bedres.utils.NBTHelper;
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -38,7 +39,7 @@ public class XPMedallion extends Item implements IDisplayFlux {
     public void appendHoverText(ItemStack pStack, @Nullable Level pLevel, List<Component> pTooltipComponents, TooltipFlag pIsAdvanced) {
         pTooltipComponents.add(Component.literal("'K' by default changes modes"));
         pTooltipComponents.add(Component.literal(String.format("Mode: %s",getMode(pStack) == 1?"Use":"Auto Absorb")).withStyle(ChatFormatting.DARK_PURPLE));
-        pTooltipComponents.add(Component.literal(String.format("Total Levels: %d",getXP(pStack))).withStyle(ChatFormatting.DARK_PURPLE));
+        pTooltipComponents.add(Component.literal(String.format("Total Levels: %d", Minecraft.getInstance().player.totalExperience)).withStyle(ChatFormatting.DARK_PURPLE));
     }
 
     @Override
@@ -51,7 +52,7 @@ public class XPMedallion extends Item implements IDisplayFlux {
             NBTHelper.addInteger(player.getItemInHand(pUsedHand),"levels",player.isShiftKeyDown() ? -1: 1);
             return InteractionResultHolder.success(player.getItemInHand(pUsedHand));
         }else{
-            int levelsStored = getXP(player.getItemInHand(pUsedHand));
+           /* int levelsStored = getXP(player.getItemInHand(pUsedHand));
             if (player.isShiftKeyDown() && levelsStored >0){
                 levelsStored--;
                 player.giveExperienceLevels(1);
@@ -62,7 +63,7 @@ public class XPMedallion extends Item implements IDisplayFlux {
                 player.giveExperienceLevels(-1);
                 setXP(player.getItemInHand(pUsedHand),levelsStored);
                 return InteractionResultHolder.success(player.getItemInHand(pUsedHand));
-            }
+            }*/
         }
         return super.use(pLevel, player, pUsedHand);
     }

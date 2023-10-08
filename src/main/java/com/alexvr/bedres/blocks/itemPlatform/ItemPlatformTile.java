@@ -101,6 +101,11 @@ public class ItemPlatformTile extends BlockEntity {
             protected void onContentsChanged(int slot) {
                 sendUpdates();
             }
+
+            @Override
+            public int getSlotLimit(int slot) {
+                return 1;
+            }
         };
     }
 

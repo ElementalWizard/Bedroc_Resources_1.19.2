@@ -3,7 +3,7 @@ package com.alexvr.bedres.datagen;
 import com.alexvr.bedres.BedrockResources;
 import com.alexvr.bedres.setup.Registration;
 import net.minecraft.core.Direction;
-import net.minecraft.data.DataGenerator;
+import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
 import net.minecraftforge.client.model.generators.BlockModelBuilder;
@@ -15,7 +15,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 import java.util.function.BiConsumer;
 
 public class ModBlockStates extends BlockStateProvider {
-    public ModBlockStates(DataGenerator generator, ExistingFileHelper existingFileHelper) {
+    public ModBlockStates(PackOutput generator, ExistingFileHelper existingFileHelper) {
         super(generator, BedrockResources.MODID,existingFileHelper);
     }
 

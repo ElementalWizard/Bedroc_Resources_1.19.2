@@ -1,0 +1,14 @@
+// 1.20.1	2023-10-02T21:06:11.187348	Tags for minecraft:item mod id bedres
+482901b9a41172187ce6a247ecd07af9086633d0 data/bedres/tags/items/decaying_fluxed_oak_log.json
+372547e6b9136fbeda43308e3abfaf9f64f32b72 data/bedres/tags/items/enderian_ore.json
+c536c49c8e1f572ef4bc0499781337d02a351de8 data/forge/tags/items/cobblestone.json
+2ebfabbc1d4055c3b04a253b83f5e81b23c1aff4 data/forge/tags/items/ingots.json
+372547e6b9136fbeda43308e3abfaf9f64f32b72 data/forge/tags/items/ores.json
+afbdacab23ec3c22d531fee1bb2b7d7273a0bc31 data/minecraft/tags/items/dirt.json
+e2d12578b54a57cc19015b38c182648c9da1a3be data/minecraft/tags/items/flowers.json
+bfb109c1a91dcfd9fa8907e2d7009915d844c1a5 data/minecraft/tags/items/leaves.json
+b87b086341330a67c425b3c477087fc094524d1b data/minecraft/tags/items/oak_logs.json
+a89da0e4f2edd81b9225c58a901b4b217c6399eb data/minecraft/tags/items/planks.json
+01e20fc98ebb335125290867896f41d37f41f6d8 data/minecraft/tags/items/saplings.json
+ff72703f640a28ffa0bdae66be4055b299d53f18 data/minecraft/tags/items/slabs.json
+93019328e783b331fb5423830f574db0a52ade27 data/minecraft/tags/items/stairs.json

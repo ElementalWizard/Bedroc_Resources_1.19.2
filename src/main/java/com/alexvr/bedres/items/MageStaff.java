@@ -9,15 +9,15 @@ import com.alexvr.bedres.utils.NBTHelper;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
-import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
@@ -26,13 +26,14 @@ import net.minecraft.world.entity.LightningBolt;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.TooltipFlag;
-import net.minecraft.world.item.UseAnim;
+import net.minecraft.world.item.*;
+import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BonemealableBlock;
+import net.minecraft.world.level.block.DoorBlock;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
@@ -40,13 +41,15 @@ import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.common.util.LazyOptional;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Random;
+import javax.annotation.Nonnull;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 import static com.alexvr.bedres.items.MageStaff.TYPES.*;
-import static java.lang.Math.cos;
-import static java.lang.Math.sin;
 
-public class MageStaff extends Item implements IDisplayFlux {
+public class MageStaff extends DiggerItem implements IDisplayFlux {
 
     private static final double LIGHTNINGRANGE = 16;
     private static final int LIFESTEALCOUNTERMAX = 10;
@@ -54,16 +57,32 @@ public class MageStaff extends Item implements IDisplayFlux {
     private static final int BONEMEALCOUNTERMAX = 20;
     private static final int GREENTICKCOUNTERMAX = 5;
 
-    public MageStaff(Properties pProperties) {
-        super(pProperties);
+    public MageStaff(float attackDamageModifier, float attackSpeedModifier, Properties pProperties) {
+        super(attackDamageModifier, attackSpeedModifier, Tiers.DIAMOND, BlockTags.MINEABLE_WITH_PICKAXE,pProperties);
     }
 
+    @Override
+    public <T extends LivingEntity> int damageItem(ItemStack stack, int amount, T entity, Consumer<T> onBroken) {
+        Minecraft.getInstance().player.reviveCaps();
+        LazyOptional<IPlayerAbility> playerFlux = Minecraft.getInstance().player.getCapability(PlayerAbilityProvider.PLAYER_ABILITY_CAPABILITY, null);
+        int finalAmount = amount;
+        playerFlux.ifPresent(k -> k.removeFlux((double) finalAmount));
+        Minecraft.getInstance().player.invalidateCaps();
+        amount = 0;
+        return super.damageItem(stack, amount, entity, onBroken);
+    }
+
+    @Override
+    public boolean isCorrectToolForDrops(ItemStack stack, BlockState state) {
+        return true;
+    }
 
     @Override
     public InteractionResultHolder<ItemStack> use(Level pLevel, Player pPlayer, InteractionHand pUsedHand) {
         ItemStack itemstack = pPlayer.getItemInHand(pUsedHand);
         Minecraft.getInstance().player.reviveCaps();
         LazyOptional<IPlayerAbility> playerFlux = Minecraft.getInstance().player.getCapability(PlayerAbilityProvider.PLAYER_ABILITY_CAPABILITY, null);
+        NBTHelper.setBoolean(itemstack,"using", true);
         if (getType(itemstack).equals(ZETA.name) && !pLevel.isClientSide()){
             playerFlux.ifPresent(k -> {
                 if (k.getFlux() > 2){
@@ -78,6 +97,7 @@ public class MageStaff extends Item implements IDisplayFlux {
         pPlayer.startUsingItem(pUsedHand);
         return InteractionResultHolder.consume(itemstack);
     }
+
 
     @Override
     public void releaseUsing(ItemStack pStack, Level pLevel, LivingEntity pLivingEntity, int pTimeCharged) {
@@ -94,6 +114,11 @@ public class MageStaff extends Item implements IDisplayFlux {
                 getBetaEffect(player,getLightningForce(pStack,pTimeCharged),k);
             }else if (getType(pStack).equals(DELTA.name)){
                 getDeltaEffect(player, getTieredForce(pStack,pTimeCharged),k);
+            }else if (getType(pStack).equals(ETA.name)){
+                // Stop breaking the block
+                BlockHitResult lookingAt = getLookingAt(player, ClipContext.Fluid.ANY);
+                pLevel.destroyBlockProgress(player.getId(), lookingAt.getBlockPos(), -1);
+
             }
         });
 
@@ -101,8 +126,11 @@ public class MageStaff extends Item implements IDisplayFlux {
             player.getCooldowns().addCooldown(pStack.getItem(), 10);
         }
         Minecraft.getInstance().player.invalidateCaps();
+
+        NBTHelper.setBoolean(pStack,"using", false);
         super.releaseUsing(pStack, pLevel, pLivingEntity, pTimeCharged);
     }
+
 
     @Override
     public void onUseTick(Level pLevel, LivingEntity pLivingEntity, ItemStack pStack, int pRemainingUseDuration) {
@@ -112,41 +140,105 @@ public class MageStaff extends Item implements IDisplayFlux {
             }
             Minecraft.getInstance().player.reviveCaps();
             LazyOptional<IPlayerAbility> playerFlux = Minecraft.getInstance().player.getCapability(PlayerAbilityProvider.PLAYER_ABILITY_CAPABILITY, null);
-            if (getCooldown(pStack) <= 0){
-                if (getType(pStack).equals(EPSILON.name)){
-                    playerFlux.ifPresent(k -> {
-                        if (k.getFlux() > 2){
-                            getEpsilonEffect(player,k);
-                        }
-                    });
-                    setCooldown(pStack,LIFESTEALCOUNTERMAX);
-                }
-                if (getType(pStack).equals(GAMA.name)){
-                    playerFlux.ifPresent(k -> {
-                        if (k.getFlux() > 2){
-                            getGamaEffect(player,k);
+            if (getType(pStack).equals(EPSILON.name)){
+                playerFlux.ifPresent(k -> {
+                    if (k.getFlux() > 2){
+                        NBTHelper.setBoolean(pStack,"using", true);
+                        getEpsilonEffect(player,k);
+                    }
+                });
+                setCooldown(pStack,LIFESTEALCOUNTERMAX);
+            }
+            if (getType(pStack).equals(GAMA.name)){
+                playerFlux.ifPresent(k -> {
+                    if (k.getFlux() > 2){
+                        NBTHelper.setBoolean(pStack,"using", true);
+                        getGamaEffect(player,k);
 
-                        }
-                    });
-                    setCooldown(pStack,POISONCOUNTERMAX);
-                }
-                if (pLevel instanceof ServerLevel serverLevel){
-                    if (getType(pStack).equals(THETA.name)){
-                        playerFlux.ifPresent(k -> getThetaGreenTickEffect(player, serverLevel, player.isShiftKeyDown(),k));
-                        player.causeFoodExhaustion(0.2F);
-                        if (player.isShiftKeyDown()){
-                            setCooldown(pStack,BONEMEALCOUNTERMAX);
-                        }else{
-                            setCooldown(pStack,GREENTICKCOUNTERMAX);
-                        }
+                    }
+                });
+                setCooldown(pStack,POISONCOUNTERMAX);
+            }
+            if (pLevel instanceof ServerLevel serverLevel){
+                if (getType(pStack).equals(THETA.name)){
+                    NBTHelper.setBoolean(pStack,"using", true);
+                    playerFlux.ifPresent(k -> getThetaGreenTickEffect(player, serverLevel, player.isShiftKeyDown(),k));
+                    player.causeFoodExhaustion(0.2F);
+                    if (player.isShiftKeyDown()){
+                        setCooldown(pStack,BONEMEALCOUNTERMAX);
+                    }else{
+                        setCooldown(pStack,GREENTICKCOUNTERMAX);
                     }
                 }
-            }else{
-                tickCooldown(pStack);
             }
+
             Minecraft.getInstance().player.invalidateCaps();
         }
         super.onUseTick(pLevel, pLivingEntity, pStack, pRemainingUseDuration);
+    }
+
+    @Override
+    public void inventoryTick(ItemStack pStack, Level pLevel, Entity pEntity, int pSlotId, boolean pIsSelected) {
+        if (getCooldown(pStack) > 0){
+            tickCooldown(pStack);
+        }
+        if(pStack.getUseDuration() == 0){
+            NBTHelper.setBoolean(pStack,"using", false);
+        }
+        super.inventoryTick(pStack, pLevel, pEntity, pSlotId, pIsSelected);
+    }
+
+    @Override
+    public InteractionResult useOn(UseOnContext pContext) {
+        Player player = pContext.getPlayer();
+        ItemStack pStack = pContext.getItemInHand();
+
+        Minecraft.getInstance().player.reviveCaps();
+        LazyOptional<IPlayerAbility> playerFlux = Minecraft.getInstance().player.getCapability(PlayerAbilityProvider.PLAYER_ABILITY_CAPABILITY, null);
+
+        if (pContext.getLevel() instanceof ServerLevel serverLevel){
+            if (getType(pStack).equals(ETA.name)){
+                playerFlux.ifPresent(k -> getEtaEffect(player, serverLevel,k));
+                player.causeFoodExhaustion(0.2F);
+                return InteractionResult.SUCCESS;
+            }
+        }
+        Minecraft.getInstance().player.invalidateCaps();
+
+        return InteractionResult.PASS;
+    }
+
+    public static List<BlockPos> collect(Player player, BlockHitResult startBlock, Level world) {
+        List<BlockPos> coordinates = new ArrayList<>();
+        BlockPos startPos = startBlock.getBlockPos();
+
+        Direction side = startBlock.getDirection();
+        boolean vertical = side.getAxis().isVertical();
+        Direction up = vertical ? player.getDirection() : Direction.UP;
+        Direction down = up.getOpposite();
+        Direction right = vertical ? up.getClockWise() : side.getCounterClockWise();
+        Direction left = right.getOpposite();
+
+        coordinates.add(startPos.relative(up).relative(left));
+        coordinates.add(startPos.relative(up));
+        coordinates.add(startPos.relative(up).relative(right));
+        coordinates.add(startPos.relative(left));
+        coordinates.add(startPos);
+        coordinates.add(startPos.relative(right));
+        coordinates.add(startPos.relative(down).relative(left));
+        coordinates.add(startPos.relative(down));
+        coordinates.add(startPos.relative(down).relative(right));
+
+        return coordinates.stream().filter(e -> isValid(e, world)).collect(Collectors.toList());
+    }
+
+    private static boolean isValid(BlockPos pos, Level world) {
+        BlockState state = world.getBlockState(pos);
+        return !(state.getBlock() instanceof DoorBlock) && world.getBlockEntity(pos) == null && (state.getFluidState().isEmpty() || state.hasProperty(BlockStateProperties.WATERLOGGED)) && !world.isEmptyBlock(pos) && !(state.getDestroySpeed(world, pos) < 0);
+    }
+
+    public boolean isUsing(ItemStack stack){
+        return NBTHelper.getBoolean(stack,"using") || getType(stack) == ETA.getName() || getType(stack) == ZETA.getName();
     }
 
     private void getZetaEffect(Player player, Level level) {
@@ -158,8 +250,8 @@ public class MageStaff extends Item implements IDisplayFlux {
     private void getThetaGreenTickEffect(Player pPlayer, ServerLevel level, boolean isShiftDown, IPlayerAbility flux) {
         BlockHitResult lookingAt = getLookingAt(pPlayer, ClipContext.Fluid.NONE);
         if (isShiftDown && flux.getFlux()>2){
-            if (pPlayer.level.getBlockState(lookingAt.getBlockPos()).getBlock() instanceof BonemealableBlock bonemealableBlock){
-                bonemealableBlock.performBonemeal(level, RandomSource.create(),lookingAt.getBlockPos(),pPlayer.level.getBlockState(lookingAt.getBlockPos()));
+            if (pPlayer.level().getBlockState(lookingAt.getBlockPos()).getBlock() instanceof BonemealableBlock bonemealableBlock){
+                bonemealableBlock.performBonemeal(level, RandomSource.create(),lookingAt.getBlockPos(),pPlayer.level().getBlockState(lookingAt.getBlockPos()));
                 pPlayer.getCooldowns().addCooldown(pPlayer.getUseItem().getItem(), 10);
                 flux.removeFlux(2D);
             }else{
@@ -180,7 +272,7 @@ public class MageStaff extends Item implements IDisplayFlux {
     }
 
     private void getGamaEffect(Player player, IPlayerAbility flux) {
-        Level world = player.level;
+        Level world = player.level();
         LivingEntity mob = world.getNearestEntity(LivingEntity.class, TargetingConditions.forCombat().range(8.0D),player,player.getX(),player.getY(),player.getZ(),player.getBoundingBox().inflate(8.0D, 8.0D, 8.0D));
         if (mob != null){
             int duration = 100;
@@ -194,16 +286,38 @@ public class MageStaff extends Item implements IDisplayFlux {
             flux.removeFlux(2D);
         }
     }
+    @Override
+    public float getDestroySpeed(@Nonnull ItemStack stack, @Nonnull BlockState state) {
+        return super.getDestroySpeed(stack, state) * (getType(stack).equals(ETA.name) ? 1 : 0);
+    }
 
-    private void getEtaEffect(Player player) {
 
+    private InteractionResult getEtaEffect(Player player, ServerLevel level, IPlayerAbility flux) {
+
+        BlockHitResult lookingAt = getLookingAt(player, ClipContext.Fluid.ANY);
+        if (level.isEmptyBlock(lookingAt.getBlockPos())){
+            level.destroyBlockProgress(player.getId(), lookingAt.getBlockPos(), -1);
+            return InteractionResult.PASS;
+        }
+        // Calculate positions of surrounding blocks based on clicked face
+        Iterable<BlockPos> positions = collect(player, lookingAt, level);
+        // Start breaking each block
+        /*for (BlockPos position : positions) {
+            // Start breaking the block
+
+        }*/
+        BlockPos position = lookingAt.getBlockPos();
+        Minecraft.getInstance().gameMode.startDestroyBlock(position, lookingAt.getDirection());
+
+        flux.removeFlux(0.1);
+        return InteractionResult.SUCCESS;
     }
 
     private void getEpsilonEffect(Player player, IPlayerAbility flux) {
-        Level world = player.level;
+        Level world = player.level();
         LivingEntity mob = world.getNearestEntity(LivingEntity.class, TargetingConditions.forCombat().range(8.0D),player,player.getX(),player.getY(),player.getZ(),player.getBoundingBox().inflate(8.0D, 8.0D, 8.0D));
         if (mob != null){
-            mob.hurt(DamageSource.MAGIC,1.5f);
+            mob.hurt(mob.damageSources().magic(),1.5f);
             player.heal(0.75f);
             player.getFoodData().setSaturation(player.getFoodData().getSaturationLevel()+0.25f);
             flux.removeFlux(2D);
@@ -236,7 +350,7 @@ public class MageStaff extends Item implements IDisplayFlux {
     }
 
     private void getBetaEffect(Player player, float power, IPlayerAbility flux) {
-        Level world = player.level;
+        Level world = player.level();
         BlockHitResult lookingAt = getLookingAt(player, ClipContext.Fluid.ANY);
         if (world.isEmptyBlock(lookingAt.getBlockPos()) || flux.getFlux() < power){
             player.sendSystemMessage(Component.translatable("bedres.mage_staff.lightning.fail"));
@@ -301,59 +415,6 @@ public class MageStaff extends Item implements IDisplayFlux {
         return 4;
     }
 
-    @Override
-    public void onUsingTick(ItemStack stack, LivingEntity player, int count) {
-        for (int i =0; i< 32;i++){
-            summonParticles(player.level, player);
-        }
-        super.onUsingTick(stack, player, count);
-    }
-
-    private void summonParticles(Level pLevel, Entity pEntity) {
-        if (pEntity instanceof Player player ){
-            if (player.getMainHandItem().is(Registration.MAGE_STAFF_ITEM.get()) || player.getOffhandItem().is(Registration.MAGE_STAFF_ITEM.get())){
-                double yIncrement = 0.2;
-                double radius = 1.5;
-                ItemStack stack = player.getMainHandItem();
-                double y = getParticleY(stack);
-                double a = getParticleA(stack);
-                String particlDirection = getParticleDirection(stack);
-
-                double x = (cos(a) * radius);
-                double z = sin(a) * radius;
-                pLevel.addParticle(ParticleTypes.REVERSE_PORTAL,player.getX() + x,player.getY() + y,player.getZ() + z,0,0,0);
-                a++;
-                if(particlDirection.equals("up"))
-                {
-                    if(y >= 2)
-                    {
-                        particlDirection = "down";
-                        y -= yIncrement;
-                    }
-                    else
-                    {
-                        y += yIncrement;
-                    }
-                }
-                else
-                {
-                    if(y <= 0)
-                    {
-                        particlDirection = "up";
-                        y += yIncrement;
-                    }
-                    else
-                    {
-                        y -= yIncrement;
-                    }
-                }
-
-                if(a >= 360){a = 0;} //reset a to stop it getting too large
-                setParticleInfo(stack,y,a,particlDirection);
-            }
-        }
-    }
-
     public int getColor(ItemStack stack){
         int color = 0x000000;
         if (stack.getItem() instanceof MageStaff mageStaff){
@@ -370,21 +431,6 @@ public class MageStaff extends Item implements IDisplayFlux {
         }
         return color;
 
-    }
-
-    public void cycleRune(ItemStack stack ,Player player){
-        if (player.getCooldowns().isOnCooldown(stack.getItem())){
-            return;
-        }
-        String type = getType(stack);
-        TYPES currentRune = TYPES.fromString(type.isEmpty()? "alpha" : type);
-        if (currentRune.ordinal() == TYPES.values().length-1){
-            type = TYPES.values()[0].name;
-        }else{
-            type = TYPES.values()[currentRune.ordinal()+1].name;
-        }
-        setType(stack,type);
-        player.getCooldowns().addCooldown(stack.getItem(), 10);
     }
 
     @Override
@@ -415,7 +461,18 @@ public class MageStaff extends Item implements IDisplayFlux {
     public void setType(ItemStack stack, String type){
         NBTHelper.setString(stack,"rune", type);
     }
+    public void cycleRune(ItemStack stack){
 
+        String type = getType(stack);
+        TYPES currentRune = TYPES.fromString(type.isEmpty()? "alpha" : type);
+        if (currentRune.ordinal() == TYPES.values().length-1){
+            type = TYPES.values()[0].name;
+        }else{
+            type = TYPES.values()[currentRune.ordinal()+1].name;
+        }
+        setType(stack,type);
+
+    }
     public int getCooldown(ItemStack stack){
         return NBTHelper.getInt(stack,"cooldown");
     }

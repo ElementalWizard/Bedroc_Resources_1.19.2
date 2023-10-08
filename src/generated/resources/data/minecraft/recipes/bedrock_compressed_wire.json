@@ -1,16 +1,18 @@
 {
   "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "###",
-    "###",
-    "###"
-  ],
+  "category": "building",
   "key": {
     "#": {
       "item": "bedres:bedrock_wire"
     }
   },
+  "pattern": [
+    "###",
+    "###",
+    "###"
+  ],
   "result": {
     "item": "bedres:bedrock_compressed_wire"
-  }
+  },
+  "show_notification": true
 }

@@ -1,20 +1,22 @@
 {
   "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "B": {
+      "tag": "minecraft:stone_bricks"
+    },
+    "I": {
+      "item": "bedres:enderian_ingot"
+    }
+  },
   "pattern": [
     "BIB",
     "IBI",
     "BIB"
   ],
-  "key": {
-    "I": {
-      "item": "bedres:enderian_ingot"
-    },
-    "B": {
-      "tag": "minecraft:stone_bricks"
-    }
-  },
   "result": {
-    "item": "bedres:enderian_brick",
-    "count": 16
-  }
+    "count": 16,
+    "item": "bedres:enderian_brick"
+  },
+  "show_notification": true
 }

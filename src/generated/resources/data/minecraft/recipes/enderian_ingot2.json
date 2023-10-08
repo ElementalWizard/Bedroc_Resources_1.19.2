@@ -1,9 +1,10 @@
 {
   "type": "minecraft:smelting",
+  "category": "misc",
+  "cookingtime": 100,
+  "experience": 0.0,
   "ingredient": {
     "item": "bedres:raw_enderian"
   },
-  "result": "bedres:enderian_ingot",
-  "experience": 0.0,
-  "cookingtime": 100
+  "result": "bedres:enderian_ingot"
 }

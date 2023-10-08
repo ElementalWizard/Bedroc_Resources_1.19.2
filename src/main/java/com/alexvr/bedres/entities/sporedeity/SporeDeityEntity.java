@@ -11,7 +11,9 @@ import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.*;
@@ -75,7 +77,7 @@ public class SporeDeityEntity extends Monster implements PowerableMob {
 
     public void tick() {
         super.tick();
-        if (!level.isClientSide() && this.getTarget() != null && ! isAttacking()) {
+        if (!level().isClientSide() && this.getTarget() != null && ! isAttacking()) {
             LivingEntity livingentity = this.getTarget();
             int chance = 400;
             if (new Random().nextInt(chance) <= 1) {
@@ -90,7 +92,7 @@ public class SporeDeityEntity extends Monster implements PowerableMob {
             else if (new Random().nextInt(chance) <= 8) {
                 teleport();
             }
-        }else if (!level.isClientSide() &&isAttacking()){
+        }else if (!level().isClientSide() &&isAttacking()){
             if (counter <= 0){
                 setAttacking(false);
             }else{
@@ -102,7 +104,7 @@ public class SporeDeityEntity extends Monster implements PowerableMob {
 
     private void AOECloud(double x,double y, double z) {
         setAttacking(true);
-        AreaEffectCloud areaeffectcloudentity = new AreaEffectCloud(this.level, x,y,z);
+        AreaEffectCloud areaeffectcloudentity = new AreaEffectCloud(this.level(), x,y,z);
         areaeffectcloudentity.setOwner(this);
         areaeffectcloudentity.setParticle(ParticleTypes.SQUID_INK);
         areaeffectcloudentity.setRadius(3.0F);
@@ -111,23 +113,23 @@ public class SporeDeityEntity extends Monster implements PowerableMob {
         areaeffectcloudentity.addEffect(new MobEffectInstance(MobEffects.WITHER, 60, 4));
         areaeffectcloudentity.setFixedColor(8421504);
         areaeffectcloudentity.moveTo(x, y, z);
-        this.level.levelEvent(2006,new BlockPos(this.getX(), this.getY(), this.getZ()), 0);
-        this.level.addFreshEntity(areaeffectcloudentity);
+        this.level().levelEvent(2006,new BlockPos((int) this.getX(), (int) this.getY(), (int) this.getZ()), 0);
+        this.level().addFreshEntity(areaeffectcloudentity);
     }
 
     private void spawnRandomEffectBall(LivingEntity livingentity) {
         setAttacking(true);
         Vec3 vec3d = this.getEyePosition(1.0F);
-        level.levelEvent(null, 1016, this.getOnPos(), 0);
-        DragonFireball fireballentity = new DragonFireball(level, this, getX(), getY()+2, getZ());
+        level().levelEvent(null, 1016, this.getOnPos(), 0);
+        DragonFireball fireballentity = new DragonFireball(level(), this, getX(), getY()+2, getZ());
 
         //fireballentity.setDye(new ItemStack(Items.MAGENTA_DYE));
         //fireballentity.explosionPower = 0;
-        fireballentity.moveTo(new BlockPos(this.getX() + vec3d.x * 2.0D + (new Random().nextInt(4)-2),this.getY() + (double)(this.getEyeHeight())  + 1.5D, this.getZ() + vec3d.z * 2.0D + (new Random().nextInt(4)-2)),0,0);
+        fireballentity.moveTo(new BlockPos((int) (this.getX() + vec3d.x * 2.0D + (new Random().nextInt(4)-2)), (int) (this.getY() + (this.getEyeHeight())  + 1.5D), (int) (this.getZ() + vec3d.z * 2.0D + (new Random().nextInt(4)-2))),0,0);
         //ItemStack stack = new ItemStack(Items.MAGENTA_DYE);
         //stack = getRandomDye(stack);
         //((EffectBallEntity) Objects.requireNonNull(ModEntities.effectBallEntityEntityType.spawn(world, null, (PlayerEntity) livingentity, fireballentity.getPosition(), SpawnReason.SPAWN_EGG, true, true))).setDye(stack);
-        level.addFreshEntity(fireballentity);
+        level().addFreshEntity(fireballentity);
     }
 
     private ItemStack getRandomDye(ItemStack stack) {
@@ -166,18 +168,18 @@ public class SporeDeityEntity extends Monster implements PowerableMob {
         boolean success = false;
         for (int i = 0; i<50;i++){
             BlockPos pos = getOnPos().south(new Random().nextInt(3)-3).east(new Random().nextInt(3)-3);
-            if (level.getBlockState(pos).getBlock() == Blocks.AIR){
+            if (level().getBlockState(pos).getBlock() == Blocks.AIR){
                 moveTo(pos.getX(),pos.getY(),pos.getZ());
                 success = true;
                 break;
-            }else if (level.getBlockState(pos.relative(Direction.UP)).getBlock() == Blocks.AIR){
+            }else if (level().getBlockState(pos.relative(Direction.UP)).getBlock() == Blocks.AIR){
                 moveTo(pos.getX(),pos.getY()+1,pos.getZ());
                 success = true;
                 break;
             }
         }
         if (success){
-            this.level.playSound((Player)null, this.xo, this.yo, this.zo, SoundEvents.ENDERMAN_TELEPORT, this.getSoundSource(), 1.0F, 1.0F);
+            this.level().playSound((Player)null, this.xo, this.yo, this.zo, SoundEvents.ENDERMAN_TELEPORT, this.getSoundSource(), 1.0F, 1.0F);
             this.playSound(SoundEvents.ENDERMAN_TELEPORT, 1.0F, 1.0F);
         }
     }
@@ -190,12 +192,12 @@ public class SporeDeityEntity extends Monster implements PowerableMob {
         double d3 = livingentity.getY(0.5D) - (0.5D + this.getY(0.5D));
         double d4 = livingentity.getZ() - (this.getZ() + vec3.z * 4.0D);
         if (!this.isSilent()) {
-            level.levelEvent((Player)null, 1016, this.blockPosition(), 0);
+            level().levelEvent((Player)null, 1016, this.blockPosition(), 0);
         }
 
-        LargeFireball largefireball = new LargeFireball(level, this, d2, d3, d4, 2);
+        LargeFireball largefireball = new LargeFireball(level(), this, d2, d3, d4, 2);
         largefireball.setPos(this.getX() + vec3.x * 4.0D, this.getY(0.5D) + 0.5D, largefireball.getZ() + vec3.z * 4.0D);
-        level.addFreshEntity(largefireball);
+        level().addFreshEntity(largefireball);
     }
 
     @Override
@@ -225,10 +227,10 @@ public class SporeDeityEntity extends Monster implements PowerableMob {
     @ParametersAreNonnullByDefault
     @Override
     public boolean isInvulnerableTo(DamageSource damageSource) {
-        if (DamageSource.IN_FIRE == damageSource|| DamageSource.LAVA == damageSource ||
-                DamageSource.DROWN == damageSource || DamageSource.HOT_FLOOR == damageSource ||
-                DamageSource.WITHER == damageSource || DamageSource.IN_WALL == damageSource ||
-                DamageSource.FALLING_BLOCK == damageSource || DamageSource.CRAMMING == damageSource || DamageSource.CACTUS == damageSource){
+        if (damageSource.is(DamageTypeTags.IS_FIRE) ||
+                damageSource.is(DamageTypeTags.IS_DROWNING) || damageSource.is(DamageTypeTags.IS_FREEZING) ||
+                damageSource.is(DamageTypes.IN_WALL) || damageSource.is(DamageTypes.WITHER) ||
+                damageSource.is(DamageTypes.FALL) || damageSource.is(DamageTypes.CRAMMING) || damageSource.is(DamageTypes.CACTUS)){
             return true;
         }
         return super.isInvulnerableTo(damageSource);
@@ -251,7 +253,7 @@ public class SporeDeityEntity extends Monster implements PowerableMob {
     @org.jetbrains.annotations.Nullable
     @Override
     protected SoundEvent getAmbientSound() {
-        return SoundEvents.AMBIENT_CAVE;
+        return SoundEvents.AMBIENT_CAVE.get();
     }
 
     /**
@@ -274,8 +276,8 @@ public class SporeDeityEntity extends Monster implements PowerableMob {
     @Override
     protected void dropCustomDeathLoot(DamageSource pSource, int pLooting, boolean pRecentlyHit) {
         super.dropCustomDeathLoot(pSource, pLooting, pRecentlyHit);
-        ItemEntity drop = new ItemEntity(level, getX(),getY(),getZ(),new ItemStack(Registration.NEBULA_HEART_ITEM.get(),1));
-        level.addFreshEntity(drop);
+        ItemEntity drop = new ItemEntity(level(), getX(),getY(),getZ(),new ItemStack(Registration.NEBULA_HEART_ITEM.get(),1));
+        level().addFreshEntity(drop);
     }
 
     @Override

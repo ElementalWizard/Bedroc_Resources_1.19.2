@@ -2,19 +2,24 @@ package com.alexvr.bedres.datagen;
 
 import com.alexvr.bedres.BedrockResources;
 import com.alexvr.bedres.setup.Registration;
-import net.minecraft.data.DataGenerator;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.data.PackOutput;
 import net.minecraft.data.tags.ItemTagsProvider;
 import net.minecraft.tags.ItemTags;
+import net.minecraft.world.level.block.Block;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.data.ExistingFileHelper;
 
+import java.util.concurrent.CompletableFuture;
+
 public class ModItemTags extends ItemTagsProvider {
-    public ModItemTags(DataGenerator generator, ModBlockTags blocktags, ExistingFileHelper existingFileHelper) {
-        super(generator,blocktags, BedrockResources.MODID,existingFileHelper);
+    public ModItemTags(PackOutput generator, CompletableFuture<HolderLookup.Provider> p_275729_,
+                       CompletableFuture<TagLookup<Block>> p_275322_, ExistingFileHelper existingFileHelper) {
+        super(generator,p_275729_, p_275322_, BedrockResources.MODID,existingFileHelper);
     }
 
     @Override
-    protected void addTags() {
+    protected void addTags(HolderLookup.Provider pProvider) {
         tag(Tags.Items.ORES)
                 .add(Registration.ENDERIAN_ORE_OVERWORLD_ITEM.get())
                 .add(Registration.ENDERIAN_ORE_NETHER_ITEM.get())
@@ -65,8 +70,4 @@ public class ModItemTags extends ItemTagsProvider {
 
     }
 
-    @Override
-    public String getName() {
-        return "Bedrock Resources Tags";
-    }
 }

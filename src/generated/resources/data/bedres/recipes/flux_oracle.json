@@ -1,22 +1,24 @@
 {
   "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "E": {
+      "item": "bedres:bedrock_wire"
+    },
+    "I": {
+      "item": "bedres:enderian_ingot"
+    },
+    "S": {
+      "item": "minecraft:ender_eye"
+    }
+  },
   "pattern": [
     "IEI",
     "ESE",
     "IEI"
   ],
-  "key": {
-    "S": {
-      "item": "minecraft:ender_eye"
-    },
-    "I": {
-      "item": "bedres:enderian_ingot"
-    },
-    "E": {
-      "item": "bedres:bedrock_wire"
-    }
-  },
   "result": {
     "item": "bedres:flux_oracle"
-  }
+  },
+  "show_notification": true
 }

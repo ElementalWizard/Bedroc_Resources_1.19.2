@@ -2,9 +2,12 @@
   "type": "minecraft:block",
   "pools": [
     {
-      "name": "item_platform",
-      "rolls": 1.0,
       "bonus_rolls": 0.0,
+      "conditions": [
+        {
+          "condition": "minecraft:survives_explosion"
+        }
+      ],
       "entries": [
         {
           "type": "minecraft:item",
@@ -15,34 +18,31 @@
             },
             {
               "function": "minecraft:copy_nbt",
-              "source": "block_entity",
               "ops": [
                 {
+                  "op": "replace",
                   "source": "inv",
-                  "target": "BlockEntityTag.inv",
-                  "op": "replace"
-                },
-                {
-                  "source": "energy",
-                  "target": "BlockEntityTag.energy",
-                  "op": "replace"
+                  "target": "BlockEntityTag.inv"
                 }
-              ]
+              ],
+              "source": "block_entity"
             },
             {
-              "function": "minecraft:set_contents",
               "type": "bedres:item_platform",
               "entries": [
                 {
                   "type": "minecraft:dynamic",
                   "name": "minecraft:contents"
                 }
-              ]
+              ],
+              "function": "minecraft:set_contents"
             }
           ],
           "name": "bedres:item_platform"
         }
-      ]
+      ],
+      "rolls": 1.0
     }
-  ]
+  ],
+  "random_sequence": "bedres:blocks/item_platform"
 }

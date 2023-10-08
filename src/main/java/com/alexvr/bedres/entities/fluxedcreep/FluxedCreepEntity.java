@@ -1,9 +1,7 @@
 package com.alexvr.bedres.entities.fluxedcreep;
 
 import com.alexvr.bedres.setup.Registration;
-import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.Difficulty;
@@ -38,11 +36,11 @@ public class FluxedCreepEntity extends Ghast {
 
     public void tick() {
         super.tick();
-        if (!this.level.isClientSide() && this.level.getDifficulty() == Difficulty.PEACEFUL) {
+        if (!this.level().isClientSide() && this.level().getDifficulty() == Difficulty.PEACEFUL) {
             this.remove(RemovalReason.DISCARDED);
         }
-        BlockPos pos = new BlockPos(this.position());
-        Minecraft.getInstance().levelRenderer.addParticle(ParticleTypes.LARGE_SMOKE,true,pos.getX() + 0.35f,pos.getY() + 0.35f,pos.getZ()+ 0.35f,0,0,0);
+        BlockPos pos = new BlockPos((int) this.position().x, (int)this.position().y, (int)this.position().z);
+        //Minecraft.getInstance().levelRenderer.addParticle(ParticleTypes.LARGE_SMOKE,true,pos.getX() + 0.35f,pos.getY() + 0.35f,pos.getZ()+ 0.35f,0,0,0);
 
     }
 

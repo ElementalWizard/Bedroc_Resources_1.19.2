@@ -29,9 +29,9 @@ public class LightProjectileEntity extends ThrowableProjectile {
     @Override
     public void tick() {
         super.tick();
-        if (this.level.isClientSide && this.tickCount > 1) {
+        if (this.level().isClientSide && this.tickCount > 1) {
             for (float i = 0; i <= 1; i += 0.2F) {
-                level.addParticle(Registration.LIGHT_PARTICLE_TYPE.get(),
+                level().addParticle(Registration.LIGHT_PARTICLE_TYPE.get(),
                         Mth.lerp(i, this.xOld, this.getX()),
                         Mth.lerp(i, this.yOld, this.getY()),
                         Mth.lerp(i, this.zOld, this.getZ()),
@@ -44,12 +44,12 @@ public class LightProjectileEntity extends ThrowableProjectile {
 
     @Override
     protected void onHit(HitResult result) {
-        if (!this.level.isClientSide) {
+        if (!this.level().isClientSide) {
             if (result instanceof BlockHitResult res) {
                 var pos = res.getBlockPos().relative(res.getDirection());
-                var state = this.level.getBlockState(pos);
-                if (state.getMaterial().isReplaceable())
-                    this.level.setBlockAndUpdate(pos, Registration.LIGHT_BLOCK.get().defaultBlockState());
+                var state = this.level().getBlockState(pos);
+                if (state.canBeReplaced())
+                    this.level().setBlockAndUpdate(pos, Registration.LIGHT_BLOCK.get().defaultBlockState());
             } else if (result instanceof EntityHitResult entity) {
                 entity.getEntity().setRemainingFireTicks(5);
             }

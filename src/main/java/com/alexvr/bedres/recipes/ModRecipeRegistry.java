@@ -2,17 +2,10 @@ package com.alexvr.bedres.recipes;
 
 import com.alexvr.bedres.recipes.eventRituals.EventRitualsRecipes;
 import com.alexvr.bedres.recipes.ritualAltar.RitualAltarRecipes;
-import com.alexvr.bedres.setup.Registration;
-import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.RecipeSerializer;
-import net.minecraft.world.item.crafting.RecipeType;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.RegistryObject;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -32,13 +25,13 @@ public class ModRecipeRegistry {
 //            RitualAltarRecipeSerializer::new);
 
     public static final ResourceLocation RECIPE_ALTAR = new ResourceLocation(MODID, "ritual_altar");
-    public static RecipeType<RitualAltarRecipes> ALTAR = Registry.register(Registry.RECIPE_TYPE, RECIPE_ALTAR,
+/*    public static RecipeType<RitualAltarRecipes> ALTAR = Registry.register(Registry.RECIPE_TYPE, RECIPE_ALTAR,
             new RecipeType<RitualAltarRecipes>() {
                 @Override
                 public String toString() {
                     return RECIPE_ALTAR.toString();
                 }
-            });
+            });*/
 
     private static List<RitualAltarRecipes> ritualAltarRecipes = new ArrayList<>();
 
@@ -46,13 +39,13 @@ public class ModRecipeRegistry {
 //            EventRitualsRecipeSerializer::new);
 
     public static final ResourceLocation RECIPE_EVENT_RITUAL = new ResourceLocation(MODID, "event_ritual");
-    public static RecipeType<EventRitualsRecipes> EVENT_RITUAL = Registry.register(Registry.RECIPE_TYPE, RECIPE_EVENT_RITUAL,
+/*    public static RecipeType<EventRitualsRecipes> EVENT_RITUAL = Registry.register(Registries.RECIPE_TYPE, RECIPE_EVENT_RITUAL,
             new RecipeType<EventRitualsRecipes>() {
                 @Override
                 public String toString() {
                     return RECIPE_EVENT_RITUAL.toString();
                 }
-            });
+            });*/
 
     private static List<EventRitualsRecipes> eventRitualsRecipes = new ArrayList<>();
 
@@ -65,17 +58,17 @@ public class ModRecipeRegistry {
         initialized = true;
 
 
-        setUpAltarRitualRecipes();
+        //setUpAltarRitualRecipes();
 
-        setUpEventRitualToolRecipes();
-        setUpEventRitualPlayerRecipes();
-        setUpEventRitualWorldRecipes();
+        //setUpEventRitualToolRecipes();
+        //setUpEventRitualPlayerRecipes();
+        //setUpEventRitualWorldRecipes();
 
     }
 
     public static void setUpAltarRitualRecipes(){
 
-        //pedestal item must be first in index
+        /*//pedestal item must be first in index
         ritualAltarRecipes.add(new RitualAltarRecipes(new ItemStack(Registration.STAFF_ITEM.get()),
                 new ItemStack(Items.CREEPER_HEAD, 1),
                 new ItemStack(Registration.VOID_TEAR_ITEM.get(), 1),
@@ -122,11 +115,11 @@ public class ModRecipeRegistry {
                 new ItemStack(Registration.ENDERIAN_INGOT_ITEM.get(), 6),
                 new ItemStack(Registration.ENDERIAN_BRICK_BLOCK.get(), 8)
         ));
-
+*/
     }
 
     public static void setUpEventRitualWorldRecipes(){
-       //RAIN
+       /*//RAIN
         {
             eventRitualsRecipes.add(new EventRitualsRecipes(new ItemStack(Items.WATER_BUCKET),"world",
                 genPattern(
@@ -176,12 +169,12 @@ public class ModRecipeRegistry {
                     new ItemStack(Items.LAPIS_LAZULI, 12),
                     new ItemStack(Items.CLOCK, 4)
             ));
-        }
+        }*/
     }
 
     public static void setUpEventRitualToolRecipes(){
 
-        //PICKAXE
+        /*//PICKAXE
         {
             eventRitualsRecipes.add(new EventRitualsRecipes(new ItemStack(Items.WOODEN_PICKAXE),"tool",
                     genPattern(
@@ -534,7 +527,7 @@ public class ModRecipeRegistry {
                     new ItemStack(Registration.ENDERIAN_INGOT_ITEM.get(), 4),
                     new ItemStack(Items.IRON_BLOCK, 2)
             ));
-        }
+        }*/
     }
 
     public static List<String> genPattern(String... patten){

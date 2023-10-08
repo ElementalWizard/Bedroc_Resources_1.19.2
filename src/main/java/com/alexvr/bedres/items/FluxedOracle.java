@@ -2,8 +2,6 @@ package com.alexvr.bedres.items;
 
 import com.alexvr.bedres.utils.IDisplayFlux;
 import com.alexvr.bedres.utils.NBTHelper;
-import com.alexvr.bedres.utils.WorldEventHandler;
-import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -39,7 +37,6 @@ public class FluxedOracle extends Item implements IDisplayFlux {
         ItemStack stack = playerIn.getItemInHand(handIn);
         if (worldIn.isClientSide) {
             NBTHelper.flipBoolean(playerIn.getMainHandItem(),"active");
-            Minecraft.getInstance().setScreen(WorldEventHandler.fxG);
         }
         return new InteractionResultHolder<>(InteractionResult.SUCCESS, stack);
     }

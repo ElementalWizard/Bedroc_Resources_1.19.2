@@ -74,7 +74,7 @@ public class HexTile extends Block {
     }
 
     public static int getColor(BlockState state){
-        Color color = new Color(state.getValue(COLOR).getMaterialColor().col);
+        Color color = new Color(state.getValue(COLOR).getMapColor().col);
         if (state.getValue(COLORBRIGHTNESS) == 0){
             return color.getRGB();
         }

@@ -13,35 +13,25 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.StateDefinition;
-import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraft.world.level.block.state.properties.BooleanProperty;
-import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
-
 import net.minecraftforge.items.ItemHandlerHelper;
 import org.jetbrains.annotations.Nullable;
 
 public class BedrociumPedestal extends Block implements EntityBlock {
 
     private static final VoxelShape Base = Block.box(0, 0.0D, 0, 16, 3, 16);
-    public static final BooleanProperty VALIDRECIPE = BlockStateProperties.TRIGGERED;
-    public static final BooleanProperty CRAFTING = BlockStateProperties.LOCKED;
 
     public BedrociumPedestal(Properties props) {
         super(props);
-        this.registerDefaultState(this.stateDefinition.any().setValue(VALIDRECIPE, Boolean.valueOf(false)).setValue(CRAFTING, Boolean.valueOf(false)));
+        this.registerDefaultState(this.stateDefinition.any());
 
     }
 
     @Override
     public InteractionResult use(BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult trace) {
-        if (state.getValue(CRAFTING)){
-            return InteractionResult.PASS;
-        }
         if (world.getBlockEntity(pos) instanceof BedrociumPedestalTile pedestalTile) {
             pedestalTile.getCapability(ForgeCapabilities.ITEM_HANDLER).ifPresent(h -> {
                 ItemStack itemInHand = player.getItemInHand(hand);
@@ -59,9 +49,7 @@ public class BedrociumPedestal extends Block implements EntityBlock {
                         player.setItemInHand(hand,remainder);
                     }
                 }
-                //pedestalTile.updateRecipeRender();
-
-                });
+            });
         } else {
             throw new IllegalStateException("Our named container provider is missing!");
         }
@@ -79,16 +67,6 @@ public class BedrociumPedestal extends Block implements EntityBlock {
         };
     }
 
-    @Override
-    public void neighborChanged(BlockState pState, Level pLevel, BlockPos pPos, Block pBlock, BlockPos pFromPos, boolean pIsMoving) {
-        if (pLevel.isClientSide()) return;
-        if (pLevel.getBlockEntity(pPos) instanceof  BedrociumPedestalTile pedestalTile && pLevel.hasNeighborSignal(pPos) && pLevel.getBlockEntity(pPos).getBlockState().getValue(VALIDRECIPE)){
-            pedestalTile.updateCrafting(true);
-        }
-        super.neighborChanged(pState, pLevel, pPos, pBlock, pFromPos, pIsMoving);
-    }
-
-
     @Nullable
     @Override
     public BlockEntity newBlockEntity(BlockPos pPos, BlockState pState) {
@@ -105,15 +83,4 @@ public class BedrociumPedestal extends Block implements EntityBlock {
         return true;
     }
 
-    @Override
-    public boolean onDestroyedByPlayer(BlockState state, Level world, BlockPos pos, Player player, boolean willHarvest, FluidState fluid) {
-        if (world.getBlockEntity(pos) instanceof BedrociumPedestalTile pedestalTile){
-            //pedestalTile.updateRecipeRender();
-        }
-        return super.onDestroyedByPlayer(state, world, pos, player, willHarvest, fluid);
-    }
-
-    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> pBuilder) {
-        pBuilder.add(VALIDRECIPE).add(CRAFTING);
-    }
 }

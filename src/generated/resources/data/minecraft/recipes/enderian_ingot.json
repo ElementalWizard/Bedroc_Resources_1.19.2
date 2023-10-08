@@ -1,12 +1,13 @@
 {
   "type": "minecraft:crafting_shapeless",
+  "category": "misc",
   "ingredients": [
     {
       "item": "bedres:enderian_block"
     }
   ],
   "result": {
-    "item": "bedres:enderian_ingot",
-    "count": 9
+    "count": 9,
+    "item": "bedres:enderian_ingot"
   }
 }

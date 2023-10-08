@@ -2,15 +2,20 @@
   "type": "minecraft:block",
   "pools": [
     {
-      "name": "void_tears",
-      "rolls": 1.0,
       "bonus_rolls": 0.0,
+      "conditions": [
+        {
+          "condition": "minecraft:survives_explosion"
+        }
+      ],
       "entries": [
         {
           "type": "minecraft:item",
           "name": "bedres:void_tears"
         }
-      ]
+      ],
+      "rolls": 1.0
     }
-  ]
+  ],
+  "random_sequence": "bedres:blocks/void_tears"
 }

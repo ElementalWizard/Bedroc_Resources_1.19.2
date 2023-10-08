@@ -2,20 +2,23 @@ package com.alexvr.bedres.datagen;
 
 import com.alexvr.bedres.BedrockResources;
 import com.alexvr.bedres.setup.Registration;
-import net.minecraft.data.DataGenerator;
-import net.minecraft.data.tags.BlockTagsProvider;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.data.PackOutput;
 import net.minecraft.tags.BlockTags;
 import net.minecraftforge.common.Tags;
+import net.minecraftforge.common.data.BlockTagsProvider;
 import net.minecraftforge.common.data.ExistingFileHelper;
+
+import java.util.concurrent.CompletableFuture;
 
 public class ModBlockTags extends BlockTagsProvider {
 
-    public ModBlockTags(DataGenerator generator, ExistingFileHelper existingFileHelper) {
-        super(generator, BedrockResources.MODID,existingFileHelper);
+    public ModBlockTags(PackOutput generator, CompletableFuture<HolderLookup.Provider> lookupProvider, ExistingFileHelper existingFileHelper) {
+        super(generator, lookupProvider, BedrockResources.MODID, existingFileHelper);
     }
 
     @Override
-    protected void addTags() {
+    protected void addTags(HolderLookup.Provider pProvider) {
         tag(BlockTags.MINEABLE_WITH_PICKAXE)
                 .add(Registration.ENDERIAN_ORE_OVERWORLD.get())
                 .add(Registration.ENDERIAN_ORE_NETHER.get())
@@ -28,8 +31,6 @@ public class ModBlockTags extends BlockTagsProvider {
                 .add(Registration.FLUXED_GRAVITY_BUBBLE_BLOCK.get())
                 .add(Registration.PEDESTAL_BLOCK.get())
                 .add(Registration.ENDERIAN_RITUAL_PEDESTAL_BLOCK.get())
-                .add(Registration.SCRAPE_TANK_BLOCK.get())
-                .add(Registration.SCRAPER_MOTOR_BLOCK.get())
                 .add(Registration.VOID_TEAR_BLOCK.get())
                 .add(Registration.ENDERIAN_STAIRS_BLOCK.get())
                 .add(Registration.DF_COOBLE_BLOCK.get())
@@ -50,8 +51,6 @@ public class ModBlockTags extends BlockTagsProvider {
                 .add(Registration.FLUXED_GRAVITY_BUBBLE_BLOCK.get())
                 .add(Registration.PEDESTAL_BLOCK.get())
                 .add(Registration.ENDERIAN_RITUAL_PEDESTAL_BLOCK.get())
-                .add(Registration.SCRAPE_TANK_BLOCK.get())
-                .add(Registration.SCRAPER_MOTOR_BLOCK.get())
                 .add(Registration.VOID_TEAR_BLOCK.get())
                 .add(Registration.ENDERIAN_STAIRS_BLOCK.get());
 
@@ -111,8 +110,4 @@ public class ModBlockTags extends BlockTagsProvider {
                 .add(Registration.ENDERIAN_ORE_DEEPSLATE.get());
     }
 
-    @Override
-    public String getName() {
-        return "Bedrock Resources Tags";
-    }
 }

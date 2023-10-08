@@ -28,7 +28,7 @@ public class SporeDeityRenderer extends LivingEntityRenderer<SporeDeityEntity, S
 
     public SporeDeityRenderer (EntityRendererProvider.Context context) {
         super(context,  new SporeDeityModel<>(context.bakeLayer(ModelLayers.PLAYER)), 0.5F);
-        this.addLayer(new HumanoidArmorLayer<>(this, new HumanoidModel(context.bakeLayer(ModelLayers.PLAYER_INNER_ARMOR)), new HumanoidModel(context.bakeLayer(ModelLayers.PLAYER_OUTER_ARMOR))));
+        this.addLayer(new HumanoidArmorLayer<>(this, new HumanoidModel(context.bakeLayer(ModelLayers.PLAYER_INNER_ARMOR)), new HumanoidModel(context.bakeLayer(ModelLayers.PLAYER_OUTER_ARMOR)), context.getModelManager()));
         this.addLayer(new SporeDeityPowerLayer(this, context.getModelSet()));
         this.addLayer(new ItemInHandLayer<>(this,context.getItemInHandRenderer()));
         this.addLayer(new CustomHeadLayer<>(this, context.getModelSet(),context.getItemInHandRenderer()));

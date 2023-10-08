@@ -1,5 +1,4 @@
 {
-  "replace": false,
   "values": [
     "bedres:enderian_ore_overworld",
     "bedres:enderian_ore_nether",
@@ -12,8 +11,6 @@
     "bedres:fluxed_gravity_bubble",
     "bedres:pedestal",
     "bedres:ritual_pedestal",
-    "bedres:scrape_tank",
-    "bedres:scraper_motor",
     "bedres:void_tears",
     "bedres:bedrock_stairs",
     "bedres:decaying_fluxed_cobblestone",

@@ -1,19 +1,17 @@
-buildscript {
-    repositories {
-        // These repositories are only for Gradle plugins, put any other repositories in the repository block further below
-        maven { url = 'https://maven.minecraftforge.net' }
-        maven { url 'https://maven.parchmentmc.org' }
-        mavenCentral()
-    }
-    dependencies {
-        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.1.+', changing: true
-        classpath 'org.parchmentmc:librarian:1.+'
-
-    }
+plugins {
+    id 'net.neoforged.gradle' version '[6.0.13, 6.2)'
+    id 'org.spongepowered.mixin' version '0.7.+'
+    id 'org.parchmentmc.librarian.forgegradle' version '1.+'
 }
-apply plugin: 'net.minecraftforge.gradle'
-apply plugin: 'org.parchmentmc.librarian.forgegradle'
+
 apply plugin: 'maven-publish'
+apply plugin: 'idea'
+
+configurations {
+    library
+    shade // <- Create a 'shade' configuration
+    implementation.extendsFrom(shade) // <- Add the shade configuration to implementation
+}
 
 var time = "${new Date().format("yyyy-MM-dd")}"
 int ver = 3
@@ -26,7 +24,7 @@ java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 
 println "Java: ${System.getProperty 'java.version'}, JVM: ${System.getProperty 'java.vm.version'} (${System.getProperty 'java.vendor'}), Arch: ${System.getProperty 'os.arch'}"
 minecraft {
-    mappings channel: 'official', version: '1.19.2'
+    mappings channel: mapping_channel, version: mapping_version
 
     // accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg') // Currently, this location cannot be changed from the default.
 
@@ -106,32 +104,31 @@ sourceSets.main.resources { srcDir 'src/generated/resources' }
 
 repositories {
     maven { url "https://minecraft.curseforge.com/api/maven/" }
+    maven { url = "https://www.cursemaven.com" } // curse mods
 
     maven { // JEI
-        name 'DVS1 Maven FS'
-        url 'https://dvs1.progwml6.com/files/maven'
-        content  {
-            includeGroup "mezz.jei"
-        }
+        url "https://maven.blamejared.com"
     }
-    maven { // location of a maven mirror for JEI files, as a fallback
-        name "ModMaven"
-        url "https://modmaven.dev"
-        content  {
-            includeGroup "mezz.jei"
-        }
+    maven { // TOP
+        url "https://maven.k-4u.nl"
     }
-
+    mavenCentral()
+    maven { url 'https://jitpack.io' }
 }
 
 dependencies {
 
-    minecraft "net.minecraftforge:forge:${mc_version}-${forge_version}"
+    minecraft "net.neoforged:forge:${minecraft_version}-${forge_version}"
 
-    compileOnly fg.deobf("mezz.jei:jei-${mc_version}-common-api:${jei_version}")
-    compileOnly fg.deobf("mezz.jei:jei-${mc_version}-forge-api:${jei_version}")
-    // at runtime, use the full JEI jar
-    runtimeOnly fg.deobf("mezz.jei:jei-${mc_version}-forge:${jei_version}")
+    compileOnly fg.deobf("mezz.jei:jei-${minecraft_version}-common-api:${jei_version}")
+    compileOnly fg.deobf("mezz.jei:jei-${minecraft_version}-forge-api:${jei_version}")
+    runtimeOnly fg.deobf("mezz.jei:jei-${minecraft_version}-forge:${jei_version}")
+
+    implementation fg.deobf(project.dependencies.create("mcjty.theoneprobe:theoneprobe:${top_version}") {
+        transitive = false
+    })
+    annotationProcessor "org.spongepowered:mixin:0.8.5:processor"
+
 }
 
 // Example for how to get properties into the manifest for reading at runtime.

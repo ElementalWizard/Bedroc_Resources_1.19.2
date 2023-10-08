@@ -7,11 +7,10 @@ public class BedrockReferences {
     public static final String SCREEN_SCRAPE_TANK = "screen.bedres.scrape_tank";
     public static final String SCREEN_CREEPER = "screen.bedres.creeper";
 
-    public static final String CREATIVE_TAB_NAME = "itemGroup.bedres";
+    public static final String CREATIVE_TAB_NAME = "creativetab.all_items_tab";
 
     public static final String BEDROCK_DUST_PARTICLE_RESOURCE = "bedres:textures/particles/bedrock_dust.png";
-    public static final String SCRAPE_TANK_GUI_TEXTURE_RESOURCE = "textures/gui/scrape_tank.png";
-    public static final String TRRECKING_CREEPER_GUI_TEXTURE_RESOURCE = "textures/gui/creeper_backpack.png";
+    public static final String FLUX_OVERLAY_TEXTURE_RESOURCE = "textures/gui/scrape_tank.png";
     public static final String ZETA_RUNE_TEXTURE_RESOURCE = "textures/effect/zeta_rune.png";
     public static final String SCRAPE_TANK_GUI_BACK_TEXTURE_RESOURCE = "textures/gui/flux_oracle_book_gui_back.png";
     public static final String FLUX_GUI_TITLE_RESOURCE = "flux_Gui";

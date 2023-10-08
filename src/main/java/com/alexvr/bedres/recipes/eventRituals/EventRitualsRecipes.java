@@ -1,32 +1,8 @@
 package com.alexvr.bedres.recipes.eventRituals;
 
-import com.alexvr.bedres.blocks.enderianRitualPedestal.EnderianRitualPedestalTile;
-import com.alexvr.bedres.blocks.eventAltar.events.PlayerUpgradeEvent;
-import com.alexvr.bedres.blocks.eventAltar.events.ToolUpgradeEvent;
-import com.alexvr.bedres.blocks.eventAltar.events.WorldEvent;
-import com.alexvr.bedres.recipes.ModRecipeRegistry;
-import com.alexvr.bedres.setup.Registration;
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.NonNullList;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.world.item.crafting.Recipe;
-import net.minecraft.world.item.crafting.RecipeSerializer;
-import net.minecraft.world.item.crafting.RecipeType;
-import net.minecraft.world.level.Level;
-import net.minecraftforge.common.capabilities.ForgeCapabilities;
-import net.minecraftforge.items.ItemHandlerHelper;
-import net.minecraftforge.registries.ForgeRegistries;
+public class EventRitualsRecipes /*implements Recipe<EventRitualsContext>*/ {
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.concurrent.atomic.AtomicBoolean;
-
-public class EventRitualsRecipes implements Recipe<EventRitualsContext> {
-
-    private final ResourceLocation id;
+/*    private final ResourceLocation id;
     private final ItemStack destination;
     private final String event;
     private final List<ItemStack> ingredients;
@@ -92,13 +68,13 @@ public class EventRitualsRecipes implements Recipe<EventRitualsContext> {
     public static String getDescription(EventRitualsRecipes recipe) {
         switch (recipe.getEvent()) {
             case "world" -> {
-                return WorldEvent.getDescriptions(recipe.getResultItem());
+                return WorldEvent.getDescriptions(recipe.getResultItem( Minecraft.getInstance().level.registryAccess()));
             }
             case "player_upgrade" -> {
-                return PlayerUpgradeEvent.getDescriptions(recipe.getResultItem());
+                return PlayerUpgradeEvent.getDescriptions(recipe.getResultItem(Minecraft.getInstance().level.registryAccess()));
             }
             case "tool" -> {
-                return  ToolUpgradeEvent.getDescriptions(recipe.getResultItem());
+                return  ToolUpgradeEvent.getDescriptions(recipe.getResultItem(Minecraft.getInstance().level.registryAccess()));
             }
             default -> {
                 return "";
@@ -232,9 +208,10 @@ public class EventRitualsRecipes implements Recipe<EventRitualsContext> {
     }
 
     @Override
-    public ItemStack assemble(EventRitualsContext inv) {
+    public ItemStack assemble(EventRitualsContext pContainer, RegistryAccess pRegistryAccess) {
         return null;
     }
+
 
     @Override
     public boolean canCraftInDimensions(int width, int height) {
@@ -242,7 +219,7 @@ public class EventRitualsRecipes implements Recipe<EventRitualsContext> {
     }
 
     @Override
-    public ItemStack getResultItem() {
+    public ItemStack getResultItem(RegistryAccess pRegistryAccess) {
         return destination;
     }
 
@@ -263,5 +240,5 @@ public class EventRitualsRecipes implements Recipe<EventRitualsContext> {
     @Override
     public RecipeType<?> getType() {
         return ModRecipeRegistry.EVENT_RITUAL;
-    }
+    }*/
 }

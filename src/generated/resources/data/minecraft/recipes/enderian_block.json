@@ -1,16 +1,18 @@
 {
   "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "###",
-    "###",
-    "###"
-  ],
+  "category": "building",
   "key": {
     "#": {
       "item": "bedres:enderian_ingot"
     }
   },
+  "pattern": [
+    "###",
+    "###",
+    "###"
+  ],
   "result": {
     "item": "bedres:enderian_block"
-  }
+  },
+  "show_notification": true
 }

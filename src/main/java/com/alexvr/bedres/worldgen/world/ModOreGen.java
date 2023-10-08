@@ -1,27 +1,10 @@
 package com.alexvr.bedres.worldgen.world;
 
-import com.alexvr.bedres.BedrockResources;
-import com.alexvr.bedres.setup.ModConfig;
-import com.alexvr.bedres.setup.Registration;
-import com.alexvr.bedres.utils.BedrockReferences;
 import net.minecraft.core.Holder;
-import net.minecraft.data.worldgen.features.OreFeatures;
-import net.minecraft.data.worldgen.placement.PlacementUtils;
-import net.minecraft.world.level.biome.Biome;
-import net.minecraft.world.level.levelgen.GenerationStep;
-import net.minecraft.world.level.levelgen.VerticalAnchor;
-import net.minecraft.world.level.levelgen.WorldGenerationContext;
-import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
-import net.minecraft.world.level.levelgen.feature.Feature;
-import net.minecraft.world.level.levelgen.feature.configurations.FeatureConfiguration;
-import net.minecraft.world.level.levelgen.feature.configurations.OreConfiguration;
-import net.minecraft.world.level.levelgen.placement.*;
+import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 import net.minecraft.world.level.levelgen.structure.templatesystem.RuleTest;
 import net.minecraft.world.level.levelgen.structure.templatesystem.TagMatchTest;
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.Tags;
-import net.minecraftforge.eventbus.api.EventPriority;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 public class ModOreGen {
 
@@ -68,9 +51,9 @@ public class ModOreGen {
 
     }
 
-    private static <C extends FeatureConfiguration, F extends Feature<C>> Holder<PlacedFeature> registerPlacedFeature(String registryName, ConfiguredFeature<C, F> feature, PlacementModifier... placementModifiers) {
+/*    private static <C extends FeatureConfiguration, F extends Feature<C>> Holder<PlacedFeature> registerPlacedFeature(String registryName, ConfiguredFeature<C, F> feature, PlacementModifier... placementModifiers) {
         return PlacementUtils.register(registryName, Holder.direct(feature), placementModifiers);
-    }
+    }*/
 //
 //    @SubscribeEvent
 //    public static void onBiomeLoadingEvent(BiomeLoadingEvent event) {

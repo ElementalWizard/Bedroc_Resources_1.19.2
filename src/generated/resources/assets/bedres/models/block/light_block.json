@@ -1,5 +1,6 @@
 {
   "parent": "minecraft:block/air",
+  "render_type": "minecraft:cutout_mipped",
   "textures": {
     "particle": "bedres:block/light_block"
   }

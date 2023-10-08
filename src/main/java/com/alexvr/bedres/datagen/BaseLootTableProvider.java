@@ -1,44 +1,33 @@
 package com.alexvr.bedres.datagen;
 
+import com.alexvr.bedres.setup.Registration;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import net.minecraft.advancements.critereon.EnchantmentPredicate;
-import net.minecraft.advancements.critereon.ItemPredicate;
-import net.minecraft.advancements.critereon.MinMaxBounds;
-import net.minecraft.data.CachedOutput;
-import net.minecraft.data.DataGenerator;
-import net.minecraft.data.DataProvider;
-import net.minecraft.data.HashCache;
-import net.minecraft.data.loot.LootTableProvider;
+import net.minecraft.data.loot.BlockLootSubProvider;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.flag.FeatureFlags;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.LootTable;
-import net.minecraft.world.level.storage.loot.LootTables;
-import net.minecraft.world.level.storage.loot.entries.AlternativesEntry;
 import net.minecraft.world.level.storage.loot.entries.DynamicLoot;
 import net.minecraft.world.level.storage.loot.entries.LootItem;
 import net.minecraft.world.level.storage.loot.functions.*;
-import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
-import net.minecraft.world.level.storage.loot.predicates.MatchTool;
 import net.minecraft.world.level.storage.loot.providers.nbt.ContextNbtProvider;
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
-import net.minecraftforge.common.Tags;
+import net.minecraftforge.registries.RegistryObject;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.io.IOException;
-import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
-public abstract class BaseLootTableProvider extends LootTableProvider {
+
+public class BaseLootTableProvider extends BlockLootSubProvider {
 
 
     private static final Logger LOGGER = LogManager.getLogger();
@@ -46,110 +35,89 @@ public abstract class BaseLootTableProvider extends LootTableProvider {
 
     protected final Map<Block, LootTable.Builder> lootTables = new HashMap<>();
     protected final Map<ResourceLocation, LootTable.Builder> entityLootTables = new HashMap<>();
-    private final DataGenerator generator;
 
-    public BaseLootTableProvider(DataGenerator dataGeneratorIn) {
-        super(dataGeneratorIn);
-        this.generator = dataGeneratorIn;
-    }
-
-    protected abstract void addTables();
-
-
-    protected void add(EntityType<?> pEntityType, LootTable.Builder pLootTableBuilder) {
-        this.add(pEntityType.getDefaultLootTable(), pLootTableBuilder);
-    }
-    protected void add(ResourceLocation pLootTableId, LootTable.Builder pLootTableBuilder) {
-        this.entityLootTables.put(pLootTableId, pLootTableBuilder);
-    }
-
-
-    LootTable.Builder createSilktoucheTable(String name, Block block, Item drop, int min, int max) {
-        LootPool.Builder builder = LootPool.lootPool()
-                .name(name)
-                .setRolls(ConstantValue.exactly(1))
-                .add(AlternativesEntry.alternatives(
-                        LootItem.lootTableItem(block)
-                                .when(MatchTool.toolMatches(ItemPredicate.Builder.item()
-                                        .hasEnchantment(new EnchantmentPredicate(Enchantments.SILK_TOUCH, MinMaxBounds.Ints.atLeast(1))))),
-                        LootItem.lootTableItem(drop)
-                                .apply(SetItemCountFunction.setCount(UniformGenerator.between(min,max)))
-                                .apply(ApplyBonusCount.addUniformBonusCount(Enchantments.BLOCK_FORTUNE,1))
-                                .apply(ApplyExplosionDecay.explosionDecay())
-                ))
-                ;
-        return LootTable.lootTable().withPool(builder);
-    }
-
-    LootTable.Builder createShearTable(String name, Block block) {
-        LootPool.Builder builder = LootPool.lootPool()
-                .name(name)
-                .setRolls(ConstantValue.exactly(1))
-                .add(AlternativesEntry.alternatives(
-                        LootItem.lootTableItem(block)
-                                .when(MatchTool.toolMatches(ItemPredicate.Builder.item()
-                                                .of(Tags.Items.SHEARS))),
-                        LootItem.lootTableItem(Items.AIR)
-                                .apply(ApplyExplosionDecay.explosionDecay())
-                ))
-                ;
-        return LootTable.lootTable().withPool(builder);
-    }
-
-    protected LootTable.Builder createSimpleTable(String name, Block block) {
-        LootPool.Builder builder = LootPool.lootPool()
-                .name(name)
-                .setRolls(ConstantValue.exactly(1))
-                .add(LootItem.lootTableItem(block));
-        return LootTable.lootTable().withPool(builder);
-    }
-
-    protected LootTable.Builder createStandardTable(String name, Block block, BlockEntityType<?> type) {
-        LootPool.Builder builder = LootPool.lootPool()
-                .name(name)
-                .setRolls(ConstantValue.exactly(1))
-                .add(LootItem.lootTableItem(block)
-                        .apply(CopyNameFunction.copyName(CopyNameFunction.NameSource.BLOCK_ENTITY))
-                        .apply(CopyNbtFunction.copyData(ContextNbtProvider.BLOCK_ENTITY)
-                                .copy("inv", "BlockEntityTag.inv", CopyNbtFunction.MergeStrategy.REPLACE)
-                                .copy("energy", "BlockEntityTag.energy", CopyNbtFunction.MergeStrategy.REPLACE))
-                        .apply(SetContainerContents.setContents(type)
-                                .withEntry(DynamicLoot.dynamicEntry(new ResourceLocation("minecraft", "contents"))))
-                );
-        return LootTable.lootTable().withPool(builder);
+    public BaseLootTableProvider() {
+        super(Set.of(), FeatureFlags.REGISTRY.allFlags());
     }
 
     @Override
-    public void run(CachedOutput cache) {
-        addTables();
+    protected void generate() {
 
-        Map<ResourceLocation, LootTable> tables = new HashMap<>();
-        for (Map.Entry<Block, LootTable.Builder> entry : lootTables.entrySet()) {
-            tables.put(entry.getKey().getLootTable(), entry.getValue().setParamSet(LootContextParamSets.BLOCK).build());
-        }
-        for (Map.Entry<ResourceLocation, LootTable.Builder> entry : entityLootTables.entrySet()) {
-            tables.put(entry.getKey(), entry.getValue().setParamSet(LootContextParamSets.ENTITY).build());
-        }
+        this.add(Registration.ENDERIAN_ORE_OVERWORLD.get(),
+                block -> createCopperLikeOreDrops(Registration.ENDERIAN_ORE_OVERWORLD.get(), Registration.RAW_ENDERIAN_CHUNK.get()));
+        this.add(Registration.ENDERIAN_ORE_NETHER.get(),
+                block -> createCopperLikeOreDrops(Registration.ENDERIAN_ORE_OVERWORLD.get(), Registration.RAW_ENDERIAN_CHUNK.get()));
+        this.add(Registration.ENDERIAN_ORE_END.get(),
+                block -> createCopperLikeOreDrops(Registration.ENDERIAN_ORE_OVERWORLD.get(), Registration.RAW_ENDERIAN_CHUNK.get()));
+        this.add(Registration.ENDERIAN_ORE_DEEPSLATE.get(),
+                block -> createCopperLikeOreDrops(Registration.ENDERIAN_ORE_OVERWORLD.get(), Registration.RAW_ENDERIAN_CHUNK.get()));
 
-        writeTables(cache, tables);
+        dropSelf(Registration.ENDERIAN_BLOCK_BLOCK.get());
+        dropSelf(Registration.HEXTILE_BLOCK.get());
+        dropSelf(Registration.ROPE_BLOCK.get());
+        dropSelf(Registration.ENDERIAN_BRICK_BLOCK.get());
+        dropSelf(Registration.ENDERIAN_STAIRS_BLOCK.get());
+        dropSelf(Registration.EVENT_ALTAR_BLOCK.get());
+        dropSelf(Registration.SPIKE_BLOCK.get());
+        dropSelf(Registration.BASE_SPIKE_BLOCK.get());
+        dropSelf(Registration.PEDESTAL_BLOCK.get());
+        dropSelf(Registration.BEDROCK_COMPRESSED_WIRE_BLOCK.get());
+        dropSelf(Registration.VOID_TEAR_BLOCK.get());
+        dropSelf(Registration.BEDROCK_WIRE_BLOCK.get());
+
+        dropSelf(Registration.BLAZIUM_BLOCK.get());
+        dropSelf(Registration.ENDER_HUSH_BLOCK.get());
+        dropSelf(Registration.SUN_DAIZE_BLOCK.get());
+        dropSelf(Registration.FLUXED_SPORES_BLOCK.get());
+
+        dropSelf(Registration.DF_COOBLE_BLOCK.get());
+        dropSelf(Registration.DF_DIRT_BLOCK.get());
+        dropSelf(Registration.DF_GRASS_BLOCK.get());
+
+        dropSelf(Registration.DF_OAK_LOG_BLOCK.get());
+        dropSelf(Registration.DF_SAPPLING_BLOCK.get());
+        dropSelf(Registration.DF_OAK_PLANKS_BLOCK.get());
+        dropSelf(Registration.DF_OAK_SLAB_BLOCK.get());
+        dropSelf(Registration.DF_STRIPPED_OAK_LOG_BLOCK.get());
+
+        this.add(Registration.DF_OAK_LEAVE_BLOCK.get(), BlockLootSubProvider::createShearsOnlyDrop);
+
+        this.add(Registration.DUNGEON_DIMENSION_PORTAL.get(),noDrop());
+        this.add(Registration.LIGHT_BLOCK.get(),noDrop());
+        this.add(Registration.RANGE_VIEW_BLOCK.get(),noDrop());
+
+        this.add(Registration.ITEM_PLATFORM_BLOCK.get(), (p_251205_) -> this.createInventoryBoxDrop(p_251205_, Registration.ITEM_PLATFORM_TILE.get()));
+        this.add(Registration.ENDERIAN_RITUAL_PEDESTAL_BLOCK.get(), (p_251205_) -> this.createInventoryBoxDrop(p_251205_, Registration.ENDERIAN_RITUAL_PEDESTAL_TILE.get()));
+        this.add(Registration.FLUXED_GRAVITY_BUBBLE_BLOCK.get(), (p_251205_) -> this.createInventoryBoxDrop(p_251205_, Registration.FLUXED_GRAVITY_BUBBLE_TILE.get()));
+
+        this.add(Registration.PEDESTAL_BLOCK.get(), this::createNameableBlockEntityTable);
+        this.add(Registration.BASE_SPIKE_BLOCK.get(), this::createNameableBlockEntityTable);
+        //this.add(Registration.FLUXED_CREEP.get(), LootTable.lootTable().withPool(LootPool.lootPool().setRolls(ConstantValue.exactly(1.0F)).add(LootItem.lootTableItem(Registration.VOID_TEAR_ITEM.get()).apply(SetItemCountFunction.setCount(UniformGenerator.between(0.0F, 1.0F))).apply(LootingEnchantFunction.lootingMultiplier(UniformGenerator.between(0.0F, 1.0F))))));
+        //this.add(Registration.CHAINED_BLAZE.get(), LootTable.lootTable().withPool(LootPool.lootPool().setRolls(ConstantValue.exactly(1.0F)).add(LootItem.lootTableItem(Items.CHAIN).apply(SetItemCountFunction.setCount(UniformGenerator.between(1.0F, 5.0F))).apply(LootingEnchantFunction.lootingMultiplier(UniformGenerator.between(0.0F, 1.0F))))).withPool(LootPool.lootPool().setRolls(ConstantValue.exactly(1.0F)).add(LootItem.lootTableItem(Registration.BEDROCK_WIRE_ITEM.get()).apply(SetItemCountFunction.setCount(UniformGenerator.between(0.0F, 3.0F))).apply(LootingEnchantFunction.lootingMultiplier(UniformGenerator.between(0.0F, 2.0F))))));
+    }
+    protected LootTable.Builder createInventoryBoxDrop(Block pBlock, BlockEntityType<?> entityType) {
+        return LootTable.lootTable().withPool(this.applyExplosionCondition(pBlock, LootPool.lootPool().setRolls(ConstantValue.exactly(1.0F))
+                .add(LootItem.lootTableItem(pBlock)
+                .apply(CopyNameFunction.copyName(CopyNameFunction.NameSource.BLOCK_ENTITY))
+                .apply(CopyNbtFunction.copyData(ContextNbtProvider.BLOCK_ENTITY).copy("inv", "BlockEntityTag.inv"))
+                .apply(SetContainerContents.setContents(entityType).withEntry(DynamicLoot.dynamicEntry(new ResourceLocation("minecraft", "contents")))))));
     }
 
-    private void writeTables(CachedOutput cache, Map<ResourceLocation, LootTable> tables) {
-        Path outputFolder = this.generator.getOutputFolder();
-        tables.forEach((key, lootTable) -> {
-            Path path = outputFolder.resolve("data/" + key.getNamespace() + "/loot_tables/" + key.getPath() + ".json");
-            try {
-                DataProvider.saveStable(cache, LootTables.serialize(lootTable), path);
-            } catch (IOException e) {
-                LOGGER.error("Couldn't write loot table {}", path, e);
-            }
-        });
+    protected LootTable.Builder createCopperLikeOreDrops(Block pBlock, Item item) {
+        return createSilkTouchDispatchTable(pBlock,
+                this.applyExplosionDecay(pBlock,
+                        LootItem.lootTableItem(item)
+                                .apply(SetItemCountFunction.setCount(UniformGenerator.between(2.0F, 5.0F)))
+                                .apply(ApplyBonusCount.addOreBonusCount(Enchantments.BLOCK_FORTUNE))));
     }
-
     @Override
-    public String getName() {
-        return "Bedrock Resources LootTables";
+    protected Iterable<Block> getKnownBlocks() {
+        return Registration.BLOCKS.getEntries().stream().map(RegistryObject::get)::iterator;
     }
+
+
+
+
 
 
 }

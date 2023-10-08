@@ -2,13 +2,13 @@ package com.alexvr.bedres.datagen;
 
 import com.alexvr.bedres.BedrockResources;
 import com.alexvr.bedres.setup.Registration;
-import net.minecraft.data.DataGenerator;
+import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.client.model.generators.ItemModelProvider;
 import net.minecraftforge.common.data.ExistingFileHelper;
 
 public class ModItemModels extends ItemModelProvider {
-    public ModItemModels(DataGenerator generator, ExistingFileHelper existingFileHelper) {
+    public ModItemModels(PackOutput generator, ExistingFileHelper existingFileHelper) {
         super(generator, BedrockResources.MODID,existingFileHelper);
 
     }
@@ -36,9 +36,6 @@ public class ModItemModels extends ItemModelProvider {
         singleTexture(Registration.SCRAPE_KNIFE_ITEM.getId().getPath(),
                 mcLoc("item/handheld"),
                 "layer0",modLoc("item/scrape_knife"));
-        singleTexture(Registration.SCRAPER_MESH_ITEM.getId().getPath(),
-                mcLoc("item/generated"),
-                "layer0",modLoc("block/frame"));
 
         withExistingParent(Registration.XP_MEDALLION_ITEM.getId().getPath(),mcLoc("item/generated")).texture("layer0",modLoc("item/xp_medallion")).override()
                 .predicate(new ResourceLocation(BedrockResources.MODID,"mode"),1).model(singleTexture(Registration.XP_MEDALLION_ITEM.getId().getPath() + "_a",
@@ -51,8 +48,6 @@ public class ModItemModels extends ItemModelProvider {
         withExistingParent(Registration.SPORE_DEITY_EGG_ITEM.getId().getPath(), mcLoc("item/template_spawn_egg"));
         withExistingParent(Registration.FLUXED_CREEP_EGG_ITEM.getId().getPath(), mcLoc("item/template_spawn_egg"));
         withExistingParent(Registration.CHAINED_BLAZE_EGG_ITEM.getId().getPath(), mcLoc("item/template_spawn_egg"));
-        withExistingParent(Registration.TRECKING_CREEPER_EGG_ITEM.getId().getPath(), mcLoc("item/template_spawn_egg"));
-        withExistingParent(Registration.BABY_GHAST_EGG_ITEM.getId().getPath(), mcLoc("item/template_spawn_egg"));
 
     }
 }
